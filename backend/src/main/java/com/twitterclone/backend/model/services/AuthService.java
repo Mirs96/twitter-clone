@@ -48,7 +48,9 @@ public class AuthService {
 //                .build();
 
         User user = new User(null, request.getFirstname(), request.getLastname(),
-                request.getNickname(),request.getDob(),request.getSex(), request.getMail(), passwordEncoder.encode(request.getPass()),request.getPhone(),request.getRole());
+                request.getNickname(),request.getDob(),request.getSex(), request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),request.getPhone(),request.getRole(),
+                request.getProfilePicture(), request.getBio(), request.getCreationDate());
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
@@ -58,7 +60,7 @@ public class AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        var user = repository.findByMail(request.getEmail()).orElseThrow();
+        var user = repository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
 

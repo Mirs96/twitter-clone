@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private static final String[] WHITE_LIST_URL = {};
+    private static final String[] WHITE_LIST_URL = {"/auth/**", "/hashtag/**"};
 
     public SecurityConfiguration(AuthenticationProvider authenticationProvider, JwtAuthenticationFilter jwtAuthFilter) {
         this.authenticationProvider = authenticationProvider;

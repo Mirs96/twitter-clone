@@ -10,22 +10,27 @@ public class RegisterRequest {
     private String nickname;
     private LocalDate dob;
     private String sex;
-    private String mail;
-    private String pass;
+    private String email;
+    private String password;
     private String phone;
     private Role role;
+    private String profilePicture;
+    private String bio;
+    private LocalDate creationDate;
 
-
-    public RegisterRequest(String firstname, String lastname, String nickname, LocalDate dob, String sex, String mail, String pass, String phone, Role role) {
+    public RegisterRequest(String firstname, String lastname, String nickname, LocalDate dob, String sex, String email, String password, String phone, Role role, String profilePicture, String bio, LocalDate creationDate) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.nickname = nickname;
         this.dob = dob;
         this.sex = sex;
-        this.mail = mail;
-        this.pass = pass;
+        this.email = email;
+        this.password = password;
         this.phone = phone;
         this.role = role;
+        this.profilePicture = profilePicture;
+        this.bio = bio;
+        this.creationDate = creationDate;
     }
 
     public RegisterRequest(){}
@@ -70,20 +75,20 @@ public class RegisterRequest {
         this.sex = sex;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPhone() {
@@ -100,6 +105,30 @@ public class RegisterRequest {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 }
 

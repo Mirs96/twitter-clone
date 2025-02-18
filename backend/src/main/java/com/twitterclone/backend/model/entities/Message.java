@@ -4,27 +4,22 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
-@Table(name = "Replies")
-public class Reply {
+@Table(name = "Messages")
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reply_id")
-    private long id;
+    @Column(name = "message_id")
+        private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
 
     @ManyToOne
-    @JoinColumn(name = "tweet_id", nullable = false)
-    private Tweet tweet;
-
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "parent_reply_id")
-    private Reply parentReply;
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiver;
 
     private String content;
 
@@ -34,17 +29,21 @@ public class Reply {
     @Column(name = "creation_time")
     private LocalTime creationTime;
 
-    public Reply() {
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "parent_message_id")
+    private Message parentMessage;
+
+    public Message() {
     }
 
-    public Reply(long id, User user, Tweet tweet, Reply parentReply, String content, LocalDate creationDate, LocalTime creationTime) {
+    public Message(long id, User sender, User receiver, String content, LocalDate creationDate, LocalTime creationTime, Message parentMessage) {
         this.id = id;
-        this.user = user;
-        this.tweet = tweet;
-        this.parentReply = parentReply;
+        this.sender = sender;
+        this.receiver = receiver;
         this.content = content;
         this.creationDate = creationDate;
         this.creationTime = creationTime;
+        this.parentMessage = parentMessage;
     }
 
     public long getId() {
@@ -55,28 +54,20 @@ public class Reply {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getSender() {
+        return sender;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
-    public Tweet getTweet() {
-        return tweet;
+    public User getReceiver() {
+        return receiver;
     }
 
-    public void setTweet(Tweet tweet) {
-        this.tweet = tweet;
-    }
-
-    public Reply getParentReply() {
-        return parentReply;
-    }
-
-    public void setParentReply(Reply parentReply) {
-        this.parentReply = parentReply;
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
     }
 
     public String getContent() {
@@ -102,4 +93,13 @@ public class Reply {
     public void setCreationTime(LocalTime creationTime) {
         this.creationTime = creationTime;
     }
+
+    public Message getParentMessage() {
+        return parentMessage;
+    }
+
+    public void setParentMessage(Message parentMessage) {
+        this.parentMessage = parentMessage;
+    }
 }
+

@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
-@Table(name = "Replies")
-public class Reply {
+@Table(name = "Bookmarks")
+public class Bookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reply_id")
+    @Column(name = "bookmark_id")
     private long id;
 
     @ManyToOne
@@ -22,29 +21,21 @@ public class Reply {
     @JoinColumn(name = "tweet_id", nullable = false)
     private Tweet tweet;
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "parent_reply_id")
-    private Reply parentReply;
-
-    private String content;
-
     @Column(name = "creation_date")
     private LocalDate creationDate;
 
     @Column(name = "creation_time")
     private LocalTime creationTime;
 
-    public Reply() {
+    public Bookmark() {
     }
 
-    public Reply(long id, User user, Tweet tweet, Reply parentReply, String content, LocalDate creationDate, LocalTime creationTime) {
-        this.id = id;
-        this.user = user;
-        this.tweet = tweet;
-        this.parentReply = parentReply;
-        this.content = content;
-        this.creationDate = creationDate;
+    public Bookmark(LocalTime creationTime, LocalDate creationDate, Tweet tweet, User user, long id) {
         this.creationTime = creationTime;
+        this.creationDate = creationDate;
+        this.tweet = tweet;
+        this.user = user;
+        this.id = id;
     }
 
     public long getId() {
@@ -69,22 +60,6 @@ public class Reply {
 
     public void setTweet(Tweet tweet) {
         this.tweet = tweet;
-    }
-
-    public Reply getParentReply() {
-        return parentReply;
-    }
-
-    public void setParentReply(Reply parentReply) {
-        this.parentReply = parentReply;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public LocalDate getCreationDate() {
