@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Tweets")
@@ -24,6 +26,14 @@ public class Tweet {
 
     @Column(name = "creation_time")
     private LocalTime creationTime;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Tweets_Hashtags",
+            joinColumns = @JoinColumn(name = "tweet_id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id")
+    )
+    private List<Hashtag> hashtags;
 
     public Tweet() {
     }
@@ -74,5 +84,13 @@ public class Tweet {
 
     public void setCreationTime(LocalTime creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public List<Hashtag> getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(List<Hashtag> hashtags) {
+        this.hashtags = hashtags;
     }
 }

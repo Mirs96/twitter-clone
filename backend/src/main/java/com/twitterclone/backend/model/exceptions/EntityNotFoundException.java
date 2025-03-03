@@ -1,4 +1,4 @@
-package com.twitterclone.backend.model;
+package com.twitterclone.backend.model.exceptions;
 public class EntityNotFoundException extends Exception {
     private String entityName;
     public EntityNotFoundException(String message, String entityName) {
