@@ -1,0 +1,44 @@
+/* Stile generale per la barra di navigazione */
+nav {
+    background-color: #4e4e4e; /* Colore di sfondo nero */
+    color: #fff; /* Testo bianco */
+    width: 250px; /* Larghezza della barra di navigazione */
+    height: 100vh; /* Altezza che copre l'intera finestra */
+    position: fixed; /* Fissa la barra sul lato sinistro */
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 20px;
+}
+
+/* Stile per i link della barra di navigazione */
+nav a {
+    color: #fff; /* Colore del testo bianco */
+    text-decoration: none; /* Rimuove la sottolineatura */
+    font-size: 18px;
+    padding: 10px 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Stile per le icone all'interno dei link */
+nav a img.menu-icon {
+    margin-right: 15px; /* Spazio tra l'icona e il testo */
+    width: 24px; /* Larghezza dell'icona */
+    height: 24px; /* Altezza dell'icona */
+}
+
+/* Stile per il link attivo o selezionato */
+nav a.active {
+    background-color: #1a1a1a; /* Sfondo leggermente più chiaro per il link attivo */
+    border-radius: 25px; /* Angoli arrotondati per il link attivo */
+}
+
+/* Stile per il link al passaggio del mouse */
+nav a:hover {
+    background-color: #333; /* Sfondo grigio scuro al passaggio del mouse */
+    border-radius: 25px; /* Angoli arrotondati al passaggio del mouse */
+}
