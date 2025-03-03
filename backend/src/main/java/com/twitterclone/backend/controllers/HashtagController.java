@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/hashtag")
+@RequestMapping("/api/hashtag")
 public class HashtagController {
     private HashtagService hashtagService;
 
