@@ -1,0 +1,19 @@
+/* Wrapper per la navbar e il contenuto principale */
+.main-container {
+    display: flex;
+    height: 100vh; /* Occupa tutta l'altezza della finestra */
+}
+
+/* Navbar (già ha position: fixed, quindi non serve modificarla) */
+nav {
+    width: 250px; /* Larghezza fissa della navbar */
+    flex-shrink: 0; /* Evita che si riduca */
+}
+
+/* Contenuto principale (Home, ecc.) */
+.content {
+    flex-grow: 1; /* Occupa tutto lo spazio disponibile */
+    margin-left: 250px; /* Deve essere uguale alla larghezza della navbar */
+    padding: 20px; /* Per non attaccare il contenuto ai bordi */
+    overflow-x: hidden; /* Evita scorrimento orizzontale indesiderato */
+}

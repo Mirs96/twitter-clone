@@ -1,1 +1,73 @@
-<p>register works!</p>
+<div class="register-container">
+    <form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
+        <div>
+            <label for="firstname">Firstname:</label>
+            <input type="text" id="firstname" formControlName="firstname">
+        </div>
+
+        <div>
+            <label for="lastname">Lastname:</label>
+            <input type="text" id="lastname" formControlName="lastname">
+        </div>
+
+        <div>
+            <label for="nickname">Nickname:</label>
+            <input type="text" id="nickname" formControlName="nickname">
+        </div>
+
+        <div>
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" formControlName="dob">
+        </div>
+
+        <div>
+            <label for="sex">Sex:</label>
+            <select id="sex" formControlName="sex">
+                <option value="">Select...</option>
+                <option value="M">man</option>
+                <option value="F">woman</option>
+                <option value="O">other</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" formControlName="email">
+        </div>
+
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" formControlName="password">
+        </div>
+
+        <div>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" formControlName="phone">
+        </div>
+
+        <div>
+            <label for="role">Role:</label>
+            <select id="role" formControlName="role">
+                <option value="">Select...</option>
+                <option value="ADMIN">Admin</option>
+                <option value="USER">User</option>
+                <option value="MANAGER">Manager</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="profileImg">Profile Image:</label>
+            <input type="file" id="profileImg" accept=".jpg, .jpeg, .png">
+        </div>
+
+        <div>
+            <label for="bio">Write a bio:</label>
+            <textarea id="bio" formControlName="bio" rows="5" maxlength="500"></textarea>
+        </div>
+
+        <div>
+            <button [disabled]="registerForm.invalid">Register</button>
+        </div>
+
+    </form>
+</div>

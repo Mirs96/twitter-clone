@@ -1,1 +1,30 @@
-<p>auth-home works!</p>
+<div class="auth-container" [class.blurred]="isRegisterOpen">
+    <img src="icons/logo.svg" alt="logo" class="auth-image">
+    <div class="auth-content">
+        <h2>Register now.</h2>
+        <button class="register-btn" (click)="openRegister()">Create Account</button>
+        <p class="separator"><span>or</span></p>
+        <h1>Do you already have an account?</h1>
+        <button class="login-btn" (click)="openLogin()">Login</button>
+    </div>
+</div>
+
+@if (isRegisterOpen) {
+    <div class="overlay" (click)="closeRegister()"></div>
+    <div class="modal">
+        <div class="modal-content">
+            <button class="close-btn" (click)="closeRegister()">✖</button>
+            <app-register></app-register>
+        </div>
+    </div>
+} @else if (isLoginOpen) {
+    <div class="overlay" (click)="closeLogin()"></div>
+    <div class="modal">
+        <div class="modal-content">
+            <button class="close-btn" (click)="closeLogin()">✖</button>
+            <app-login></app-login>
+        </div>
+    </div>
+}
+<button (click)="logout()">Logout</button>
+

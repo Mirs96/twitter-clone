@@ -1,0 +1,74 @@
+.register-container {
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 700px; /* Aumentato da 400px a 500px */
+    max-width: 90%;
+    text-align: center;
+    max-height: 80vh; /* Imposta un'altezza massima */
+    overflow-y: auto; /* Attiva solo la barra di scorrimento verticale se necessario */
+    overflow-x: hidden; /* Disabilita la barra di scorrimento orizzontale */
+}
+
+/* Stile per la barra di scorrimento */
+.register-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.register-container::-webkit-scrollbar-track {
+    background: #444; /* Grigio scuro */
+}
+
+.register-container::-webkit-scrollbar-thumb {
+    background: #888; /* Grigio chiaro */
+    border-radius: 10px;
+}
+
+.register-container label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.register-container input,
+.register-container select,
+.register-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background: black;
+    color: white;
+}
+
+.register-container textarea {
+    resize: vertical; /* Permette di ridimensionare verticalmente */
+    height: 100px; /* Imposta un'altezza iniziale */
+}
+
+.register-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.register-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.register-container button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+.register-container input[type="file"] {
+    border: none;
+    padding: 5px;
+}
