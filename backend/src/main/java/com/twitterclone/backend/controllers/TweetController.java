@@ -11,14 +11,12 @@ import com.twitterclone.backend.model.services.TweetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 
+@CrossOrigin(origins="http://localhost:4200", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/tweet")
 public class TweetController {
