@@ -35,7 +35,7 @@ Authentication
 Tweet Management  
 📌 Create a Tweet → POST /api/tweets
 
-📜 TODO (Next Steps)
+📜 TODO (Next Steps)  
 ✅ Backend: Dynamic hashtag management  
 ❌ Frontend: Display tweets and enable navbar functionality  
 ❌ Add likes, retweets, and user profiles  
