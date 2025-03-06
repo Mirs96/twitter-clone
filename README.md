@@ -1,21 +1,21 @@
 # Twitter Clone
 
-Un'applicazione **full-stack** che replica le funzionalità di base di Twitter, incluse l'autenticazione, la creazione di tweet e la gestione degli hashtag.
+A **full-stack** application that replicates basic Twitter functionalities, including authentication, tweet creation, and hashtag management.
 
-## 📁 Struttura del Progetto
+## 📁 Project Structure
 
 **Frontend (Angular):**  
-- **Autenticazione (Login/Registrazione)**  
-- **Home** (vuota, in fase di sviluppo)  
-- **Navbar laterale** (non ancora funzionale)
+- **Authentication (Login/Register)**  
+- **Home** (empty, under development)  
+- **Sidebar Navbar** (not functional yet)
 
 **Backend (Spring Boot):**  
-- **Login/Registrazione**  
-- **Creazione dei tweet** (gestione automatica degli hashtag)  
-- **Associazione degli hashtag ai tweet**  
-- **API RESTful con Spring JPA (Hibernate) e MVC**
+- **Login/Register**  
+- **Tweet Creation** (automatically manages hashtags)  
+- **Linking hashtags to tweets**  
+- **RESTful API with Spring JPA (Hibernate) & MVC**
 
-## 🛠 Tecnologie Utilizzate
+## 🛠 Technologies Used
 
 **Frontend (Angular):**  
 - **Angular**  
@@ -28,20 +28,20 @@ Un'applicazione **full-stack** che replica le funzionalità di base di Twitter, 
 - **Spring JPA (Hibernate)**  
 - **PostgreSQL**
 
-## **Funzionalità**
+## **Features**
 
-### 📌 Endpoint API principali
+### 📌 Key API Endpoints
 
-**Autenticazione**  
+**Authentication**  
 - **Login:** `POST /api/auth/login`  
-- **Registrazione:** `POST /api/auth/register`
+- **Register:** `POST /api/auth/register`
 
-**Gestione dei Tweet**  
-- **Creazione di un Tweet:** `POST /api/tweet`  
-  (Nota: il backend gestisce automaticamente gli hashtag nei tweet)
+**Tweet Management**  
+- **Create a Tweet:** `POST /api/tweet`  
+  (Note: the backend automatically manages hashtags in tweets)
 
-### 📜 TODO (Prossimi Passi)
+### 📜 TODO (Next Steps)
 
-- ✅ **Backend:** Gestione dinamica degli hashtag  
-- ❌ **Frontend:** Visualizzazione dei tweet e funzionalità della navbar  
-- ❌ Aggiungere like, retweet e profili utente
+- ✅ **Backend:** Dynamic hashtag management  
+- ❌ **Frontend:** Display tweets and enable navbar functionality  
+- ❌ Add likes, retweets, and user profiles
