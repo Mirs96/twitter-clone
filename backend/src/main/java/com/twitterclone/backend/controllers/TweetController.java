@@ -34,7 +34,8 @@ public class TweetController {
             @RequestBody TweetDto tweetDto,
             UriComponentsBuilder uriBuilder,
             HttpServletRequest request) {
-        // Retreive token by the header "Authorization"
+
+        // Retrieve token by the header "Authorization"
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
