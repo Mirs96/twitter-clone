@@ -1,15 +1,25 @@
 import { Injectable } from "@angular/core";
 import { jwtDecode } from "jwt-decode";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
+import { UserDetails } from "./userDetails";
+import { HttpClient } from "@angular/common/http";
+import { HttpConfig } from "../../config/http-config";
+
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserService {
-    private loggedIn = new BehaviorSubject<boolean>(this.checkToken()); // Inizializza con il token
+    urlExtension = '/user';
+    // Check if the user is logged
+    private loggedIn = new BehaviorSubject<boolean>(this.checkToken());
     loggedIn$ = this.loggedIn.asObservable();
 
-    constructor() {}
+    // Get user data (nickname, id and profile picture)
+    private userDetailsSubject = new BehaviorSubject<UserDetails | null>(null);
+    userDetails$ = this.userDetailsSubject.asObservable();
+
+    constructor(private http: HttpClient) { }
 
     private checkToken(): boolean {
         const token = localStorage.getItem('jwtToken');
@@ -31,5 +41,47 @@ export class UserService {
 
     setLoggedIn(status: boolean): void {
         this.loggedIn.next(status);
+    }
+
+    private getDecodedToken() {
+        const token = localStorage.getItem('jwtToken'); //serve per leggere il token che è salvato nel local storage
+        if (!token) {
+            return null;
+        }
+        try {
+            const decodedToken = jwtDecode<any>(token);
+            console.log(decodedToken);
+            return decodedToken;
+        } catch (error) {
+            console.error('error decodingToken', error);
+            return null;
+        }
+
+    }
+
+    getUserIdFromToken(): string | null {
+        const dC = this.getDecodedToken();
+        if (!dC) {
+            return null;
+        }
+        console.log("decode token esiste", dC);
+        return dC.userId;
+    }
+
+    fetchUserDetails(): void {
+        const userId = this.getUserIdFromToken();
+        if (!userId) {
+            console.error("User ID not found in token");
+            return;
+        }
+
+        this.http.get<UserDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${userId}`).subscribe({
+            next: user => this.userDetailsSubject.next(user),
+            error: err => console.log(err)
+        });
+    }
+
+    getUserDetails(): UserDetails | null {
+        return this.userDetailsSubject.value;
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../model/authentication/authService';
-import { RegisterDetails } from '../../model/authentication/RegisterDetails';
+import { RegisterDetails } from '../../model/authentication/registerDetails';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../model/authentication/userService';
 
@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService, 
     private router: Router,
     private userService: UserService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({

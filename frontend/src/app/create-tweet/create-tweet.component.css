@@ -1,0 +1,53 @@
+.tweet-container {
+    background-color: black;
+    padding: 15px;
+    border: 1px solid #71767b; /* Bordo grigio attorno al contenitore */
+    display: flex;
+    flex-direction: column;
+    width: 500px; /* Dimensione più piccola */
+    margin-left: 0; /* Allineato a sinistra */
+}
+
+textarea {
+    width: 100%;
+    background: transparent;
+    color: white; /* Testo dell'utente in bianco */
+    border: none; /* Rimuove il bordo dalla textarea */
+    outline: none;
+    font-size: 16px;
+    resize: none;
+    padding: 10px;
+    min-height: 25px; /* Altezza iniziale più corta */
+    max-height: 200px; /* Limite massimo di espansione */
+    overflow: hidden; /* Nasconde la scrollbar verticale */
+}
+
+textarea::placeholder {
+    color: #71767b; /* Placeholder in grigio */
+}
+
+textarea:focus {
+    border-color: #1d9bf0; /* Cambia il bordo a blu quando l'utente scrive, come su X/Twitter */
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+button {
+    background-color: white;
+    color: black;
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 8px 15px;
+    border-radius: 9999px;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

@@ -1,0 +1,12 @@
+<div class="tweet-container">
+    <form (ngSubmit)="onSubmit()" [formGroup]="tweetForm">
+        <div>
+            <textarea #tweetInput formControlName="content" rows="1" maxlength="1000" placeholder="What is happening?"
+                (input)="adjustTextareaHeight()">
+            </textarea>
+        </div>
+        <div class="button-container">
+            <button [disabled]="tweetForm.invalid">Post</button>
+        </div>
+    </form>
+</div>

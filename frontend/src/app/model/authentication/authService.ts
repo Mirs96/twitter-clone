@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { TokenResponse } from "./tokenResponse";
-import { LoginDetails } from "./LoginDetails";
+import { LoginDetails } from "./loginDetails";
 import { Observable } from "rxjs";
 import { HttpConfig } from "../../config/http-config";
-import { RegisterDetails } from "./RegisterDetails";
+import { RegisterDetails } from "./registerDetails";
 
 @Injectable({
     providedIn: 'root'
