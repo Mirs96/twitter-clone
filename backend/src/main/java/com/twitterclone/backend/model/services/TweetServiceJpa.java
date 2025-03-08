@@ -4,13 +4,12 @@ import com.twitterclone.backend.model.entities.Hashtag;
 import com.twitterclone.backend.model.entities.Tweet;
 import com.twitterclone.backend.model.entities.User;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
-import com.twitterclone.backend.model.repositories.HashtagRepositoryJpa;
 import com.twitterclone.backend.model.repositories.TweetRepositoryJpa;
 import com.twitterclone.backend.model.repositories.UserRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +36,10 @@ public class TweetServiceJpa implements  TweetService {
         List<Hashtag> hashtags = hashtagService.createHashtagsFromTweet(tweet.getContent());
         tweet.setHashtags(hashtags);
         return tweetRepo.save(tweet);
+    }
+
+    @Override
+    public Page<Tweet> getTrendingTweets(Pageable pageable) {
+        return tweetRepo.getTweetsByLikesAndCommentsDesc(pageable);
     }
 }

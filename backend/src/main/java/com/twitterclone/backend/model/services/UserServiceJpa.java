@@ -4,7 +4,6 @@ import com.twitterclone.backend.model.entities.User;
 import com.twitterclone.backend.model.repositories.UserRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service

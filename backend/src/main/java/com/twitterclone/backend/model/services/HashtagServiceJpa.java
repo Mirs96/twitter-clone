@@ -37,12 +37,11 @@ public class HashtagServiceJpa implements HashtagService {
                 tags.add(word.replaceAll("[^#\\w]+", ""));
             }
         }
-        List<Hashtag> hashtags = tags.stream()
+
+        return tags.stream()
                 .filter(t -> hashtagRepo.findByTag(t).isEmpty())
                 .map(t -> new Hashtag(0, t))
                 .map(hashtagRepo::save)
                 .toList();
-
-        return hashtags;
     }
 }

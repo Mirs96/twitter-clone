@@ -1,14 +1,14 @@
 package com.twitterclone.backend.controllers;
 
 import com.twitterclone.backend.dto.TweetDto;
-import com.twitterclone.backend.model.entities.Hashtag;
 import com.twitterclone.backend.model.entities.Tweet;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
-import com.twitterclone.backend.model.security.JwtAuthenticationFilter;
-import com.twitterclone.backend.model.services.HashtagService;
 import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.TweetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,5 +58,13 @@ public class TweetController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/trending")
+    public ResponseEntity<Page<TweetDto>> getTrendingTweets(@RequestParam(defaultValue = "0") String page,
+                                                            @RequestParam(defaultValue = "20") String size) {
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
+        Page<Tweet> tweets = tweetService.getTrendingTweets(pageable);
+        return ResponseEntity.ok(tweets.map(TweetDto::new));
     }
 }

@@ -15,6 +15,8 @@ public class TweetDto {
 
     private long userId;
 
+    private String userNickname;
+
     private String content;
 
     private String creationDate;
@@ -24,12 +26,23 @@ public class TweetDto {
     public TweetDto() {
     }
 
-    public TweetDto(long id, long userId, String content, String creationDate, String creationTime) {
+
+    public TweetDto(long id, long userId, String userNickname, String content, String creationDate, String creationTime) {
         this.id = id;
         this.userId = userId;
+        this.userNickname = userNickname;
         this.content = content;
         this.creationDate = creationDate;
         this.creationTime = creationTime;
+    }
+
+    public TweetDto(Tweet tweet) {
+        this.id = tweet.getId();
+        this.userId = tweet.getUser().getId();
+        this.userNickname = tweet.getUser().getNickname();
+        this.content = tweet.getContent();
+        this.creationDate = tweet.getCreationDate().toString();
+        this.creationTime = tweet.getCreationTime().toString();
     }
 
     public static Tweet fromDto(TweetDto dto) {
@@ -78,5 +91,13 @@ public class TweetDto {
 
     public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getUserNickname() {
+        return userNickname;
+    }
+
+    public void setUserNickname(String userNickname) {
+        this.userNickname = userNickname;
     }
 }
