@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TweetService } from '../model/tweet/tweetService';
 import { TweetDetails } from '../model/tweet/tweetDetails';
 import { UserService } from '../model/authentication/userService';
+import { TweetService } from '../model/tweet/tweetService';
 
 @Component({
   selector: 'app-create-tweet',

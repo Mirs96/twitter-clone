@@ -1,9 +1,10 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { TokenResponse } from "../authentication/tokenResponse";
 import { Observable } from "rxjs";
-import { HttpConfig } from "../../config/http-config";
 import { TweetDetails } from "./tweetDetails";
+import { HttpConfig } from "../../config/http-config";
+import { Page } from "../page";
+
 
 @Injectable({
     providedIn: 'root'
@@ -15,5 +16,13 @@ export class TweetService {
 
     createTweet(tweet: TweetDetails): Observable<TweetDetails> {
         return this.http.post<TweetDetails>(`${HttpConfig.apiUrl}${this.urlExtension}`, tweet);
+    }
+
+    getGeneralTweets(page: number, size: number): Observable<Page<TweetDetails>> {
+        const params = new HttpParams()
+                        .set('page', page.toString())
+                        .set('size', size.toString());
+        
+        return this.http.get<Page<TweetDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/trending`, { params });
     }
 }
