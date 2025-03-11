@@ -107,7 +107,7 @@ p {
     width: 600px; /* Aumenta la larghezza */
     max-width: 90%;
     max-height: 90vh; /* Evita che superi lo schermo */
-    overflow-y: auto; /* Permette lo scorrimento verticale */
+    overflow-y: hidden; /* Permette lo scorrimento verticale */
 }
 
 .modal-content {

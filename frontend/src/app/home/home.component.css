@@ -1,0 +1,68 @@
+.home-container {
+    flex: 1;
+    border-left: 1px solid #333;
+    /* Bordo grigio scuro */
+    border-right: 1px solid #333;
+    /* Bordo grigio scuro */
+    background-color: black;
+    /* Sfondo nero per la home */
+}
+
+.content-container {
+    flex: 1;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.switch-btn {
+    display: flex;
+}
+
+.btn {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    background: none;
+    font-weight: bold;
+    font-size: 15px;
+    color: #657786;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.btn.active {
+    color: #1da1f2;
+}
+
+.btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #1da1f2;
+}
+
+.create-tweet {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.tweet-list {
+    display: flex;
+    flex-direction: column;
+}
+
+app-general-tweets,
+app-following-tweet {
+    flex: 1;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+button {
+    appearance: none;
+    outline: none;
+}

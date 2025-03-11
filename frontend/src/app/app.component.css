@@ -1,19 +1,39 @@
-/* Wrapper per la navbar e il contenuto principale */
 .main-container {
     display: flex;
-    height: 100vh; /* Occupa tutta l'altezza della finestra */
+    height: 100vh;
+    background-color: black;
+    /* Sfondo nero per il contenitore principale */
+    color: white;
+    /* Testo bianco per impostazione predefinita */
 }
 
-/* Navbar (già ha position: fixed, quindi non serve modificarla) */
 nav {
-    width: 250px; /* Larghezza fissa della navbar */
-    flex-shrink: 0; /* Evita che si riduca */
+    width: 250px;
+    flex-shrink: 0;
+    background-color: rgb(0, 0, 0);
+    /* Sfondo nero per la navbar */
 }
 
-/* Contenuto principale (Home, ecc.) */
 .content {
-    flex-grow: 1; /* Occupa tutto lo spazio disponibile */
-    margin-left: 250px; /* Deve essere uguale alla larghezza della navbar */
-    padding: 20px; /* Per non attaccare il contenuto ai bordi */
-    overflow-x: hidden; /* Evita scorrimento orizzontale indesiderato */
+    flex-grow: 1;
+    margin-left: 250px;
+    padding: 20px;
+    overflow-x: hidden;
+    display: flex;
+    background-color: black;
+    /* Sfondo nero per il contenuto */
+}
+
+.right-sidebar {
+    width: 300px;
+    background-color: black;
+    /* Sfondo nero per la sidebar destra */
+    padding: 20px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    /* Assicurati che il background sia nero */
 }

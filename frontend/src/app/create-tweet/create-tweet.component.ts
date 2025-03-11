@@ -30,15 +30,14 @@ export class CreateTweetComponent implements OnInit, AfterViewInit {
     });
   }
 
-
   ngAfterViewInit() {
     this.adjustTextareaHeight(); // Regola altezza iniziale
   }
 
   adjustTextareaHeight() {
     const textarea = this.tweetInput.nativeElement;
-    textarea.style.height = '25px'; // Reset altezza iniziale
-    textarea.style.height = textarea.scrollHeight + 'px'; // Altezza dinamica in base al contenuto
+    textarea.style.height = '25px';
+    textarea.style.height = textarea.scrollHeight + 'px';
   }
 
   onSubmit(): void {

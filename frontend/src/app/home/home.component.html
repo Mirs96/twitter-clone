@@ -1,18 +1,20 @@
-<div class="btn">
-    <button (click)="onForYou()">For you</button>
-    <button (click)="onFollowing()">Following</button>
-</div>
+<div class="home-container">
+    <div class="content-container">
+        <div class="switch-btn">
+            <button class="btn" [class.active]="!isFollowing" (click)="onForYou()">For you</button>
+            <button class="btn" [class.active]="isFollowing" (click)="onFollowing()">Following</button>
+        </div>
 
-<div class="create-tweet">
-    <app-create-tweet></app-create-tweet>
-</div>
+        <div class="create-tweet">
+            <app-create-tweet></app-create-tweet>
+        </div>
 
-@if (isFollowing) {
-    <div class="tweets">
-        <app-following-tweet></app-following-tweet>
+        <div class="tweet-list">
+            @if (isFollowing) {
+            <app-following-tweet></app-following-tweet>
+            } @else {
+            <app-general-tweets></app-general-tweets>
+            }
+        </div>
     </div>
-} @else {
-    <div class="tweets">
-        <app-general-tweets></app-general-tweets>
-    </div>
-}
+</div>

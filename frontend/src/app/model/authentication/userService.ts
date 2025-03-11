@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { jwtDecode } from "jwt-decode";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { UserDetails } from "./userDetails";
 import { HttpClient } from "@angular/common/http";
 import { HttpConfig } from "../../config/http-config";
