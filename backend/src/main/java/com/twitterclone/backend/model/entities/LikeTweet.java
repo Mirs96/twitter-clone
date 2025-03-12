@@ -20,13 +20,12 @@ public class LikeTweet {
     private Tweet tweet;
 
     @Column(name = "emoji", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Emoji emoji;
+    private String emoji;
 
     public LikeTweet() {
     }
 
-    public LikeTweet(long id, User user, Tweet tweet, Emoji emoji) {
+    public LikeTweet(long id, User user, Tweet tweet, String emoji) {
         this.id = id;
         this.user = user;
         this.tweet = tweet;
@@ -57,11 +56,11 @@ public class LikeTweet {
         this.tweet = tweet;
     }
 
-    public Emoji getEmoji() {
+    public String getEmoji() {
         return emoji;
     }
 
-    public void setEmoji(Emoji emoji) {
+    public void setEmoji(String emoji) {
         this.emoji = emoji;
     }
 }

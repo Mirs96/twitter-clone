@@ -19,13 +19,12 @@ public class LikeReply {
     private Reply reply;
 
     @Column(name = "emoji", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Emoji emoji;
+    private String emoji;
 
     public LikeReply() {
     }
 
-    public LikeReply(long id, User user, Reply reply, Emoji emoji) {
+    public LikeReply(long id, User user, Reply reply, String emoji) {
         this.id = id;
         this.user = user;
         this.reply = reply;
@@ -56,11 +55,11 @@ public class LikeReply {
         this.reply = reply;
     }
 
-    public Emoji getEmoji() {
+    public String getEmoji() {
         return emoji;
     }
 
-    public void setEmoji(Emoji emoji) {
+    public void setEmoji(String emoji) {
         this.emoji = emoji;
     }
 }
