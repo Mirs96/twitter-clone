@@ -1,6 +1,8 @@
 package com.twitterclone.backend.controllers;
 
-import com.twitterclone.backend.dto.TweetDto;
+import com.twitterclone.backend.dto.CreateTweetDto;
+import com.twitterclone.backend.dto.DisplayTweetDto;
+import com.twitterclone.backend.model.DisplayTweet;
 import com.twitterclone.backend.model.entities.Tweet;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
 import com.twitterclone.backend.model.services.JwtService;
@@ -31,7 +33,7 @@ public class TweetController {
 
     @PostMapping
     public ResponseEntity<?> createTweet(
-            @RequestBody TweetDto tweetDto,
+            @RequestBody CreateTweetDto createTweetDto,
             UriComponentsBuilder uriBuilder,
             HttpServletRequest request) {
 
@@ -46,25 +48,27 @@ public class TweetController {
         String tokenUserId = jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
 
         // Compare the id given by the request to the one extracted from the token
-        if (!tokenUserId.equals(String.valueOf(tweetDto.getUserId()))) {
+        if (!tokenUserId.equals(String.valueOf(createTweetDto.getUserId()))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        Tweet tweet = TweetDto.fromDto(tweetDto);
+        Tweet tweet = CreateTweetDto.fromDto(createTweetDto);
         try {
-            Tweet savedTweet = tweetService.createTweet(tweet, tweetDto.getUserId());
+            Tweet savedTweet = tweetService.createTweet(tweet, createTweetDto.getUserId());
             URI location = uriBuilder.path("/tweet/{id}").buildAndExpand(savedTweet.getId()).toUri();;
-            tweetDto.setId(savedTweet.getUser().getId());
-            return ResponseEntity.created(location).body(tweetDto);
+            createTweetDto.setId(savedTweet.getUser().getId());
+            return ResponseEntity.created(location).body(createTweetDto);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/trending")
-    public ResponseEntity<Page<TweetDto>> getTrendingTweets(@RequestParam(defaultValue = "0") String page,
-                                                            @RequestParam(defaultValue = "20") String size) {
+    public ResponseEntity<Page<DisplayTweetDto>> getTrendingTweets(
+            @RequestParam(defaultValue = "0") String page,
+            @RequestParam(defaultValue = "20") String size
+    ) {
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
-        Page<Tweet> tweets = tweetService.getTrendingTweets(pageable);
-        return ResponseEntity.ok(tweets.map(TweetDto::new));
+        Page<DisplayTweet> tweets = tweetService.getTrendingTweets(pageable);
+        return ResponseEntity.ok(tweets.map(DisplayTweetDto::new));
     }
 }

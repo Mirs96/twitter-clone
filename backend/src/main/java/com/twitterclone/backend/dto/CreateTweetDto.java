@@ -1,16 +1,12 @@
 package com.twitterclone.backend.dto;
 
 import com.twitterclone.backend.model.entities.Tweet;
-import com.twitterclone.backend.model.entities.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class TweetDto {
+public class CreateTweetDto {
     private long id;
 
     private long userId;
@@ -23,11 +19,11 @@ public class TweetDto {
 
     private String creationTime;
 
-    public TweetDto() {
+    public CreateTweetDto() {
     }
 
 
-    public TweetDto(long id, long userId, String userNickname, String content, String creationDate, String creationTime) {
+    public CreateTweetDto(long id, long userId, String userNickname, String content, String creationDate, String creationTime) {
         this.id = id;
         this.userId = userId;
         this.userNickname = userNickname;
@@ -36,7 +32,7 @@ public class TweetDto {
         this.creationTime = creationTime;
     }
 
-    public TweetDto(Tweet tweet) {
+    public CreateTweetDto(Tweet tweet) {
         this.id = tweet.getId();
         this.userId = tweet.getUser().getId();
         this.userNickname = tweet.getUser().getNickname();
@@ -45,7 +41,7 @@ public class TweetDto {
         this.creationTime = tweet.getCreationTime().toString();
     }
 
-    public static Tweet fromDto(TweetDto dto) {
+    public static Tweet fromDto(CreateTweetDto dto) {
         return new Tweet(dto.getId(),
                 null,
                 dto.getContent(),

@@ -11,25 +11,21 @@ public class LikeTweetDto {
 
     private long tweetId;
 
-    private String emoji;
-
     public LikeTweetDto() {
     }
 
-    public LikeTweetDto(long id, long userId, String userNickname, long tweetId, String emoji) {
+    public LikeTweetDto(long id, long userId, String userNickname, long tweetId) {
         this.id = id;
         this.userId = userId;
         this.userNickname = userNickname;
         this.tweetId = tweetId;
-        this.emoji = emoji;
     }
 
     public static LikeTweet fromDto(LikeTweetDto dto) {
         return new LikeTweet(
                 dto.getId(),
                 null,
-                null,
-                dto.getEmoji()
+                null
         );
     }
 
@@ -63,13 +59,5 @@ public class LikeTweetDto {
 
     public void setTweetId(long tweetId) {
         this.tweetId = tweetId;
-    }
-
-    public String getEmoji() {
-        return emoji;
-    }
-
-    public void setEmoji(String emoji) {
-        this.emoji = emoji;
     }
 }

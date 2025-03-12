@@ -4,9 +4,7 @@ import com.twitterclone.backend.model.entities.LikeTweet;
 import com.twitterclone.backend.model.entities.Tweet;
 import com.twitterclone.backend.model.entities.User;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
-import com.twitterclone.backend.model.repositories.LikeTweetRepositoryJpa;
-import com.twitterclone.backend.model.repositories.TweetRepositoryJpa;
-import com.twitterclone.backend.model.repositories.UserRepositoryJpa;
+import com.twitterclone.backend.model.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +13,8 @@ public class LikeTweetServiceJpa implements LikeTweetService {
     private TweetRepositoryJpa tweetRepo;
     private UserRepositoryJpa userRepo;
     private LikeTweetRepositoryJpa likeTweetRepo;
+    private ReplyRepositoryJpa replyRepo;
+    private BookmarkRepositoryJpa bookmarkRepo;
 
     @Autowired
     public LikeTweetServiceJpa(TweetRepositoryJpa tweetRepo, UserRepositoryJpa userRepo, LikeTweetRepositoryJpa likeTweetRepo) {

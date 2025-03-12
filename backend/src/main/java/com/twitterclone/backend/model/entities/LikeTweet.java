@@ -19,17 +19,13 @@ public class LikeTweet {
     @JoinColumn(name = "tweet_id", nullable = false)
     private Tweet tweet;
 
-    @Column(name = "emoji", nullable = false)
-    private String emoji;
-
     public LikeTweet() {
     }
 
-    public LikeTweet(long id, User user, Tweet tweet, String emoji) {
+    public LikeTweet(long id, User user, Tweet tweet) {
         this.id = id;
         this.user = user;
         this.tweet = tweet;
-        this.emoji = emoji;
     }
 
     public long getId() {
@@ -54,13 +50,5 @@ public class LikeTweet {
 
     public void setTweet(Tweet tweet) {
         this.tweet = tweet;
-    }
-
-    public String getEmoji() {
-        return emoji;
-    }
-
-    public void setEmoji(String emoji) {
-        this.emoji = emoji;
     }
 }

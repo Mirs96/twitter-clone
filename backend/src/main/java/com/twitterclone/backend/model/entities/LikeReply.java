@@ -18,17 +18,13 @@ public class LikeReply {
     @JoinColumn(name = "reply_id", nullable = false)
     private Reply reply;
 
-    @Column(name = "emoji", nullable = false)
-    private String emoji;
-
     public LikeReply() {
     }
 
-    public LikeReply(long id, User user, Reply reply, String emoji) {
+    public LikeReply(long id, User user, Reply reply) {
         this.id = id;
         this.user = user;
         this.reply = reply;
-        this.emoji = emoji;
     }
 
     public long getId() {
@@ -53,13 +49,5 @@ public class LikeReply {
 
     public void setReply(Reply reply) {
         this.reply = reply;
-    }
-
-    public String getEmoji() {
-        return emoji;
-    }
-
-    public void setEmoji(String emoji) {
-        this.emoji = emoji;
     }
 }
