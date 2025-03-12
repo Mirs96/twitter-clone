@@ -1,18 +1,20 @@
 @if (tweets.content) {
     @for (tweet of tweets.content; track $index) {
-    <div class="post">
-        <h3>{{ tweet.userNickname }}</h3>
-        <p>{{ tweet.content }}</p>
-        <p class="time">{{ tweet.creationDate }} · {{ tweet.creationTime }}</p>
-        <div class="actions">
-            <div class="emoji-selector">
+        <div class="post">
+            <h3>{{ tweet.userNickname }}</h3>
+            <p>{{ tweet.content }}</p>
+            <p class="time">{{ tweet.creationDate }} · {{ tweet.creationTime }}</p>
+            <div class="actions">
+                <div class="emoji-selector">
+                    {{ tweet.bookmarkCount }}
+                    {{ tweet.replyCount }}
+                    {{ tweet.likeCount }}
+                </div>
 
+                <button class="reply-button">
+                    reply
+                </button>
             </div>
-
-            <button class="comment-button" (click)="openComments(tweet)">
-                reply
-            </button>
         </div>
-    </div>
     }
 }

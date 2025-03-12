@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TweetService } from '../model/tweet/tweetService';
 import { TweetDetails } from '../model/tweet/tweetDetails';
 import { Page } from '../model/page';
+import { DisplayTweetDetails } from '../model/tweet/DisplayTweetDetails';
 
 @Component({
   selector: 'app-general-tweets',
@@ -10,9 +11,11 @@ import { Page } from '../model/page';
   styleUrl: './general-tweets.component.css'
 })
 export class GeneralTweetsComponent implements OnInit{
-  tweets!: Page<TweetDetails>;
+  tweets!: Page<DisplayTweetDetails>;
   page = 0;
   size = 10;
+
+
   constructor(private tweetService: TweetService) {}
 
   ngOnInit(): void {
@@ -24,13 +27,4 @@ export class GeneralTweetsComponent implements OnInit{
         });
   }
 
-  reactToTweet() {
-
-  }
-
-  openComments(tweet: TweetDetails) {
-  }
-
-  addComment(tweet: TweetDetails, comment: string) {
-  }
 }
