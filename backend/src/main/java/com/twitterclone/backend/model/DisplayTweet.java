@@ -1,11 +1,9 @@
 package com.twitterclone.backend.model;
 
 import com.twitterclone.backend.model.entities.Tweet;
-import com.twitterclone.backend.model.entities.User;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class DisplayTweet {
+
     private Tweet tweet;
 
     private long likeCount;
@@ -13,6 +11,10 @@ public class DisplayTweet {
     private long replyCount;
 
     private long bookmarkCount;
+
+    private boolean liked;
+
+    private boolean bookmarked;
 
     public DisplayTweet() {
     }
@@ -22,6 +24,8 @@ public class DisplayTweet {
         this.likeCount = 0;
         this.replyCount = 0;
         this.bookmarkCount = 0;
+        this.liked = false;
+        this.bookmarked = false;
     }
 
     public Tweet getTweet() {
@@ -50,6 +54,22 @@ public class DisplayTweet {
 
     public long getBookmarkCount() {
         return bookmarkCount;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
+
+    public boolean isBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        this.bookmarked = bookmarked;
     }
 
     public void setBookmarkCount(long bookmarkCount) {

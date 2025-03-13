@@ -2,9 +2,11 @@ package com.twitterclone.backend.model.services;
 
 import com.twitterclone.backend.model.DisplayTweet;
 import com.twitterclone.backend.model.entities.Hashtag;
+import com.twitterclone.backend.model.entities.LikeTweet;
 import com.twitterclone.backend.model.entities.Tweet;
 import com.twitterclone.backend.model.entities.User;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
+import com.twitterclone.backend.model.exceptions.ReactionAlreadyExistsException;
 import com.twitterclone.backend.model.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,7 +44,7 @@ public class TweetServiceJpa implements  TweetService {
     }
 
     @Override
-    public Page<DisplayTweet> getTrendingTweets(Pageable pageable) {
+    public Page<DisplayTweet> getTrendingTweets(Pageable pageable, long userId) {
         Page<DisplayTweet> tweets = tweetRepo
                 .getTweetsByLikesAndCommentsDesc(pageable)
                 .map(DisplayTweet::new);
@@ -51,8 +53,38 @@ public class TweetServiceJpa implements  TweetService {
             t.setLikeCount(likeTweetRepo.countLikesByTweetId(t.getTweet().getId()));
             t.setReplyCount(replyRepo.countReplyByTweetId(t.getTweet().getId()));
             t.setBookmarkCount(bookmarkRepo.countBookmarkByTweetId(t.getTweet().getId()));
+            t.setLiked(likeTweetRepo.findLikeByUserIdAndTweetId(userId, t.getTweet().getId()).isPresent());
+            t.setBookmarked(bookmarkRepo.findBookmarkByUserIdAndTweetId(userId, t.getTweet().getId()).isPresent());
         });
 
         return tweets;
+    }
+
+    @Override
+    public DisplayTweet createLikeToTweet(LikeTweet like, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+        Tweet tweet = tweetRepo.findById(tweetId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity not found", Tweet.class.getName()));
+
+        // If the user has already reacted to the tweet
+        if (likeTweetRepo.findLikeByUserIdAndTweetId(userId, tweetId).isPresent()) {
+            throw new ReactionAlreadyExistsException("Reaction already present", LikeTweet.class.getName());
+        }
+
+        like.setUser(user);
+        like.setTweet(tweet);
+
+        likeTweetRepo.save(like);
+
+        // To update the like counts of the tweet
+        DisplayTweet tweetDetails = new DisplayTweet(tweet);
+        tweetDetails.setLikeCount(likeTweetRepo.countLikesByTweetId(tweetId));
+        tweetDetails.setReplyCount(replyRepo.countReplyByTweetId(tweetId));
+        tweetDetails.setBookmarkCount(bookmarkRepo.countBookmarkByTweetId(tweetId));
+        tweetDetails.setLiked(true);
+        tweetDetails.setBookmarked(bookmarkRepo.findBookmarkByUserIdAndTweetId(userId, tweetId).isPresent());
+
+        return tweetDetails;
     }
 }

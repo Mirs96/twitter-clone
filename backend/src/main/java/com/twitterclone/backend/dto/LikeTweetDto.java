@@ -7,17 +7,14 @@ public class LikeTweetDto {
 
     private long userId;
 
-    private String userNickname;
-
     private long tweetId;
 
     public LikeTweetDto() {
     }
 
-    public LikeTweetDto(long id, long userId, String userNickname, long tweetId) {
+    public LikeTweetDto(long id, long userId, long tweetId) {
         this.id = id;
         this.userId = userId;
-        this.userNickname = userNickname;
         this.tweetId = tweetId;
     }
 
@@ -43,14 +40,6 @@ public class LikeTweetDto {
 
     public void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    public String getUserNickname() {
-        return userNickname;
-    }
-
-    public void setUserNickname(String userNickname) {
-        this.userNickname = userNickname;
     }
 
     public long getTweetId() {
