@@ -12,4 +12,5 @@ public interface TweetService {
     public Tweet createTweet(Tweet tweet, long userId) throws EntityNotFoundException;
     public Page<DisplayTweet> getTrendingTweets(Pageable pageable, long userId);
     public DisplayTweet createLikeToTweet(LikeTweet like, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException;
-}
+    public DisplayTweet deleteLikeFromTweet(long tweetId, long userId) throws EntityNotFoundException;
+    }

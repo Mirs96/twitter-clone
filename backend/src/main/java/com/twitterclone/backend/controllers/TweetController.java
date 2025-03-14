@@ -111,4 +111,22 @@ public class TweetController {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.CONFLICT);
         }
     }
+
+    @DeleteMapping("/{id}/like")
+    public ResponseEntity<?> removeLikeToTweet(@PathVariable long id, HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authHeader.substring(7);
+        // Extract id from token
+        long userId = Integer.parseInt(jwtService.extractClaim(token, claims -> claims.get("userId", String.class)));
+
+        try {
+            DisplayTweet tweet = tweetService.deleteLikeFromTweet(id, userId);
+            return ResponseEntity.ok(new DisplayTweetDto(tweet));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }
