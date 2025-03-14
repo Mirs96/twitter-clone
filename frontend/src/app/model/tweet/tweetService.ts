@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { ChangeDetectorRef, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { TweetDetails } from "./tweetDetails";
 import { HttpConfig } from "../../config/http-config";
 import { Page } from "../page";
-import { DisplayTweetDetails } from "./DisplayTweetDetails";
-
+import { LikeTweetDetails } from "./likeTweetDetails";
+import { DisplayTweetDetails } from "./displayTweetDetails";
 
 @Injectable({
     providedIn: 'root'
@@ -16,14 +16,27 @@ export class TweetService {
     constructor(private http: HttpClient) {}
 
     createTweet(tweet: TweetDetails): Observable<TweetDetails> {
-        return this.http.post<TweetDetails>(`${HttpConfig.apiUrl}${this.urlExtension}`, tweet);
+        const headers = new HttpHeaders({
+            'Content-Type':'application/json'
+        });
+        return this.http.post<TweetDetails>(`${HttpConfig.apiUrl}${this.urlExtension}`, tweet, { headers });
     }
 
-    getGeneralTweets(page: number, size: number): Observable<Page<DisplayTweetDetails>> {
+    getGeneralTweets(page: number, size: number, userId: number): Observable<Page<DisplayTweetDetails>> {
         const params = new HttpParams()
                         .set('page', page.toString())
                         .set('size', size.toString());
-        
-        return this.http.get<Page<DisplayTweetDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/trending`, { params });
+        return this.http.get<Page<DisplayTweetDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/${userId}/trending`, { params });
+    }
+
+    addLikeToTweet(like: LikeTweetDetails): Observable<DisplayTweetDetails> {
+        const headers = new HttpHeaders({
+            'Content-Type':'application/json'
+        });
+        return this.http.post<DisplayTweetDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/like`, like, { headers });
+    }
+
+    removeLikeFromTweet(tweetId: number): Observable<DisplayTweetDetails> {
+        return this.http.delete<DisplayTweetDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${tweetId}/like`);
     }
 }

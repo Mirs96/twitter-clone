@@ -8,4 +8,6 @@ export interface DisplayTweetDetails {
     likeCount: number;
     replyCount: number;
     bookmarkCount: number;
+    liked: boolean;
+    bookmarked: boolean;
 }

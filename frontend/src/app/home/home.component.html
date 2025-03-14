@@ -5,15 +5,19 @@
             <button class="btn" [class.active]="isFollowing" (click)="onFollowing()">Following</button>
         </div>
 
-        <div class="create-tweet">
+        <div #createTweet class="create-tweet">
             <app-create-tweet></app-create-tweet>
         </div>
 
-        <div class="tweet-list">
+        <div #tweetListContainer class="tweet-list">
             @if (isFollowing) {
-                <app-following-tweet></app-following-tweet>
+                <div class="tweets">
+                    <app-following-tweet></app-following-tweet>
+                </div>
             } @else {
-                <app-general-tweets></app-general-tweets>
+                <div class="tweets">
+                    <app-general-tweets></app-general-tweets>
+                </div>
             }
         </div>
     </div>

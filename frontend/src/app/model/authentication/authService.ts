@@ -18,10 +18,13 @@ export class AuthService {
         const headers = new HttpHeaders({
             'Content-Type':'application/json'
         });
-        return this.http.post<TokenResponse>(`${HttpConfig.apiUrl}${this.urlExtension}/login`, login, {headers});
+        return this.http.post<TokenResponse>(`${HttpConfig.apiUrl}${this.urlExtension}/login`, login, { headers });
     }
 
     register(register: RegisterDetails): Observable<TokenResponse> {
-        return this.http.post<TokenResponse>(`${HttpConfig.apiUrl}${this.urlExtension}/register`, register);
+        const headers = new HttpHeaders({
+            'Content-Type':'application/json'
+        });
+        return this.http.post<TokenResponse>(`${HttpConfig.apiUrl}${this.urlExtension}/register`, register, { headers });
     }
 }

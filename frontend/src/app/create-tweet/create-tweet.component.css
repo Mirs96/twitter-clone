@@ -19,7 +19,7 @@ textarea {
     padding: 10px;
     min-height: 25px; /* Altezza iniziale più corta */
     max-height: 200px; /* Limite massimo di espansione */
-    overflow: initial; /* Nasconde la scrollbar verticale */
+    overflow: hidden; /* Nasconde la scrollbar verticale */
 }
 
 textarea::placeholder {

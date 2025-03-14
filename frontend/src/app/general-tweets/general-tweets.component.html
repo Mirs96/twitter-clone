@@ -1,20 +1,39 @@
-@if (tweets.content) {
-    @for (tweet of tweets.content; track $index) {
-        <div class="post">
-            <h3>{{ tweet.userNickname }}</h3>
+<div class="tweets-container" (scroll)="onScroll($event)">
+    @for (tweet of tweets; track $index) {
+    <div class="tweet">
+        <div class="post-header">
+            <div class="user-info">
+                <h3>{{ tweet.userNickname }}</h3>
+                <p class="time">{{ tweet.creationDate }} · {{ tweet.creationTime }}</p>
+            </div>
+        </div>
+        <div class="post-content">
             <p>{{ tweet.content }}</p>
-            <p class="time">{{ tweet.creationDate }} · {{ tweet.creationTime }}</p>
-            <div class="actions">
-                <div class="emoji-selector">
-                    {{ tweet.bookmarkCount }}
-                    {{ tweet.replyCount }}
-                    {{ tweet.likeCount }}
-                </div>
-
-                <button class="reply-button">
-                    reply
+        </div>
+        <div class="actions">
+            <div class="interaction-buttons">
+                <button class="interaction-button like-button" [class.active]="tweet.liked" (click)="toggleLike(tweet)">
+                    <img class="interaction-icon" src="icons/tweet-buttons/like.svg" alt="Like">
+                    <span class="interaction-count">{{ tweet.likeCount }}</span>
+                </button>
+                <button class="interaction-button reply-button">
+                    <img class="interaction-icon" src="icons/tweet-buttons/reply.svg" alt="Reply">
+                    <span class="interaction-count">{{ tweet.replyCount }}</span>
+                </button>
+                <button class="interaction-button bookmark-button" [class.active]="tweet.bookmarked"
+                    (click)="toggleBookmark(tweet)">
+                    <img class="interaction-icon" src="icons/tweet-buttons/bookmark.svg" alt="Bookmark">
+                    <span class="interaction-count">{{ tweet.bookmarkCount }}</span>
                 </button>
             </div>
         </div>
+
+        @if (isLoading) {
+        <div class="loading-spinner">
+            Loading more tweets...
+        </div>
+        }
+    </div>
     }
-}
+
+</div>
