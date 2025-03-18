@@ -10,15 +10,21 @@ public interface TweetRepositoryJpa extends JpaRepository<Tweet, Long> {
     @Query("""
                 SELECT t
                 FROM Tweet t
-                ORDER BY t.creationDate DESC, (
-                    SELECT COUNT(lt)
-                    FROM LikeTweet lt
-                    WHERE lt.tweet = t
-                ) DESC, (
-                    SELECT COUNT(r)
-                    FROM Reply r
-                    WHERE r.tweet = t
-                ) DESC
+                ORDER BY
+                    EXTRACT(EPOCH FROM CAST(t.creationDate AS TIMESTAMP)) * 0.7 +
+                    (
+                        (
+                            SELECT COUNT(lt)
+                            FROM LikeTweet lt
+                            WHERE lt.tweet = t
+                        ) +
+                        (
+                            SELECT COUNT(r)
+                            FROM Reply r
+                            WHERE r.tweet = t
+                        )
+                    ) * 0.3
+                DESC
             """)
-    public Page<Tweet> getTweetsByLikesAndCommentsDesc(Pageable pageable);
+    Page<Tweet> getTweetsByLikesAndCommentsDesc(Pageable pageable);
 }

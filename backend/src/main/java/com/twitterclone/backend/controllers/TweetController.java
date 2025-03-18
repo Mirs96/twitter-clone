@@ -1,13 +1,13 @@
 package com.twitterclone.backend.controllers;
 
-import com.twitterclone.backend.dto.CreateTweetDto;
-import com.twitterclone.backend.dto.DisplayTweetDto;
-import com.twitterclone.backend.dto.LikeTweetDto;
+import com.twitterclone.backend.dto.*;
 import com.twitterclone.backend.model.DisplayTweet;
+import com.twitterclone.backend.model.entities.Bookmark;
 import com.twitterclone.backend.model.entities.LikeTweet;
 import com.twitterclone.backend.model.entities.Tweet;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
 import com.twitterclone.backend.model.exceptions.ReactionAlreadyExistsException;
+import com.twitterclone.backend.model.exceptions.UnauthorizedException;
 import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.TweetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 
-@CrossOrigin(origins="http://localhost:4200", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/tweet")
 public class TweetController {
+
     private TweetService tweetService;
     private JwtService jwtService;
 
@@ -34,30 +35,46 @@ public class TweetController {
         this.jwtService = jwtService;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createTweet(
-            @RequestBody CreateTweetDto createTweetDto,
-            UriComponentsBuilder uriBuilder,
-            HttpServletRequest request) {
-        // Retrieve token by the header "Authorization"
+    private String extractUserIdFromToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return null;
         }
         String token = authHeader.substring(7);
-        // Extract id from token
-        String tokenUserId = jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
-        // Compare the id given by the request to the one extracted from the token
-        if (!tokenUserId.equals(String.valueOf(createTweetDto.getUserId()))) {
+        return jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
+    }
+
+    private boolean isValidUser(HttpServletRequest request, long userId) {
+        String tokenUserId = extractUserIdFromToken(request);
+        return tokenUserId != null && tokenUserId.equals(String.valueOf(userId));
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createTweet(@RequestBody CreateTweetDto createTweetDto,
+                                         UriComponentsBuilder uriBuilder,
+                                         HttpServletRequest request) {
+        long userId = createTweetDto.getUserId();
+
+        if (!isValidUser(request, userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         Tweet tweet = CreateTweetDto.fromDto(createTweetDto);
         try {
-            Tweet savedTweet = tweetService.createTweet(tweet, createTweetDto.getUserId());
-            URI location = uriBuilder.path("/tweet/{id}").buildAndExpand(savedTweet.getId()).toUri();;
+            Tweet savedTweet = tweetService.createTweet(tweet, userId);
+            URI location = uriBuilder.path("/tweet/{id}").buildAndExpand(savedTweet.getId()).toUri();
             createTweetDto.setId(savedTweet.getUser().getId());
             return ResponseEntity.created(location).body(createTweetDto);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findTweetById(@PathVariable long id) {
+        try {
+            DisplayTweet tweet = tweetService.findTweetById(id);
+            return ResponseEntity.ok(DisplayTweetDto::new);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
@@ -68,17 +85,9 @@ public class TweetController {
             @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "20") String size,
             @PathVariable long userId,
-            HttpServletRequest request
-    ) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        String token = authHeader.substring(7);
-        // Extract id from token
-        String tokenUserId = jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
-        // Compare the id given by the request to the one extracted from the token
-        if (!tokenUserId.equals(String.valueOf(userId))) {
+            HttpServletRequest request) {
+
+        if (!isValidUser(request, userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -89,21 +98,15 @@ public class TweetController {
 
     @PostMapping("/like")
     public ResponseEntity<?> createLikeToTweet(@RequestBody LikeTweetDto likeDto, HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        String token = authHeader.substring(7);
-        // Extract id from token
-        String tokenUserId = jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
-        // Compare the id given by the request to the one extracted from the token
-        if (!tokenUserId.equals(String.valueOf(likeDto.getUserId()))) {
+        long userId = likeDto.getUserId();
+
+        if (!isValidUser(request, userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         LikeTweet like = LikeTweetDto.fromDto(likeDto);
         try {
-            DisplayTweet updatedTweet = tweetService.createLikeToTweet(like, likeDto.getUserId(), likeDto.getTweetId());
+            DisplayTweet updatedTweet = tweetService.createLikeToTweet(like, userId, likeDto.getTweetId());
             return ResponseEntity.ok(new DisplayTweetDto(updatedTweet));
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
@@ -114,19 +117,48 @@ public class TweetController {
 
     @DeleteMapping("/{id}/like")
     public ResponseEntity<?> removeLikeToTweet(@PathVariable long id, HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        String token = authHeader.substring(7);
-        // Extract id from token
-        long userId = Integer.parseInt(jwtService.extractClaim(token, claims -> claims.get("userId", String.class)));
+        long userId = Long.parseLong(extractUserIdFromToken(request));
 
         try {
             DisplayTweet tweet = tweetService.deleteLikeFromTweet(id, userId);
             return ResponseEntity.ok(new DisplayTweetDto(tweet));
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        } catch (UnauthorizedException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PostMapping("/bookmark")
+    public ResponseEntity<?> createBookmarkToTweet(@RequestBody BookmarkDto bookmarkDto, HttpServletRequest request) {
+        long userId = bookmarkDto.getUserId();
+
+        if (!isValidUser(request, userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Bookmark bookmark = BookmarkDto.fromDto(bookmarkDto);
+        try {
+            DisplayTweet updatedTweet = tweetService.createBookmarkToTweet(bookmark, userId, bookmarkDto.getTweetId());
+            return ResponseEntity.ok(new DisplayTweetDto(updatedTweet));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        } catch (ReactionAlreadyExistsException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.CONFLICT);
+        }
+    }
+
+    @DeleteMapping("/{id}/bookmark")
+    public ResponseEntity<?> removeBookmarkToTweet(@PathVariable long id, HttpServletRequest request) {
+        long userId = Long.parseLong(extractUserIdFromToken(request));
+
+        try {
+            DisplayTweet tweet = tweetService.deleteBookmarkFromTweet(id, userId);
+            return ResponseEntity.ok(new DisplayTweetDto(tweet));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        } catch (UnauthorizedException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.FORBIDDEN);
         }
     }
 }

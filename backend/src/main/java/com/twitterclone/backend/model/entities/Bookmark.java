@@ -30,12 +30,12 @@ public class Bookmark {
     public Bookmark() {
     }
 
-    public Bookmark(LocalTime creationTime, LocalDate creationDate, Tweet tweet, User user, long id) {
-        this.creationTime = creationTime;
-        this.creationDate = creationDate;
-        this.tweet = tweet;
-        this.user = user;
+    public Bookmark(long id, User user, Tweet tweet, LocalDate creationDate, LocalTime creationTime) {
         this.id = id;
+        this.user = user;
+        this.tweet = tweet;
+        this.creationDate = creationDate;
+        this.creationTime = creationTime;
     }
 
     public long getId() {

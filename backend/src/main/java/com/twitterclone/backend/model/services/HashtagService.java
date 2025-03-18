@@ -5,6 +5,6 @@ import com.twitterclone.backend.model.entities.Hashtag;
 import java.util.List;
 
 public interface HashtagService {
-    public Hashtag createHashtag(Hashtag hashtag);
-    public List<Hashtag> createHashtagsFromTweet(String content);
+    Hashtag createHashtag(Hashtag hashtag);
+    List<Hashtag> createHashtagsFromTweet(String content);
 }

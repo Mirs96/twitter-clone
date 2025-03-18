@@ -13,7 +13,7 @@ public interface LikeTweetRepositoryJpa extends JpaRepository<LikeTweet, Long> {
                 FROM LikeTweet lt
                 WHERE lt.tweet.id = :tweetId
             """)
-    public long countLikesByTweetId(@Param("tweetId") long tweetId);
+    long countLikesByTweetId(@Param("tweetId") long tweetId);
 
     @Query("""
                 SELECT lt
@@ -21,5 +21,5 @@ public interface LikeTweetRepositoryJpa extends JpaRepository<LikeTweet, Long> {
                 WHERE lt.tweet.id = :tweetId
                 AND lt.user.id = :userId
             """)
-    public Optional<LikeTweet> findLikeByUserIdAndTweetId(@Param("userId") long userId, @Param("tweetId") long tweetId);
+    Optional<LikeTweet> findLikeByUserIdAndTweetId(@Param("userId") long userId, @Param("tweetId") long tweetId);
 }
