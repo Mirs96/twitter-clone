@@ -74,7 +74,7 @@ public class TweetController {
     public ResponseEntity<?> findTweetById(@PathVariable long id) {
         try {
             DisplayTweet tweet = tweetService.findTweetById(id);
-            return ResponseEntity.ok(DisplayTweetDto::new);
+            return ResponseEntity.ok(new DisplayTweetDto(tweet));
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
