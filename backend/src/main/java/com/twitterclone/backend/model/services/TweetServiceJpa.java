@@ -60,10 +60,14 @@ public class TweetServiceJpa implements TweetService {
     }
 
     @Override
-    public DisplayTweet findTweetById(long tweetId) throws EntityNotFoundException {
-        return tweetRepo.findById(tweetId)
+    public DisplayTweet findTweetById(long tweetId, long userId) throws EntityNotFoundException {
+        DisplayTweet tweet= tweetRepo.findById(tweetId)
                 .map(DisplayTweet::new)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", Tweet.class.getName()));
+
+        updateTweetDetails(tweet, userId);
+
+        return tweet;
     }
 
     @Override

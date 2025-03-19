@@ -164,4 +164,20 @@ public class DisplayTweetDto {
     public void setReplied(boolean replied) {
         this.replied = replied;
     }
+
+    public Long getLikeId() {
+        return likeId;
+    }
+
+    public void setLikeId(Long likeId) {
+        this.likeId = likeId;
+    }
+
+    public Long getBookmarkId() {
+        return bookmarkId;
+    }
+
+    public void setBookmarkId(Long bookmarkId) {
+        this.bookmarkId = bookmarkId;
+    }
 }

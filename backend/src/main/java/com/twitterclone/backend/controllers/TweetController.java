@@ -21,6 +21,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 
+import static java.lang.Integer.parseInt;
+
+
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/tweet")
@@ -71,9 +74,10 @@ public class TweetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findTweetById(@PathVariable long id) {
+    public ResponseEntity<?> findTweetById(@PathVariable long id, HttpServletRequest request) {
+        long userId = parseInt(extractUserIdFromToken(request));
         try {
-            DisplayTweet tweet = tweetService.findTweetById(id);
+            DisplayTweet tweet = tweetService.findTweetById(id, userId);
             return ResponseEntity.ok(new DisplayTweetDto(tweet));
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
@@ -91,7 +95,7 @@ public class TweetController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
+        Pageable pageable = PageRequest.of(parseInt(page), parseInt(size));
         Page<DisplayTweet> tweets = tweetService.getTrendingTweets(pageable, userId);
         return ResponseEntity.ok(tweets.map(DisplayTweetDto::new));
     }

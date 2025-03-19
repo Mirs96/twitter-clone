@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public interface TweetService {
     Tweet createTweet(Tweet tweet, long userId) throws EntityNotFoundException;
-    DisplayTweet findTweetById(long tweetId) throws EntityNotFoundException;
+    DisplayTweet findTweetById(long tweetId, long userId) throws EntityNotFoundException;
     Page<DisplayTweet> getTrendingTweets(Pageable pageable, long userId);
 
     DisplayTweet createLikeToTweet(LikeTweet like, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException;
