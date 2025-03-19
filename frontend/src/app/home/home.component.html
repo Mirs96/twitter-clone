@@ -10,15 +10,9 @@
         </div>
 
         <div #tweetListContainer class="tweet-list">
-            @if (isFollowing) {
-                <div class="tweets">
-                    <app-following-tweet></app-following-tweet>
-                </div>
-            } @else {
-                <div class="tweets">
-                    <app-general-tweets></app-general-tweets>
-                </div>
-            }
+            <div class="tweets">
+                <app-tweet-list [isFollowing]="isFollowing"></app-tweet-list>
+            </div>
         </div>
     </div>
 </div>

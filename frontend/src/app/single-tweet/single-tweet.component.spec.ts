@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GeneralTweetsComponent } from './general-tweets.component';
+import { SingleTweetComponent } from './single-tweet.component';
 
-describe('GeneralTweetsComponent', () => {
-  let component: GeneralTweetsComponent;
-  let fixture: ComponentFixture<GeneralTweetsComponent>;
+describe('SingleTweetComponent', () => {
+  let component: SingleTweetComponent;
+  let fixture: ComponentFixture<SingleTweetComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GeneralTweetsComponent]
+      imports: [SingleTweetComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GeneralTweetsComponent);
+    fixture = TestBed.createComponent(SingleTweetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -10,4 +10,6 @@ export interface DisplayTweetDetails {
     bookmarkCount: number;
     liked: boolean;
     bookmarked: boolean;
+    likeId?: number;
+    bookmarkId?: number;
 }

@@ -7,7 +7,7 @@
     max-width: 90%;
     text-align: center;
     max-height: 80vh; /* Imposta un'altezza massima */
-    overflow-y: hidden; /* Attiva solo la barra di scorrimento verticale se necessario */
+    overflow-y: auto; /* Attiva solo la barra di scorrimento verticale se necessario */
     overflow-x: hidden; /* Disabilita la barra di scorrimento orizzontale */
 }
 

@@ -1,11 +1,10 @@
-import { Component, ElementRef, HostListener, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, Renderer2, ViewChild } from '@angular/core';
 import { CreateTweetComponent } from '../create-tweet/create-tweet.component';
-import { FollowingTweetsComponent } from '../following-tweets/following-tweet.component';
-import { GeneralTweetsComponent } from '../general-tweets/general-tweets.component';
+import { TweetListComponent } from '../tweet-list/tweet-list.component';
 
 @Component({
   selector: 'app-home',
-  imports: [CreateTweetComponent, FollowingTweetsComponent, GeneralTweetsComponent],
+  imports: [CreateTweetComponent, TweetListComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -14,7 +13,15 @@ export class HomeComponent {
   @ViewChild('createTweet') createTweet!: ElementRef;
   @ViewChild('tweetListContainer') tweetListContainer!: ElementRef;
 
+  @Output()
+  isFollowingChanged = new EventEmitter<boolean>();
+
   constructor(private renderer: Renderer2) { }
+
+  toggleFollow(): void {
+    this.isFollowing = !this.isFollowing;
+    this.isFollowingChanged.emit(this.isFollowing);
+  }
 
   ngAfterViewInit(): void {
     this.onTweetListScroll();
@@ -22,24 +29,26 @@ export class HomeComponent {
 
   onForYou(): void {
     this.isFollowing = false;
+    this.isFollowingChanged.emit(this.isFollowing); 
   }
 
   onFollowing(): void {
     this.isFollowing = true;
+    this.isFollowingChanged.emit(this.isFollowing);
   }
 
   @HostListener('scroll', ['$event'])
   onTweetListScroll(event?: any) {
     if (this.createTweet && this.createTweet.nativeElement && this.tweetListContainer && this.tweetListContainer.nativeElement) {
       const scrollY = this.tweetListContainer.nativeElement.scrollTop;
-      const creaPostElement = this.createTweet.nativeElement;
-      const creaPostHeight = creaPostElement.offsetHeight;
+      const createTweetElement = this.createTweet.nativeElement;
+      const createTweetHeight = createTweetElement.offsetHeight;
 
-      if (scrollY < creaPostHeight) {
-        this.renderer.setStyle(creaPostElement, 'transform', `translateY(-${scrollY}px)`);
-        this.renderer.setStyle(creaPostElement, 'opacity', '1');
+      if (scrollY < createTweetHeight) {
+        this.renderer.setStyle(createTweetElement, 'transform', `translateY(-${scrollY}px)`);
+        this.renderer.setStyle(createTweetElement, 'opacity', '1');
       } else {
-        this.renderer.setStyle(creaPostElement, 'opacity', '0');
+        this.renderer.setStyle(createTweetElement, 'opacity', '0');
       }
     }
   }

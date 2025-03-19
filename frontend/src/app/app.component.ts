@@ -8,7 +8,7 @@ import { RegisterComponent } from './authentication/register/register.component'
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, AuthHomeComponent, HomeComponent],
+  imports: [RouterOutlet, NavbarComponent, AuthHomeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

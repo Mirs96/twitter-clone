@@ -1,0 +1,18 @@
+<div class="tweet-container">
+    <app-single-tweet [tweet]="tweet" [userId]="this.userId"></app-single-tweet>
+</div>
+
+<form [formGroup]="replyForm" (ngSubmit)="onSubmit()" class="reply-form">
+    <textarea formControlName="content" placeholder="Post your repy" rows="3"></textarea>
+    <button type="submit" [disabled]="replyForm.invalid">Reply</button>
+</form>
+
+<div class="replies">
+    @for (reply of replies; track reply.id) {
+        <div class="reply">
+            <strong>{{ reply.userNickname }}</strong>
+            <span><small>{{ tweet.creationDate }} · {{ tweet.creationTime }}</small></span>
+            <p>{{ reply.content }}</p>
+        </div>
+    }
+</div>

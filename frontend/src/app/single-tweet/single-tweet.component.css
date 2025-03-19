@@ -1,30 +1,3 @@
-body {
-    background-color: #000;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.tweets-container {
-    overflow-y: scroll;
-    max-height: 80vh;
-
-    /* Nasconde la scrollbar su Firefox */
-    scrollbar-width: none;
-
-    /* Nasconde la scrollbar su Internet Explorer e Edge */
-    -ms-overflow-style: none;
-}
-
-/* Nasconde la scrollbar su WebKit (Chrome, Safari, Edge basato su Chromium, Opera) */
-.tweets-container::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-    display: none;
-}
-
-
 .tweet {
     border: 1px solid #2f3336;
     border-radius: 10px;
@@ -32,13 +5,6 @@ body {
     margin: 10px;
     color: white;
     background-color: #000;
-}
-
-.loading-spinner {
-    text-align: center;
-    padding: 20px;
-    font-size: 16px;
-    color: #888;
 }
 
 .post-header {

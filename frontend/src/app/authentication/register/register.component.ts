@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../model/authentication/authService';
 import { RegisterDetails } from '../../model/authentication/registerDetails';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserService } from '../../model/authentication/userService';
 
 @Component({
@@ -14,11 +14,11 @@ import { UserService } from '../../model/authentication/userService';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, 
-    private authService: AuthService, 
+  constructor(private fb: FormBuilder,
+    private authService: AuthService,
     private router: Router,
     private userService: UserService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -37,22 +37,18 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.registerForm.value);
-    console.log(this.registerForm.valid);
-
     if (this.registerForm.valid) {
       const formData: RegisterDetails = {
         ...this.registerForm.value,
         creationDate: new Date().toISOString().split('T')[0]
       };
-      console.log('Dati di registrazione: ', formData);
 
       this.authService.register(formData).subscribe({
         next: response => {
           alert('Registration successful');
           localStorage.setItem('jwtToken', response.token);
           this.userService.setLoggedIn(true);
-          this.router.navigate(['/home']);          
+          this.router.navigate(['/home']);
         },
         error: err => {
           console.log(err);
