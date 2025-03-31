@@ -2,15 +2,14 @@ package com.twitterclone.backend.dto;
 
 import com.twitterclone.backend.model.entities.Reply;
 
-public class ReplyDto {
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class CreateReplyDto {
 
     private long id;
 
     private long userId;
-
-    private String userNickname;
-
-    private String userProfilePicture;
 
     private long tweetId;
 
@@ -22,14 +21,9 @@ public class ReplyDto {
 
     private String creationTime;
 
-    public ReplyDto() {
-    }
-
-    public ReplyDto(long id, long userId, String userNickname, String userProfilePicture, long tweetId, Long parentReplyId, String content, String creationDate, String creationTime) {
+    public CreateReplyDto(long id, long userId, long tweetId, Long parentReplyId, String content, String creationDate, String creationTime) {
         this.id = id;
         this.userId = userId;
-        this.userNickname = userNickname;
-        this.userProfilePicture = userProfilePicture;
         this.tweetId = tweetId;
         this.parentReplyId = parentReplyId;
         this.content = content;
@@ -37,15 +31,16 @@ public class ReplyDto {
         this.creationTime = creationTime;
     }
 
-    public ReplyDto(Reply reply) {
-        this.id = reply.getId();
-        this.userId = reply.getUser().getId();
-        this.userNickname = reply.getUser().getNickname();
-        this.userProfilePicture = reply.getUser().getProfilePicture();
-        this.tweetId = reply.getTweet().getId();
-        this.parentReplyId = (reply.getParentReply() != null) ? reply.getParentReply().getId() : null;         this.content = reply.getContent();
-        this.creationDate = reply.getCreationDate().toString();
-        this.creationTime = reply.getCreationTime().toString();
+    public static Reply fromDto(CreateReplyDto dto) {
+        return new Reply(
+                dto.getId(),
+                null,
+                null,
+                null,
+                dto.getContent(),
+                LocalDate.parse(dto.getCreationDate()),
+                LocalTime.parse(dto.getCreationTime())
+        );
     }
 
     public long getId() {
@@ -62,22 +57,6 @@ public class ReplyDto {
 
     public void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    public String getUserNickname() {
-        return userNickname;
-    }
-
-    public void setUserNickname(String userNickname) {
-        this.userNickname = userNickname;
-    }
-
-    public String getUserProfilePicture() {
-        return userProfilePicture;
-    }
-
-    public void setUserProfilePicture(String userProfilePicture) {
-        this.userProfilePicture = userProfilePicture;
     }
 
     public long getTweetId() {

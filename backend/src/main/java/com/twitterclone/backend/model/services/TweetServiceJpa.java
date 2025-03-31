@@ -32,23 +32,6 @@ public class TweetServiceJpa implements TweetService {
         this.bookmarkRepo = bookmarkRepo;
     }
 
-    private void updateTweetDetails(DisplayTweet tweetDetails, long userId) {
-        long tweetId = tweetDetails.getTweet().getId();
-
-        tweetDetails.setLikeCount(likeTweetRepo.countLikesByTweetId(tweetId));
-        tweetDetails.setReplyCount(replyRepo.countReplyByTweetId(tweetId));
-        tweetDetails.setBookmarkCount(bookmarkRepo.countBookmarkByTweetId(tweetId));
-        tweetDetails.setReplied(!replyRepo.findReplyByUserIdAndTweetId(userId, tweetId).isEmpty());
-
-        Optional<LikeTweet> oLike = likeTweetRepo.findLikeByUserIdAndTweetId(userId, tweetId);
-        tweetDetails.setLiked(oLike.isPresent());
-        oLike.ifPresent(l -> tweetDetails.setLikeId(l.getId()));
-
-        Optional<Bookmark> oBookmark = bookmarkRepo.findBookmarkByUserIdAndTweetId(userId, tweetId);
-        tweetDetails.setBookmarked(oBookmark.isPresent());
-        oBookmark.ifPresent(b -> tweetDetails.setBookmarkId(b.getId()));
-    }
-
     public Tweet createTweet(Tweet tweet, long userId) throws EntityNotFoundException {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
@@ -115,7 +98,6 @@ public class TweetServiceJpa implements TweetService {
         }
 
         DisplayTweet tweet = new DisplayTweet(like.getTweet());
-        long tweetId = tweet.getTweet().getId();
 
         likeTweetRepo.deleteById(like.getId());
 
@@ -159,7 +141,6 @@ public class TweetServiceJpa implements TweetService {
         }
 
         DisplayTweet tweet = new DisplayTweet(bookmark.getTweet());
-        long tweetId = tweet.getTweet().getId();
 
         bookmarkRepo.deleteById(bookmark.getId());
 
@@ -167,6 +148,22 @@ public class TweetServiceJpa implements TweetService {
         updateTweetDetails(tweet, userId);
 
         return tweet;
+    }
+
+    private void updateTweetDetails(DisplayTweet tweetDetails, long userId) {
+        long tweetId = tweetDetails.getTweet().getId();
+
+        tweetDetails.setLikeCount(likeTweetRepo.countLikesByTweetId(tweetId));
+        tweetDetails.setReplyCount(replyRepo.countReplyByTweetId(tweetId));
+        tweetDetails.setBookmarkCount(bookmarkRepo.countBookmarkByTweetId(tweetId));
+
+        Optional<LikeTweet> oLike = likeTweetRepo.findLikeByUserIdAndTweetId(userId, tweetId);
+        tweetDetails.setLiked(oLike.isPresent());
+        oLike.ifPresent(l -> tweetDetails.setLikeId(l.getId()));
+
+        Optional<Bookmark> oBookmark = bookmarkRepo.findBookmarkByUserIdAndTweetId(userId, tweetId);
+        tweetDetails.setBookmarked(oBookmark.isPresent());
+        oBookmark.ifPresent(b -> tweetDetails.setBookmarkId(b.getId()));
     }
 
 }

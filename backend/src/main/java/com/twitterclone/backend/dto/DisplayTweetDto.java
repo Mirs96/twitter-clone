@@ -26,8 +26,6 @@ public class DisplayTweetDto {
 
     private boolean bookmarked;
 
-    private boolean replied;
-
     private Long likeId;
 
     private Long bookmarkId;
@@ -35,7 +33,7 @@ public class DisplayTweetDto {
     public DisplayTweetDto() {
     }
 
-    public DisplayTweetDto(long id, long userId, String userNickname, String content, String creationDate, String creationTime, long likeCount, long replyCount, long bookmarkCount, boolean liked, boolean bookmarked, boolean replied, Long likeId, Long bookmarkId) {
+    public DisplayTweetDto(long id, long userId, String userNickname, String content, String creationDate, String creationTime, long likeCount, long replyCount, long bookmarkCount, boolean liked, boolean bookmarked, Long likeId, Long bookmarkId) {
         this.id = id;
         this.userId = userId;
         this.userNickname = userNickname;
@@ -47,7 +45,6 @@ public class DisplayTweetDto {
         this.bookmarkCount = bookmarkCount;
         this.liked = liked;
         this.bookmarked = bookmarked;
-        this.replied = replied;
         this.likeId = likeId;
         this.bookmarkId = bookmarkId;
     }
@@ -64,7 +61,6 @@ public class DisplayTweetDto {
         this.bookmarkCount = tweet.getBookmarkCount();
         this.liked = tweet.isLiked();
         this.bookmarked = tweet.isBookmarked();
-        this.replied = tweet.isReplied();
         this.likeId = tweet.getLikeId();
         this.bookmarkId = tweet.getBookmarkId();
     }
@@ -155,14 +151,6 @@ public class DisplayTweetDto {
 
     public void setBookmarked(boolean bookmarked) {
         this.bookmarked = bookmarked;
-    }
-
-    public boolean isReplied() {
-        return replied;
-    }
-
-    public void setReplied(boolean replied) {
-        this.replied = replied;
     }
 
     public Long getLikeId() {

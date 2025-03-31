@@ -1,26 +1,27 @@
 package com.twitterclone.backend.dto;
 
+import com.twitterclone.backend.model.entities.LikeReply;
 import com.twitterclone.backend.model.entities.LikeTweet;
 
-public class LikeTweetDto {
+public class LikeReplyDto {
 
     private long id;
 
     private long userId;
 
-    private long tweetId;
+    private long replyId;
 
-    public LikeTweetDto() {
+    public LikeReplyDto() {
     }
 
-    public LikeTweetDto(long id, long userId, long tweetId) {
+    public LikeReplyDto(long id, long userId, long replyId) {
         this.id = id;
         this.userId = userId;
-        this.tweetId = tweetId;
+        this.replyId = replyId;
     }
 
-    public static LikeTweet fromDto(LikeTweetDto dto) {
-        return new LikeTweet(
+    public static LikeReply fromDto(LikeReplyDto dto) {
+        return new LikeReply(
                 dto.getId(),
                 null,
                 null
@@ -43,11 +44,11 @@ public class LikeTweetDto {
         this.userId = userId;
     }
 
-    public long getTweetId() {
-        return tweetId;
+    public long getReplyId() {
+        return replyId;
     }
 
-    public void setTweetId(long tweetId) {
-        this.tweetId = tweetId;
+    public void setReplyId(long replyId) {
+        this.replyId = replyId;
     }
 }

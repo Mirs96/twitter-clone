@@ -16,8 +16,6 @@ public class DisplayTweet {
 
     private boolean bookmarked;
 
-    private boolean replied;
-
     private Long likeId;
 
     private Long bookmarkId;
@@ -25,14 +23,13 @@ public class DisplayTweet {
     public DisplayTweet() {
     }
 
-    public DisplayTweet(Tweet tweet, long likeCount, long replyCount, long bookmarkCount, boolean liked, boolean bookmarked, boolean replied, Long likeId, Long bookmarkId) {
+    public DisplayTweet(Tweet tweet, long likeCount, long replyCount, long bookmarkCount, boolean liked, boolean bookmarked, Long likeId, Long bookmarkId) {
         this.tweet = tweet;
         this.likeCount = likeCount;
         this.replyCount = replyCount;
         this.bookmarkCount = bookmarkCount;
         this.liked = liked;
         this.bookmarked = bookmarked;
-        this.replied = replied;
         this.likeId = likeId;
         this.bookmarkId = bookmarkId;
     }
@@ -44,7 +41,6 @@ public class DisplayTweet {
         this.bookmarkCount = 0;
         this.liked = false;
         this.bookmarked = false;
-        this.replied = false;
         this.likeId = null;
         this.bookmarkId = null;
     }
@@ -95,14 +91,6 @@ public class DisplayTweet {
 
     public void setBookmarkCount(long bookmarkCount) {
         this.bookmarkCount = bookmarkCount;
-    }
-
-    public boolean isReplied() {
-        return replied;
-    }
-
-    public void setReplied(boolean replied) {
-        this.replied = replied;
     }
 
     public Long getLikeId() {

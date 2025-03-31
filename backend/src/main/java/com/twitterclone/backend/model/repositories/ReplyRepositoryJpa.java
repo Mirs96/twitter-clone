@@ -10,13 +10,48 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReplyRepositoryJpa extends JpaRepository<Reply, Long> {
-
     @Query("""
                 SELECT r
                 FROM Reply r
                 WHERE r.tweet.id = :tweetId
+                AND r.parentReply IS NULL
+                ORDER BY
+                    (EXTRACT(EPOCH FROM r.creationDate) * 0.7) +
+                    (
+                        (
+                            SELECT COUNT(lr)
+                            FROM LikeReply lr
+                            WHERE lr.reply = r
+                        ) +
+                        (
+                        SELECT COUNT(r2)
+                        FROM Reply r2
+                        WHERE r2.parentReply = r
+                        )
+                    ) * 0.3 DESC
             """)
-    Page<Reply> getReplyByTweetId(@Param("tweetId") long tweetId, Pageable pageable);
+    Page<Reply> findMainRepliesByTweet(@Param("tweetId") long tweetId, Pageable pageable);
+
+    @Query("""
+                SELECT r
+                FROM Reply r
+                WHERE r.parentReply.id = :parentReplyId
+                ORDER BY
+                    (EXTRACT(EPOCH FROM r.creationDate) * 0.7) +
+                    (
+                        (
+                            SELECT COUNT(lr)
+                            FROM LikeReply lr
+                            WHERE lr.reply = r
+                        ) +
+                        (
+                        SELECT COUNT(r2)
+                        FROM Reply r2
+                        WHERE r2.parentReply = r
+                        )
+                    ) * 0.3 DESC
+            """)
+    List<Reply> findNestedRepliesByParentReplyId(@Param("parentReplyId") long parentReplyId);
 
     @Query("""
                 SELECT COUNT(r)
@@ -26,11 +61,16 @@ public interface ReplyRepositoryJpa extends JpaRepository<Reply, Long> {
     long countReplyByTweetId(@Param("tweetId") long tweetId);
 
     @Query("""
-                SELECT r
+                SELECT COUNT(r)
                 FROM Reply r
-                WHERE r.tweet.id = :tweetId
-                AND r.user.id = :userId
+                WHERE r.parentReply.id = :replyId
             """)
-    List<Reply> findReplyByUserIdAndTweetId(@Param("userId") long userId, @Param("tweetId") long tweetId);
+    long countReplyByParentReplyId(@Param("replyId") long replyId);
 
+    @Query("""
+                SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END
+                FROM Reply r
+                WHERE r.parentReply.id = :replyId
+            """)
+    boolean hasNestedReplies(@Param("replyId") long replyId);
 }

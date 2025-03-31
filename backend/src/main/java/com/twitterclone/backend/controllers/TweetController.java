@@ -23,7 +23,6 @@ import java.net.URI;
 
 import static java.lang.Integer.parseInt;
 
-
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/tweet")
@@ -38,24 +37,12 @@ public class TweetController {
         this.jwtService = jwtService;
     }
 
-    private String extractUserIdFromToken(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
-        }
-        String token = authHeader.substring(7);
-        return jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
-    }
-
-    private boolean isValidUser(HttpServletRequest request, long userId) {
-        String tokenUserId = extractUserIdFromToken(request);
-        return tokenUserId != null && tokenUserId.equals(String.valueOf(userId));
-    }
-
     @PostMapping
-    public ResponseEntity<?> createTweet(@RequestBody CreateTweetDto createTweetDto,
-                                         UriComponentsBuilder uriBuilder,
-                                         HttpServletRequest request) {
+    public ResponseEntity<?> createTweet(
+            @RequestBody CreateTweetDto createTweetDto,
+            UriComponentsBuilder uriBuilder,
+            HttpServletRequest request
+    ) {
         long userId = createTweetDto.getUserId();
 
         if (!isValidUser(request, userId)) {
@@ -84,17 +71,13 @@ public class TweetController {
         }
     }
 
-    @GetMapping("/{userId}/trending")
+    @GetMapping("/trending")
     public ResponseEntity<Page<DisplayTweetDto>> getTrendingTweets(
             @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "20") String size,
-            @PathVariable long userId,
-            HttpServletRequest request) {
-
-        if (!isValidUser(request, userId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
+            HttpServletRequest request
+    ) {
+        long userId = parseInt(extractUserIdFromToken(request));
         Pageable pageable = PageRequest.of(parseInt(page), parseInt(size));
         Page<DisplayTweet> tweets = tweetService.getTrendingTweets(pageable, userId);
         return ResponseEntity.ok(tweets.map(DisplayTweetDto::new));
@@ -164,5 +147,19 @@ public class TweetController {
         } catch (UnauthorizedException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.FORBIDDEN);
         }
+    }
+
+    private String extractUserIdFromToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+        String token = authHeader.substring(7);
+        return jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
+    }
+
+    private boolean isValidUser(HttpServletRequest request, long userId) {
+        String tokenUserId = extractUserIdFromToken(request);
+        return tokenUserId != null && tokenUserId.equals(String.valueOf(userId));
     }
 }
