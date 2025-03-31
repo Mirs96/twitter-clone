@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AuthHomeComponent } from './authentication/auth-home/auth-home.component';
-import { TweetDetailComponent } from './tweet-detail/tweet-detail.component';
+import { TweetDetailComponent } from './tweet/tweet-detail/tweet-detail.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },

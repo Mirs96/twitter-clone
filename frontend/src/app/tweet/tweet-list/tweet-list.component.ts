@@ -1,11 +1,10 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { SingleTweetComponent } from '../single-tweet/single-tweet.component';
-import { DisplayTweetDetails } from '../model/tweet/displayTweetDetails';
-import { LikeTweetDetails } from '../model/tweet/likeTweetDetails';
-import { BookmarkDetails } from '../model/tweet/bookmarkDetails';
-import { TweetService } from '../model/tweet/tweetService';
-import { UserService } from '../model/authentication/userService';
-import { Router } from '@angular/router';
+import { DisplayTweetDetails } from '../../model/tweet/displayTweetDetails';
+import { LikeTweetDetails } from '../../model/tweet/likeTweetDetails';
+import { BookmarkDetails } from '../../model/tweet/bookmarkDetails';
+import { TweetService } from '../../model/tweet/tweetService';
+import { UserService } from '../../model/authentication/userService';
 
 @Component({
   selector: 'app-tweet-list',
@@ -31,13 +30,14 @@ export class TweetListComponent implements OnInit, OnChanges {
   constructor(
     private tweetService: TweetService,
     private userService: UserService,
-    private cdr: ChangeDetectorRef,
-    private router: Router
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    this.userId = parseInt(this.userService.getUserIdFromToken() ?? "0");
-    this.loadTweets();
+    setTimeout(() => {
+      this.userId = parseInt(this.userService.getUserIdFromToken() ?? "0");
+      this.loadTweets();
+    }, 1000);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,12 +55,10 @@ export class TweetListComponent implements OnInit, OnChanges {
     }
 
     this.isLoading = true;
-    console.log('loading');
-    console.log(this.userId);
 
     if (!this.isFollowing) {
       this.tweetService
-        .getGeneralTweets(this.page, this.size, this.userId)
+        .getTweets(this.page, this.size)
         .subscribe({
           next: r => {
             this.tweets = [...this.tweets, ...r.content];

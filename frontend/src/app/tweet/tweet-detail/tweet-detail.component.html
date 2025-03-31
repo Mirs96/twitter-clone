@@ -1,0 +1,35 @@
+@if (tweet) {
+    <div class="arrow-container" (click)="goHome()">
+        <img src="icons/back-arrow.svg" alt="Go Back" class="arrow-icon">
+        <span class="post-text">Post</span>
+    </div>
+    
+    <div class="tweet-container">
+        <app-single-tweet [tweet]="tweet" [replyCount]="tweet.replyCount">
+        </app-single-tweet>
+    </div>
+
+    @if (showReplyModal) {
+        <div class="overlay" (click)="closeReplyPopup()">
+            <div class="popup-content" (click)="$event.stopPropagation()"> <!-- Impedisce che il click sull'interno del popup chiuda il popup -->
+                <app-create-reply 
+                    [tweetId]="tweetId"
+                    [parentReplyId]="parentReplyId"
+                    (replyCreated)="onCreatedReply($event)">
+                </app-create-reply>
+            </div>
+        </div>
+    }
+
+    <div class="create-reply">
+        <app-create-reply [tweetId]="tweetId" [parentReplyId]="parentReplyId" (replyCreated)="onCreatedReply($event)"></app-create-reply>
+    </div>
+
+    <div class="replies">
+        <app-reply-list 
+            [tweetId]="tweetId" 
+            [newReply]="newReply"
+            (openReplyPopup)="openReplyPopup($event)">
+        </app-reply-list>
+    </div>
+}

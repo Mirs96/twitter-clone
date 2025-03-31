@@ -41,7 +41,6 @@
     margin-top: 15px;
 }
 
-/* Stili per i bottoni di interazione */
 .interaction-buttons {
     display: flex;
     justify-content: space-between;
@@ -75,7 +74,6 @@
     margin-left: 3px;
 }
 
-/* Effetti hover per i bottoni */
 .like-button:hover .interaction-icon {
     filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
 }
@@ -88,7 +86,6 @@
     filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(601%) hue-rotate(167deg) brightness(97%) contrast(97%);
 }
 
-/* Stato attivo: il pulsante rimane colorato */
 .like-button.active .interaction-icon {
     filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
     color: rgb(249, 24, 128);

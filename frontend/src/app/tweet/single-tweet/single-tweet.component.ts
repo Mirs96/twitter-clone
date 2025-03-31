@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { DisplayTweetDetails } from '../model/tweet/displayTweetDetails';
-import { LikeTweetDetails } from '../model/tweet/likeTweetDetails';
-import { TweetService } from '../model/tweet/tweetService';
-import { BookmarkDetails } from '../model/tweet/bookmarkDetails';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { LikeTweetDetails } from '../../model/tweet/likeTweetDetails';
+import { BookmarkDetails } from '../../model/tweet/bookmarkDetails';
+import { DisplayTweetDetails } from '../../model/tweet/displayTweetDetails';
+import { TweetService } from '../../model/tweet/tweetService';
+import { UserService } from '../../model/authentication/userService';
 
 @Component({
   selector: 'app-single-tweet',
@@ -11,24 +12,35 @@ import { Router } from '@angular/router';
   templateUrl: './single-tweet.component.html',
   styleUrl: './single-tweet.component.css'
 })
-export class SingleTweetComponent {
+export class SingleTweetComponent implements OnInit, OnChanges {
   likeDetails!: LikeTweetDetails;
   bookmarkDetails!: BookmarkDetails;
+  userId!: number;
 
   @Input({
     required: true
   })
   tweet!: DisplayTweetDetails;
-  @Input({
-    required: true
-  })
-  userId!: number;
+
+  @Input()
+  replyCount!: number;
 
   constructor(
     private tweetService: TweetService,
+    private userService: UserService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) { }
+
+  ngOnInit(): void {
+    this.userId = Number(this.userService.getUserIdFromToken()) || 0;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['replyCount']) {
+      this.tweet.replyCount = this.replyCount;
+    }
+  }
 
   // Toggle like
   toggleLike() {

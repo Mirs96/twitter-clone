@@ -1,0 +1,15 @@
+@for (nestedReply of nestedReplies; track $index) {
+    <app-single-reply 
+        [reply]="nestedReply" 
+        (openReplyPopup)="onReplyPopupOpened($event)">
+    </app-single-reply>
+
+    @if (nestedReply.hasNestedReplies && nestedReply.showNested) {
+        <div class="nested-replies">
+            <app-nested-reply
+                [replyId]="nestedReply.id"
+                (openReplyPopup)="onReplyPopupOpened($event)">
+            </app-nested-reply>
+        </div>
+    }
+} 

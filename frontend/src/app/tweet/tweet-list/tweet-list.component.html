@@ -1,5 +1,5 @@
 <div class="tweets-container" (scroll)="onScroll($event)">
     @for (tweet of tweets; track $index) {
-        <app-single-tweet [tweet]="tweet" [userId]="this.userId"></app-single-tweet>
+        <app-single-tweet [tweet]="tweet"></app-single-tweet>
     }
 </div>

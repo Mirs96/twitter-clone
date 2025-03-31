@@ -1,0 +1,105 @@
+.reply {
+    border: 1px solid #2f3336;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    color: white;
+    background-color: #000;
+}
+
+.reply-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.time {
+    color: #71767b;
+    font-size: 14px;
+}
+
+.reply-content p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.interaction-buttons {
+    display: flex;
+    justify-content: flex-start; /* Pulsanti allineati a sinistra */
+}
+
+.toggle-nested {
+    color: #6e767d;
+    font-size: 14px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 9999px;
+    margin-left: auto; /* Questo spinge il bottone a destra */
+}
+
+.toggle-nested:hover {
+    background-color: rgba(29, 155, 240, 0.1);
+    color: rgb(29, 155, 240);
+}
+
+.interaction-button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: #6e767d;
+    padding: 8px 12px;
+    border-radius: 9999px;
+    transition: background-color 0.3s ease;
+}
+
+.interaction-button:hover {
+    background-color: rgba(29, 155, 240, 0.1);
+    color: rgb(29, 155, 240);
+}
+
+.interaction-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.interaction-count {
+    margin-left: 3px;
+}
+
+.like-button:hover .interaction-icon {
+    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+}
+
+.reply-button:hover .interaction-icon {
+    filter: brightness(0) saturate(100%) invert(56%) sepia(93%) saturate(1637%) hue-rotate(119deg) brightness(96%) contrast(97%);
+}
+
+.like-button.active .interaction-icon {
+    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+    color: rgb(249, 24, 128);
+}

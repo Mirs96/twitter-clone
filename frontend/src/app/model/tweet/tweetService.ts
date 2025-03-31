@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { ChangeDetectorRef, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { TweetDetails } from "./tweetDetails";
 import { HttpConfig } from "../../config/http-config";
@@ -27,11 +27,11 @@ export class TweetService {
         return this.http.get<DisplayTweetDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${tweetId}`);
     } 
 
-    getGeneralTweets(page: number, size: number, userId: number): Observable<Page<DisplayTweetDetails>> {
+    getTweets(page: number, size: number): Observable<Page<DisplayTweetDetails>> {
         const params = new HttpParams()
             .set('page', page.toString())
             .set('size', size.toString());
-        return this.http.get<Page<DisplayTweetDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/${userId}/trending`, { params });
+        return this.http.get<Page<DisplayTweetDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/trending`, { params });
     }
 
     addLikeToTweet(like: LikeTweetDetails): Observable<DisplayTweetDetails> {

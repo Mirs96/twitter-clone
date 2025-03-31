@@ -52,5 +52,4 @@ export class AuthHomeComponent {
     alert(localStorage.getItem('jwtToken'));
     localStorage.removeItem('jwtToken');
   }
-
 }

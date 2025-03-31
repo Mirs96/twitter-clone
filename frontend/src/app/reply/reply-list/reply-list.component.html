@@ -1,0 +1,19 @@
+<div class="replies-container" (scroll)="onScroll($event)">
+  @for (mainReply of mainReplies; track $index) {
+    <div>
+      <app-single-reply 
+        [reply]="mainReply" 
+        (openReplyPopup)="onReplyPopupOpened($event)">
+      </app-single-reply>
+    </div>
+    
+    <div class="nested-replies">
+      @if (mainReply.showNested) {
+        <app-nested-reply
+          [replyId]="mainReply.id"
+          (openReplyPopup)="onReplyPopupOpened($event)">
+        </app-nested-reply>
+      }
+    </div>
+  } 
+</div>

@@ -1,0 +1,29 @@
+<div class="reply">
+    <div class="reply-header">
+        <div class="user-info">
+            <h3>{{ reply.userNickname }}</h3>
+            <p class="time">{{ reply.creationDate }} · {{ reply.creationTime }}</p>
+        </div>
+    </div>
+    <div class="reply-content">
+        <p>{{ reply.content }}</p>
+    </div>
+    <div class="actions">
+        <div class="interaction-buttons">
+            <button class="interaction-button like-button" [class.active]="reply.liked"
+                (click)="toggleLike(); $event.stopPropagation()">
+                <img class="interaction-icon" src="icons/tweet-buttons/like.svg" alt="Like">
+                <span class="interaction-count">{{ reply.likeCount }}</span>
+            </button>
+            <button class="interaction-button reply-button" (click)="onReplyClick()">
+                <img class="interaction-icon" src="icons/tweet-buttons/reply.svg" alt="Reply">
+            </button>
+        </div>
+        @if (reply.hasNestedReplies) {
+            <button class="toggle-nested" (click)="toggleNestedRepliesVisibility()">
+                {{ reply.showNested  ? 'Hide replies' : 'Show replies' }}
+            </button>
+        }
+        
+    </div>
+</div>

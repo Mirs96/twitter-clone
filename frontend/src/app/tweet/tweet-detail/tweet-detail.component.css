@@ -1,0 +1,169 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.post-text {
+    position: relative;
+    top: -5px;
+    left: 30px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.arrow-container {
+    background-color: black;
+    padding: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.arrow-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    color: white;
+}
+
+.tweet-container {
+    background-color: black;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin-left: 0;
+    border-radius: 10px;
+}
+
+.replies {
+    margin-top: 10px;
+}
+
+.reply {
+    border-top: 1px solid #2f3336;
+    padding: 10px 0;
+}
+
+.tweets-container {
+    overflow-y: scroll;
+    max-height: 80vh;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.tweets-container::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    display: none;
+}
+
+.interaction-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.interaction-button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    color: #6e767d;
+    padding: 8px 12px;
+    border-radius: 9999px;
+    transition: background-color 0.3s ease;
+}
+
+.interaction-button:hover {
+    background-color: rgba(29, 155, 240, 0.1);
+    color: rgb(29, 155, 240);
+}
+
+.interaction-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.interaction-count {
+    margin-left: 3px;
+}
+
+.like-button:hover .interaction-icon {
+    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+}
+
+.reply-button:hover .interaction-icon {
+    filter: brightness(0) saturate(100%) invert(56%) sepia(93%) saturate(1637%) hue-rotate(119deg) brightness(96%) contrast(97%);
+}
+
+.bookmark-button:hover .interaction-icon {
+    filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(601%) hue-rotate(167deg) brightness(97%) contrast(97%);
+}
+
+.like-button.active .interaction-icon {
+    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+    color: rgb(249, 24, 128);
+}
+
+.bookmark-button.active .interaction-icon {
+    filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(601%) hue-rotate(167deg) brightness(97%) contrast(97%);
+    color: rgb(29, 155, 240);
+}
+
+/* Overlay che copre tutta la pagina e sfoca il contenuto */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* semi trasparente */
+    backdrop-filter: blur(5px);
+    /* Aggiunge l'effetto di sfocatura */
+    z-index: 999;
+    /* Deve essere sopra il contenuto */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Il popup centrale */
+.popup-content {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+    z-index: 1000;
+    /* Assicurati che il popup stia sopra l'overlay */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Opzionale: anima il popup per una transizione più fluida */
+.popup-content {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Cursore sopra l'overlay per indicare che l'utente può chiudere il popup */
+.overlay:hover {
+    cursor: pointer;
+}

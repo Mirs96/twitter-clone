@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, Output, Renderer2, ViewChild } from '@angular/core';
-import { CreateTweetComponent } from '../create-tweet/create-tweet.component';
-import { TweetListComponent } from '../tweet-list/tweet-list.component';
+import { TweetListComponent } from '../tweet/tweet-list/tweet-list.component';
+import { CreateTweetComponent } from '../tweet/create-tweet/create-tweet.component';
+
 
 @Component({
   selector: 'app-home',
@@ -29,12 +30,14 @@ export class HomeComponent {
 
   onForYou(): void {
     this.isFollowing = false;
-    this.isFollowingChanged.emit(this.isFollowing); 
+    this.isFollowingChanged.emit(this.isFollowing);
+    console.log('Evento isFollowingChanged emesso:', this.isFollowing);
   }
 
   onFollowing(): void {
     this.isFollowing = true;
     this.isFollowingChanged.emit(this.isFollowing);
+    console.log('Evento isFollowingChanged emesso:', this.isFollowing);
   }
 
   @HostListener('scroll', ['$event'])

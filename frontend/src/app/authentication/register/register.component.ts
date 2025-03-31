@@ -45,7 +45,6 @@ export class RegisterComponent implements OnInit {
 
       this.authService.register(formData).subscribe({
         next: response => {
-          alert('Registration successful');
           localStorage.setItem('jwtToken', response.token);
           this.userService.setLoggedIn(true);
           this.router.navigate(['/home']);

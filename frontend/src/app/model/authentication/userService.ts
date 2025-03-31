@@ -30,7 +30,7 @@ export class UserService {
             const currentTime = Math.floor(Date.now() / 1000);
             return decodedToken.exp > currentTime; // True se il token non è scaduto
         } catch (error) {
-            console.error("Errore nella decodifica del token", error);
+            console.error("error decodingToken", error);
             return false;
         }
     }
@@ -50,7 +50,6 @@ export class UserService {
         }
         try {
             const decodedToken = jwtDecode<any>(token);
-            console.log(decodedToken);
             return decodedToken;
         } catch (error) {
             console.error('error decodingToken', error);
@@ -64,7 +63,6 @@ export class UserService {
         if (!dC) {
             return null;
         }
-        console.log("decode token esiste", dC);
         return dC.userId;
     }
 

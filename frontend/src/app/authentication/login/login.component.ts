@@ -28,27 +28,22 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    console.log(this.loginForm.value);
-    console.log(this.loginForm.valid);
-
     if (this.loginForm.valid) {
       const formData: LoginDetails = this.loginForm.value;
-      console.log('Dati di login: ', formData);
 
       this.authService.login(formData).subscribe({
         next: response => {
-          alert('Login successful');
           localStorage.setItem('jwtToken', response.token);
           this.userService.setLoggedIn(true);
           this.router.navigate(['/home']);
         },
         error: err => {
           console.log(err);
-          alert('Login fallita, riprova');
+          alert('Login failed, try again');
         }
       });
     } else {
-      console.log('Form non valido.');
+      console.log('Invalid form.');
     }
   }
 }

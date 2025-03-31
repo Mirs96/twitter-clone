@@ -1,0 +1,19 @@
+.replies-container {
+    overflow-y: scroll;
+    max-height: 80vh;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-right: 10px;
+}
+
+.replies-container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.nested-replies {
+    margin-left: 20px;
+    border-left: 2px solid #71767b;
+    padding-left: 15px;
+}

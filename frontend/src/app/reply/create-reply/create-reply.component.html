@@ -1,0 +1,12 @@
+<div class="tweet-container">
+    <form [formGroup]="replyForm" (ngSubmit)="onSubmit()">
+        <div>
+            <textarea #replyInput formControlName="content" rows="1" maxlength="1000" placeholder="Post your repy"
+                (input)="adjustTextareaHeight()">
+            </textarea>
+        </div>
+        <div class="button-container">
+            <button type="submit" [disabled]="replyForm.invalid">Reply</button>
+        </div>
+    </form>
+</div>

@@ -8,5 +8,10 @@ export interface ReplyDetails {
     content: string;
     creationDate: string;
     creationTime: string;
+    likeCount: number;
+    liked: boolean;
+    likeId?: number;
+    hasNestedReplies: boolean;
+    showNested?: boolean;
 }
 

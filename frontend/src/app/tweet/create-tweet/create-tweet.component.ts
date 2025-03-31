@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TweetDetails } from '../model/tweet/tweetDetails';
-import { UserService } from '../model/authentication/userService';
-import { TweetService } from '../model/tweet/tweetService';
+import { TweetDetails } from '../../model/tweet/tweetDetails';
+import { TweetService } from '../../model/tweet/tweetService';
+import { UserService } from '../../model/authentication/userService';
 
 @Component({
   selector: 'app-create-tweet',
@@ -11,7 +11,8 @@ import { TweetService } from '../model/tweet/tweetService';
   styleUrl: './create-tweet.component.css'
 })
 export class CreateTweetComponent implements OnInit, AfterViewInit {
-  @ViewChild('tweetInput') tweetInput!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('tweetInput')
+  tweetInput!: ElementRef<HTMLTextAreaElement>;
   
   tweetForm!: FormGroup;
   userId!: number;
@@ -49,11 +50,18 @@ export class CreateTweetComponent implements OnInit, AfterViewInit {
         creationTime: new Date().toISOString().split('T')[1].slice(0, 5)
       };
 
-      console.log('formData:', formData);
       this.tweetService.createTweet(formData).subscribe({
-        next: r => this.tweet = r,
+        next: r => {
+          this.tweet = r;
+          this.resetForm();
+        },
         error: err => console.log(err)
       });
     }
+  }
+
+  resetForm() {
+    this.tweetForm.reset();
+    this.adjustTextareaHeight();
   }
 }
