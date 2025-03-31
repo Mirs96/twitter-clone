@@ -4,7 +4,12 @@ A **full-stack** application that replicates basic Twitter functionalities, incl
 
 ## 📁 Project Structure 
 
-**Frontend (Angular):** - **Authentication** (Login/Register page for user authentication) 
+**Database (PostGreSQL)**:
+![TwitterCloneDb](https://github.com/user-attachments/assets/54333496-792f-45ed-8456-dff7ef5fc2e1)
+
+
+**Frontend (Angular):** 
+- **Authentication** (Login/Register page for user authentication) 
 - **Home** (displays tweet creation form and list of tweets) 
 - **Navbar** (functional with "Home" button, under development for additional navigation) 
 - **Tweet List** (dynamic scrolling and pagination for tweets) 
@@ -51,7 +56,10 @@ A **full-stack** application that replicates basic Twitter functionalities, incl
 - **CSS**
 
 **Backend (Spring Boot):** 
-- **Spring Boot** - **Spring Security** - **Spring JPA (Hibernate)** - **PostgreSQL**
+- **Spring Boot** 
+- **Spring Security** 
+- **Spring JPA (Hibernate)** 
+- **PostgreSQL**
 
 ## **Features**
 
