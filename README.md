@@ -70,7 +70,13 @@ A **full-stack** application that replicates basic Twitter functionalities, incl
 
 **Tweet Management**
 - **Create a Tweet:** `POST /api/tweet`
- (Note: the backend automatically manages hashtags in tweets)
+ (Note: the backend automatically manages hashtags in tweets) 
+- **Find Tweet by ID:** `GET /api/tweet/{id}` 
+- **Get Trending Tweets:** `GET /api/tweet/trending` 
+- **Like a Tweet:** `POST /api/tweet/like` 
+- **Unlike a Tweet:** `DELETE /api/tweet/{id}/like` 
+- **Bookmark a Tweet:** `POST /api/tweet/bookmark` 
+- **Unbookmark a Tweet:** `DELETE /api/tweet/{id}/bookmark` 
 
 **Reply Management** 
 - **Create a Reply:** `POST /api/reply` 
