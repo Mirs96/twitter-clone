@@ -64,7 +64,8 @@ A **full-stack** application that replicates basic Twitter functionalities, incl
 
 ### 📌 Key API Endpoints
 
-**Authentication** - **Login:** `POST /api/auth/login`
+**Authentication** 
+- **Login:** `POST /api/auth/login` 
 - **Register:** `POST /api/auth/register`
 
 **Tweet Management**
