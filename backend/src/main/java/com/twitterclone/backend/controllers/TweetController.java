@@ -60,6 +60,18 @@ public class TweetController {
         }
     }
 
+    @GetMapping("/trending")
+    public ResponseEntity<Page<DisplayTweetDto>> getTrendingTweets(
+            @RequestParam(defaultValue = "0") String page,
+            @RequestParam(defaultValue = "20") String size,
+            HttpServletRequest request
+    ) {
+        long userId = parseInt(extractUserIdFromToken(request));
+        Pageable pageable = PageRequest.of(parseInt(page), parseInt(size));
+        Page<DisplayTweet> tweets = tweetService.getTrendingTweets(pageable, userId);
+        return ResponseEntity.ok(tweets.map(DisplayTweetDto::new));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> findTweetById(@PathVariable long id, HttpServletRequest request) {
         long userId = parseInt(extractUserIdFromToken(request));
@@ -71,16 +83,23 @@ public class TweetController {
         }
     }
 
-    @GetMapping("/trending")
-    public ResponseEntity<Page<DisplayTweetDto>> getTrendingTweets(
+    @GetMapping("/{userId}/user")
+    ResponseEntity<?> getTweetByUserId(
+            @PathVariable long userId,
             @RequestParam(defaultValue = "0") String page,
-            @RequestParam(defaultValue = "20") String size,
-            HttpServletRequest request
-    ) {
-        long userId = parseInt(extractUserIdFromToken(request));
-        Pageable pageable = PageRequest.of(parseInt(page), parseInt(size));
-        Page<DisplayTweet> tweets = tweetService.getTrendingTweets(pageable, userId);
-        return ResponseEntity.ok(tweets.map(DisplayTweetDto::new));
+            @RequestParam(defaultValue = "10") String size
+    ) throws EntityNotFoundException {
+
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
+        try {
+            Page<DisplayTweetDto> tweets = tweetService
+                    .getTweetByUserId(userId, pageable)
+                    .map(DisplayTweetDto::new);
+
+            return ResponseEntity.ok(tweets);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/like")

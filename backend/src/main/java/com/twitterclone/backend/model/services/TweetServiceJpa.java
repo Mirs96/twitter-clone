@@ -108,6 +108,18 @@ public class TweetServiceJpa implements TweetService {
     }
 
     @Override
+    public Page<DisplayTweet> getTweetByUserId(long userId, Pageable pageable) throws EntityNotFoundException {
+        userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+
+        Page<DisplayTweet> tweets = tweetRepo.getTweetsByUserId(userId, pageable)
+                .map(DisplayTweet::new);
+
+        tweets.forEach(t -> updateTweetDetails(t, userId));
+        return tweets;
+    }
+
+    @Override
     public DisplayTweet createBookmarkToTweet(Bookmark bookmark, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));

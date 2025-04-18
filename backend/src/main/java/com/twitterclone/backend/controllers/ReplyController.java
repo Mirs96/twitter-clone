@@ -81,6 +81,24 @@ public class ReplyController {
         }
     }
 
+    @GetMapping("/{userId}/user")
+    ResponseEntity<?> getRepliesByUserId(
+            @PathVariable long userId,
+            @RequestParam(defaultValue = "0") String page,
+            @RequestParam(defaultValue = "10") String size
+    ) throws EntityNotFoundException {
+        Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
+
+        try {
+            Page<DisplayReply> replies = replyService
+                    .getRepliesByUserId(userId, pageable);
+
+            return ResponseEntity.ok(replies.map(DisplayReplyDto::new));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/{tweetId}/tweet")
     public ResponseEntity<?> getRepliesByTweet(
             @RequestParam(defaultValue = "0") String page,
@@ -91,6 +109,7 @@ public class ReplyController {
         long userId = parseInt(extractUserIdFromToken(request));
 
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
+
         try {
             Page<DisplayReply> replies = replyService.getMainRepliesByTweetId(tweetId, userId, pageable);
             return ResponseEntity.ok(replies.map(DisplayReplyDto::new));

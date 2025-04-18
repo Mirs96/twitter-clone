@@ -68,6 +68,19 @@ public class ReplyServiceJpa implements ReplyService {
     }
 
     @Override
+    public Page<DisplayReply> getRepliesByUserId(long userId, Pageable pageable) throws EntityNotFoundException {
+        userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+
+        Page<DisplayReply> replies = replyRepo.getRepliesByUserId(userId, pageable)
+                .map(DisplayReply::new);
+
+        replies.forEach(reply -> updateReplyDetails(reply, userId));
+
+        return replies;
+    }
+
+    @Override
     public void deleteReplyFromTweet(long id, long userId) throws EntityNotFoundException, UnauthorizedException {
         Reply reply = replyRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", Reply.class.getName()));

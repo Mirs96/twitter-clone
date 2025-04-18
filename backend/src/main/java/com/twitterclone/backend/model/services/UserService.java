@@ -1,9 +1,19 @@
 package com.twitterclone.backend.model.services;
 
+import com.twitterclone.backend.model.entities.Follower;
 import com.twitterclone.backend.model.entities.User;
+import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 public interface UserService {
     Optional<User> findById(Long userId);
+
+    long countFollowersByUserId(long userId) throws EntityNotFoundException;
+    long countFollowingByFollowerId(long followerId) throws EntityNotFoundException;
+
+    Page<Follower> findFollowersByUserId(long userId, Pageable pageable) throws EntityNotFoundException;
+    Page<Follower> findFollowingByFollowerId(long followerId, Pageable pageable) throws EntityNotFoundException;
 }

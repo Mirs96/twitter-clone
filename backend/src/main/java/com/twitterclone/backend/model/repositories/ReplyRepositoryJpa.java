@@ -73,4 +73,12 @@ public interface ReplyRepositoryJpa extends JpaRepository<Reply, Long> {
                 WHERE r.parentReply.id = :replyId
             """)
     boolean hasNestedReplies(@Param("replyId") long replyId);
+
+    @Query("""
+                SELECT r
+                FROM Reply r
+                WHERE r.user.id =:userId
+                ORDER BY r.creationDate DESC, r.creationTime DESC
+            """)
+    Page<Reply> getRepliesByUserId(@Param("userId") long userId, Pageable pageable);
 }
