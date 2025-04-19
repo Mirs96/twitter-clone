@@ -1,8 +1,10 @@
 package com.twitterclone.backend.controllers;
 
 import com.twitterclone.backend.dto.*;
+import com.twitterclone.backend.model.UserProfile;
 import com.twitterclone.backend.model.entities.User;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
+import com.twitterclone.backend.model.exceptions.ReactionAlreadyExistsException;
 import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable long id, HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -50,23 +52,16 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{userId}/followers-count")
-    public ResponseEntity<?> countFollowersByUserId(@PathVariable long userId) {
-        try {
-            long count = userService.countFollowersByUserId(userId);
-            return ResponseEntity.ok(count);
-        } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
+    @GetMapping("/{userId}/profile")
+    public ResponseEntity<?> getProfile(@PathVariable long userId, HttpServletRequest request) {
+        String tokenUserId = extractUserIdFromToken(request);
+        long currentUserId = Integer.parseInt(tokenUserId);
 
-    @GetMapping("/{userId}/followed-count")
-    public ResponseEntity<?> countFollowingByFollowerId(@PathVariable long followerId) {
         try {
-            long count = userService.countFollowingByFollowerId(followerId);
-            return ResponseEntity.ok(count);
+            UserProfile userProfile = userService.getProfile(userId, currentUserId);
+            return ResponseEntity.ok(new UserProfileDto(userProfile));
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -89,7 +84,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{userId}/followed")
+    @GetMapping("/{followerId}/followed")
     ResponseEntity<?> findFollowingByFollowerId(
             @PathVariable long followerId,
             @RequestParam(defaultValue = "0") String page,
@@ -108,5 +103,50 @@ public class UserController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/follow")
+    public ResponseEntity<?> followUser(
+            @RequestParam long followerId,
+            @RequestParam long userId,
+            HttpServletRequest request
+    ) {
+        String tokenUserId = extractUserIdFromToken(request);
+
+        if (!tokenUserId.equals(String.valueOf(followerId))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        try {
+            userService.followUser(followerId, userId);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (ReactionAlreadyExistsException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{followingId}/unfollow")
+    public ResponseEntity<?> unfollowUser(
+            @PathVariable long followingId, // id of the row in the Followers table
+            HttpServletRequest request
+    ) {
+        String tokenUserId = extractUserIdFromToken(request);
+        try {
+            userService.unfollowUser(followingId);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private String extractUserIdFromToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+        String token = authHeader.substring(7);
+        return jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
     }
 }
