@@ -1,5 +1,9 @@
 <div class="profile-container">
   @if (profile) {
+    <div class="arrow-container" (click)="goHome()">
+      <img src="icons/back-arrow.svg" alt="Go Back" class="arrow-icon">
+    </div>
+
     <div class="profile-header">
       <h2>{{ profile.nickname }}</h2>
       <p>{{ profile.followersCount }} followers • {{ profile.followingCount }} following</p>

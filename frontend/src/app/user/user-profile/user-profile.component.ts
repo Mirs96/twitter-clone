@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfileDetails } from '../../model/user/userProfileDetails';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfileService } from '../../model/user/userProfileService';
 import { ReplyListComponent } from '../../reply/reply-list/reply-list.component';
 import { TweetListComponent } from '../../tweet/tweet-list/tweet-list.component';
-import { UserService } from '../../model/authentication/userService';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,7 +21,7 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private userProfileService: UserProfileService,
-    private userService: UserService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -49,5 +48,9 @@ export class UserProfileComponent implements OnInit {
           this.profile.followersCount++;
         });
     }
+  }
+
+  goHome(): void {
+    this.router.navigate(['/home']);
   }
 }
