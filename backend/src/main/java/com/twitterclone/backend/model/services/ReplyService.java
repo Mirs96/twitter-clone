@@ -17,7 +17,7 @@ public interface ReplyService {
     void deleteReplyFromTweet(long id, long userId) throws EntityNotFoundException, UnauthorizedException;
 
     DisplayReply findReplyById(long replyId, long userId) throws EntityNotFoundException;
-    Page<DisplayReply> getRepliesByUserId(long userId, Pageable pageable) throws EntityNotFoundException;
+    Page<DisplayReply> getRepliesByUserId(long userId, long currentUserId, Pageable pageable) throws EntityNotFoundException;
 
     Page<DisplayReply> getMainRepliesByTweetId(long tweetId, long userId, Pageable pageable) throws EntityNotFoundException;
     List<DisplayReply> getNestedRepliesByParentReplyId(long parentReplyId, long userId) throws EntityNotFoundException;

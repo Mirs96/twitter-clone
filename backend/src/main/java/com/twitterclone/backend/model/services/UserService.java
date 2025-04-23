@@ -14,14 +14,9 @@ public interface UserService {
 
     UserProfile getProfile(long profileUserId, long currentUserId) throws EntityNotFoundException;
 
-    //long countFollowersByUserId(long userId) throws EntityNotFoundException;
-    //long countFollowingByFollowerId(long followerId) throws EntityNotFoundException;
-
     Page<Follower> findFollowersByUserId(long userId, Pageable pageable) throws EntityNotFoundException;
     Page<Follower> findFollowingByFollowerId(long followerId, Pageable pageable) throws EntityNotFoundException;
 
     void followUser(long followerId, long userId) throws EntityNotFoundException, ReactionAlreadyExistsException;
-    void unfollowUser(long followerId) throws EntityNotFoundException;
-
-
+    void unfollowUser(long followerId, long userToFollowId) throws EntityNotFoundException;
 }

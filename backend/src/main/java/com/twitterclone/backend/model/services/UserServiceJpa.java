@@ -82,7 +82,7 @@ public class UserServiceJpa implements UserService {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
 
-        if (followerRepo.existsByFollowerIdAndUserId(followerId, userId)) {
+        if (followerRepo.findByFollowerAndUser(followerId, userId).isPresent()) {
             throw new ReactionAlreadyExistsException("Already following", Follower.class.getName());
         }
 
@@ -96,12 +96,18 @@ public class UserServiceJpa implements UserService {
     }
 
     @Override
-    public void unfollowUser(long followerId) throws EntityNotFoundException {
-        Follower follower = followerRepo
-                .findById(followerId)
+    public void unfollowUser(long followerId, long userToFollowId) throws EntityNotFoundException {
+
+        User follower = userRepo.findById(followerId)
+                .orElseThrow(() -> new EntityNotFoundException("Follower: Entity not found", User.class.getName()));
+
+        User followed = userRepo.findById(userToFollowId)
+                .orElseThrow(() -> new EntityNotFoundException("Followed: Entity not found", User.class.getName()));
+
+        Follower f = followerRepo.findByFollowerAndUser(followerId, userToFollowId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", Follower.class.getName()));
 
-        followerRepo.delete(follower);
+        followerRepo.delete(f);
     }
 
     @Override
@@ -112,13 +118,13 @@ public class UserServiceJpa implements UserService {
         long followersCount = followerRepo.countByUserId(profileUserId);
         long followingCount = followerRepo.countByFollowerId(profileUserId);
 
-        boolean isFollowing = followerRepo.existsByFollowerIdAndUserId(currentUserId, profileUserId);
+        Optional<Follower> of = followerRepo.findByFollowerAndUser(currentUserId, profileUserId);
 
         return new UserProfile(
                 user.getNickname(),
                 followersCount,
                 followingCount,
-                isFollowing
+                of.isEmpty() ? false : true
         );
     }
 }

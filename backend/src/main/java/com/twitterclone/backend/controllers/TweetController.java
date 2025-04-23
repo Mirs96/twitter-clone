@@ -87,13 +87,15 @@ public class TweetController {
     ResponseEntity<?> getTweetByUserId(
             @PathVariable long userId,
             @RequestParam(defaultValue = "0") String page,
-            @RequestParam(defaultValue = "10") String size
+            @RequestParam(defaultValue = "10") String size,
+            HttpServletRequest request
     ) throws EntityNotFoundException {
+        long currentUserId = parseInt(extractUserIdFromToken(request));
 
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
         try {
             Page<DisplayTweetDto> tweets = tweetService
-                    .getTweetByUserId(userId, pageable)
+                    .getTweetByUserId(userId, currentUserId, pageable)
                     .map(DisplayTweetDto::new);
 
             return ResponseEntity.ok(tweets);

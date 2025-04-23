@@ -15,7 +15,7 @@ public interface TweetService {
     Page<DisplayTweet> getTrendingTweets(Pageable pageable, long userId);
 
     DisplayTweet findTweetById(long tweetId, long userId) throws EntityNotFoundException;
-    Page<DisplayTweet> getTweetByUserId(long userId, Pageable pageable) throws EntityNotFoundException;
+    Page<DisplayTweet> getTweetByUserId(long userId, long currentUserId, Pageable pageable) throws EntityNotFoundException;
 
     DisplayTweet createLikeToTweet(LikeTweet like, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException;
     DisplayTweet deleteLikeFromTweet(long id, long userId) throws EntityNotFoundException, UnauthorizedException;

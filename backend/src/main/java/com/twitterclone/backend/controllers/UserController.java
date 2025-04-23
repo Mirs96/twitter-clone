@@ -105,20 +105,16 @@ public class UserController {
         }
     }
 
-    @PostMapping("/follow")
+    @PostMapping("/follow/{userIdToFollow}")
     public ResponseEntity<?> followUser(
-            @RequestParam long followerId,
-            @RequestParam long userId,
+            @PathVariable long userIdToFollow,
             HttpServletRequest request
     ) {
         String tokenUserId = extractUserIdFromToken(request);
-
-        if (!tokenUserId.equals(String.valueOf(followerId))) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        long followerId = Long.parseLong(tokenUserId);
 
         try {
-            userService.followUser(followerId, userId);
+            userService.followUser(followerId, userIdToFollow);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -127,14 +123,16 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{followingId}/unfollow")
+    @DeleteMapping("/unfollow/{userIdToUnfollow}")
     public ResponseEntity<?> unfollowUser(
-            @PathVariable long followingId, // id of the row in the Followers table
+            @PathVariable long userIdToUnfollow,
             HttpServletRequest request
     ) {
         String tokenUserId = extractUserIdFromToken(request);
+        long followerId = Long.parseLong(tokenUserId);
+
         try {
-            userService.unfollowUser(followingId);
+            userService.unfollowUser(followerId, userIdToUnfollow);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

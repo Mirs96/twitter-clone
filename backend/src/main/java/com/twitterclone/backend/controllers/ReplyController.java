@@ -85,13 +85,15 @@ public class ReplyController {
     ResponseEntity<?> getRepliesByUserId(
             @PathVariable long userId,
             @RequestParam(defaultValue = "0") String page,
-            @RequestParam(defaultValue = "10") String size
+            @RequestParam(defaultValue = "10") String size,
+            HttpServletRequest request
     ) throws EntityNotFoundException {
+        long currentUserId = parseInt(extractUserIdFromToken(request));
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
 
         try {
             Page<DisplayReply> replies = replyService
-                    .getRepliesByUserId(userId, pageable);
+                    .getRepliesByUserId(userId, currentUserId, pageable);
 
             return ResponseEntity.ok(replies.map(DisplayReplyDto::new));
         } catch (EntityNotFoundException e) {

@@ -65,6 +65,18 @@ public class TweetServiceJpa implements TweetService {
     }
 
     @Override
+    public Page<DisplayTweet> getTweetByUserId(long userId, long currentUserId, Pageable pageable) throws EntityNotFoundException {
+        userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+
+        Page<DisplayTweet> tweets = tweetRepo.getTweetsByUserId(userId, pageable)
+                .map(DisplayTweet::new);
+
+        tweets.forEach(t -> updateTweetDetails(t, currentUserId));
+        return tweets;
+    }
+
+    @Override
     public DisplayTweet createLikeToTweet(LikeTweet like, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
@@ -107,17 +119,6 @@ public class TweetServiceJpa implements TweetService {
         return tweet;
     }
 
-    @Override
-    public Page<DisplayTweet> getTweetByUserId(long userId, Pageable pageable) throws EntityNotFoundException {
-        userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
-
-        Page<DisplayTweet> tweets = tweetRepo.getTweetsByUserId(userId, pageable)
-                .map(DisplayTweet::new);
-
-        tweets.forEach(t -> updateTweetDetails(t, userId));
-        return tweets;
-    }
 
     @Override
     public DisplayTweet createBookmarkToTweet(Bookmark bookmark, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException {

@@ -68,14 +68,14 @@ public class ReplyServiceJpa implements ReplyService {
     }
 
     @Override
-    public Page<DisplayReply> getRepliesByUserId(long userId, Pageable pageable) throws EntityNotFoundException {
+    public Page<DisplayReply> getRepliesByUserId(long userId, long currentUserId, Pageable pageable) throws EntityNotFoundException {
         userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
 
         Page<DisplayReply> replies = replyRepo.getRepliesByUserId(userId, pageable)
                 .map(DisplayReply::new);
 
-        replies.forEach(reply -> updateReplyDetails(reply, userId));
+        replies.forEach(reply -> updateReplyDetails(reply, currentUserId));
 
         return replies;
     }

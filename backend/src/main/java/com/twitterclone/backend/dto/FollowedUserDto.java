@@ -1,8 +1,6 @@
 package com.twitterclone.backend.dto;
 
 import com.twitterclone.backend.model.entities.Follower;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class FollowedUserDto {
 
@@ -14,11 +12,11 @@ public class FollowedUserDto {
 
     private String userProfilePicture;
 
-    LocalDate creationDate;
+    private String creationDate;
 
-    LocalTime creationTime;
+    private String creationTime;
 
-    public FollowedUserDto(long id, long userId, String userNickname, String userProfilePicture, LocalDate creationDate, LocalTime creationTime) {
+    public FollowedUserDto(long id, long userId, String userNickname, String userProfilePicture, String creationDate, String creationTime) {
         this.id = id;
         this.userId = userId;
         this.userNickname = userNickname;
@@ -32,8 +30,8 @@ public class FollowedUserDto {
         this.userId = user.getUser().getId();
         this.userNickname = user.getUser().getNickname();
         this.userProfilePicture = user.getUser().getProfilePicture();
-        this.creationDate = user.getCreationDate();
-        this.creationTime = user.getCreationTime();
+        this.creationDate = user.getCreationDate().toString();
+        this.creationTime = user.getCreationTime().toString();
     }
 
     public long getId() {
@@ -68,19 +66,19 @@ public class FollowedUserDto {
         this.userProfilePicture = userProfilePicture;
     }
 
-    public LocalDate getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 
-    public LocalTime getCreationTime() {
+    public String getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(LocalTime creationTime) {
+    public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
     }
 }
