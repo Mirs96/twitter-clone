@@ -1,0 +1,32 @@
+<div class="profile-container">
+  @if (profile) {
+    <div class="profile-header">
+      <h2>{{ profile.nickname }}</h2>
+      <p>{{ profile.followersCount }} followers • {{ profile.followingCount }} following</p>
+      <button (click)="toggleFollow()" class="follow-btn">
+        {{ isCurrentUserFollowing ? 'Unfollow' : 'Follow' }}
+      </button>
+    </div>
+  }
+
+  <div class="profile-tabs">
+    <button (click)="activeTab = 'tweets'" [class.active]="activeTab === 'tweets'">Post</button>
+    <button (click)="activeTab = 'replies'" [class.active]="activeTab === 'replies'">Replies</button>
+  </div>
+
+  @if (profile) {
+    <div class="profile-content">
+      @if (activeTab === 'tweets') {
+        <app-tweet-list
+          [isFollowing]="false"
+          [userId]="profileUserId">
+        </app-tweet-list>
+      }
+      @if (activeTab === 'replies') {
+        <app-reply-list
+          [userId]="profileUserId">
+        </app-reply-list>
+      }
+    </div>
+  }
+</div>  

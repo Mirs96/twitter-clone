@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { LikeTweetDetails } from '../../model/tweet/likeTweetDetails';
 import { BookmarkDetails } from '../../model/tweet/bookmarkDetails';
 import { DisplayTweetDetails } from '../../model/tweet/displayTweetDetails';
@@ -8,7 +8,7 @@ import { UserService } from '../../model/authentication/userService';
 
 @Component({
   selector: 'app-single-tweet',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './single-tweet.component.html',
   styleUrl: './single-tweet.component.css'
 })

@@ -58,4 +58,21 @@ export class RegisterComponent implements OnInit {
       console.log('Form non valido.');
     }
   }
+
+  onFieldBlur(fieldName: string) {
+    const field = this.registerForm.get(fieldName);
+    if (field) {
+      field.markAsTouched();
+      field.updateValueAndValidity();
+    }
+  }
+
+  onFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.registerForm.patchValue({
+        profilePicture: file
+      });
+    }
+  }
 }

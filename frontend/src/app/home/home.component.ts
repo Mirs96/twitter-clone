@@ -1,11 +1,12 @@
 import { Component, ElementRef, EventEmitter, HostListener, Output, Renderer2, ViewChild } from '@angular/core';
 import { TweetListComponent } from '../tweet/tweet-list/tweet-list.component';
 import { CreateTweetComponent } from '../tweet/create-tweet/create-tweet.component';
+import { RightSidebarComponent } from '../right-sidebar/right-sidebar/right-sidebar.component';
 
 
 @Component({
   selector: 'app-home',
-  imports: [CreateTweetComponent, TweetListComponent],
+  imports: [CreateTweetComponent, TweetListComponent, RightSidebarComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

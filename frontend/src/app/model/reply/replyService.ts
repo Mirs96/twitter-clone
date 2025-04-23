@@ -51,4 +51,11 @@ export class ReplyService {
     removeLikeFromReply(likeId?: number): Observable<ReplyDetails> {
         return this.http.delete<ReplyDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${likeId}/like`);
     }
+
+    getRepliesByUserId(userId: number, page: number, size: number): Observable<Page<ReplyDetails>> {
+        const params = new HttpParams()
+            .set('page', page.toString())
+            .set('size', size.toString());
+        return this.http.get<Page<ReplyDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/${userId}/user`, { params });
+    }
 }

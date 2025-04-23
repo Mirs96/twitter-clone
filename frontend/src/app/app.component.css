@@ -1,39 +1,62 @@
-.main-container {
-    display: flex;
-    height: 100vh;
-    background-color: black;
-    /* Sfondo nero per il contenitore principale */
-    color: white;
-    /* Testo bianco per impostazione predefinita */
-}
-
-nav {
-    width: 250px;
-    flex-shrink: 0;
-    background-color: rgb(0, 0, 0);
-    /* Sfondo nero per la navbar */
-}
-
-.content {
-    flex-grow: 1;
-    margin-left: 250px;
-    padding: 20px;
-    overflow-x: hidden;
-    display: flex;
-    background-color: black;
-    /* Sfondo nero per il contenuto */
-}
-
-.right-sidebar {
-    width: 300px;
-    background-color: black;
-    /* Sfondo nero per la sidebar destra */
-    padding: 20px;
-}
-
+/* Reset e stili globali */
 body {
     margin: 0;
     padding: 0;
     background-color: black;
-    /* Assicurati che il background sia nero */
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Layout principale */
+.main-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: black;
+}
+
+/* Navbar sinistra (fissa) */
+.nav {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px 0;
+    border-right: 1px solid #2f3336;
+    overflow-y: auto;
+}
+
+/* Area scrollabile principale */
+.scrollable-main {
+    flex: 1;
+    margin-left: 250px; /* Larghezza navbar */
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Contenuto centrale */
+.content {
+    flex: 1;
+    max-width: 600px;
+    border-left: 1px solid #2f3336;
+    border-right: 1px solid #2f3336;
+}
+
+/* Sidebar destra */
+.right-sidebar {
+    width: 350px;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+/* Stile scrollbar (opzionale) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #000;
+}
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 5px;
 }

@@ -4,10 +4,11 @@ import { ReplyDetails } from '../../model/reply/replyDetails';
 import { ReplyService } from '../../model/reply/replyService';
 import { UserService } from '../../model/authentication/userService';
 import { LikeReplyDetails } from '../../model/reply/likeReplyDetails';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-single-reply',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './single-reply.component.html',
   styleUrl: './single-reply.component.css'
 })

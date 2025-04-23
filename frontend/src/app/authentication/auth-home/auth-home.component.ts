@@ -47,9 +47,4 @@ export class AuthHomeComponent {
       this.router.navigateByUrl('/home');
     }
   }
-
-  logout() {
-    alert(localStorage.getItem('jwtToken'));
-    localStorage.removeItem('jwtToken');
-  }
 }

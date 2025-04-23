@@ -1,18 +1,17 @@
-<div class="home-container">
-    <div class="content-container">
-        <div class="switch-btn">
-            <button class="btn" [class.active]="!isFollowing" (click)="onForYou()">For you</button>
-            <button class="btn" [class.active]="isFollowing" (click)="onFollowing()">Following</button>
-        </div>
+<div class="home-feed">
+    <!-- Barra switch "For you/Following" -->
+    <div class="switch-btn">
+        <button class="btn" [class.active]="!isFollowing" (click)="onForYou()">For you</button>
+        <button class="btn" [class.active]="isFollowing" (click)="onFollowing()">Following</button>
+    </div>
 
-        <div #createTweet class="create-tweet">
-            <app-create-tweet></app-create-tweet>
-        </div>
+    <!-- Creazione tweet -->
+    <div class="create-tweet">
+        <app-create-tweet></app-create-tweet>
+    </div>
 
-        <div #tweetListContainer class="tweet-list">
-            <div class="tweets">
-                <app-tweet-list [isFollowing]="isFollowing"></app-tweet-list>
-            </div>
-        </div>
+    <!-- Lista tweet -->
+    <div class="tweet-list">
+        <app-tweet-list [isFollowing]="isFollowing"></app-tweet-list>
     </div>
 </div>

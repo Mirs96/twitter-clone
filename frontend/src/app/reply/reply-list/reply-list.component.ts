@@ -17,12 +17,13 @@ export class ReplyListComponent implements OnChanges {
   size = 10;
   isLoading = false;
   hasMoreReplies = true;
-  userId!: number;
+  currentUserId!: number;
 
-  @Input({
-    required: true
-  })
+  @Input()
   tweetId!: number;
+
+  @Input()
+  userId!: number;
 
   @Input()
   newReply!: ReplyDetails;
@@ -39,8 +40,12 @@ export class ReplyListComponent implements OnChanges {
   ) { }
 
   ngOnInit(): void {
-    this.userId = Number(this.userService.getUserIdFromToken()) || 0;
-    this.loadMainReplies();
+    this.currentUserId = Number(this.userService.getUserIdFromToken()) || 0;
+    if (this.tweetId != null) {
+      this.loadMainRepliesByTweet();
+    } else if (this.userId != null) {
+      this.loadRepliesByUser();
+    }
   }
 
   // Add new reply
@@ -51,8 +56,8 @@ export class ReplyListComponent implements OnChanges {
   }
 
   // Load main replies for the tweet
-  loadMainReplies(): void {
-    if (this.isLoading || !this.hasMoreReplies) {
+  loadMainRepliesByTweet(): void {
+    if (this.isLoading || !this.hasMoreReplies || this.tweetId === null) {
       return;
     }
 
@@ -60,46 +65,43 @@ export class ReplyListComponent implements OnChanges {
     this.replyService
       .getMainRepliesByTweetId(this.tweetId, this.page, this.size)
       .subscribe({
+        next: r => this.handleReplyResponse(r),
+        error: err => this.handleError(err)
+      });
+  }
+
+  loadRepliesByUser(): void {
+    if (this.isLoading || !this.hasMoreReplies || this.userId == null) return;
+
+    this.isLoading = true;
+    this.replyService
+      .getRepliesByUserId(this.userId, this.page, this.size)
+      .subscribe({
         next: r => {
-          if (r.content.length === 0) {
-            this.hasMoreReplies = false;
-          } else {
-            this.mainReplies = [...this.mainReplies, ...r.content];
-            this.page++;
-            this.hasMoreReplies = this.page < r.totalPages;
-          }
-          this.isLoading = false;
+          r.content.forEach(reply => {
+            reply.hasNestedReplies = false; 
+          });
+          this.handleReplyResponse(r);
         },
-        error: err => {
-          console.log(err);
-          this.isLoading = false;
-        }
+        error: err => this.handleError(err)
       });
   }
 
-
-
-  /* toggleShowNested(replyId: number): void {
-    let found = false;
-
-    this.mainReplies.forEach(r => {
-      if (r.id === replyId) {
-        r.showNested = !r.showNested;
-        found = true;
-      }
-    });
-
-    if (!found) {
-      this.nestedRepliesMap.forEach(nestedList => {
-        nestedList.forEach(r => {
-          if (r.id === replyId) {
-            r.showNested = true;
-          }
-        });
-      });
+  handleReplyResponse(r: any): void {
+    if (r.content.length === 0) {
+      this.hasMoreReplies = false;
+    } else {
+      this.mainReplies = [...this.mainReplies, ...r.content];
+      this.page++;
+      this.hasMoreReplies = this.page < r.totalPages;
     }
+    this.isLoading = false;
   }
- */
+
+  handleError(err: any): void {
+    console.log(err);
+    this.isLoading = false;
+  }
 
   addNewReply(newReply: ReplyDetails): void {
     this.mainReplies = [newReply, ...this.mainReplies];
@@ -113,7 +115,7 @@ export class ReplyListComponent implements OnChanges {
     const isBottom = difference <= tolerance;
 
     if (isBottom) {
-      this.loadMainReplies();
+      this.loadMainRepliesByTweet();
     }
   }
 

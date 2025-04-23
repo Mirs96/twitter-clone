@@ -5,10 +5,11 @@ import { AuthHomeComponent } from './authentication/auth-home/auth-home.componen
 import { UserService } from './model/authentication/userService';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './authentication/register/register.component';
+import { RightSidebarComponent } from './right-sidebar/right-sidebar/right-sidebar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent, AuthHomeComponent],
+  imports: [RouterOutlet, NavbarComponent, AuthHomeComponent, RightSidebarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

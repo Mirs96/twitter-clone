@@ -55,4 +55,11 @@ export class TweetService {
     removeBookmarkFromTweet(bookmarkId?: number): Observable<DisplayTweetDetails> {
         return this.http.delete<DisplayTweetDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${bookmarkId}/bookmark`);
     }
+
+    getTweetsByUserId(userId: number, page: number, size: number): Observable<Page<DisplayTweetDetails>> {
+        const params = new HttpParams()
+            .set('page', page.toString())
+            .set('size', size.toString());
+        return this.http.get<Page<DisplayTweetDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/${userId}/user`, { params });
+    }
 }

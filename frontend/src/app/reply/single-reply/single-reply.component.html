@@ -1,7 +1,12 @@
 <div class="reply">
     <div class="reply-header">
         <div class="user-info">
-            <h3>{{ reply.userNickname }}</h3>
+            <h3>
+                <a [routerLink]="['/profile', reply.userId]" class="nickname-link" (click)="$event.stopPropagation()">
+                    {{ reply.userNickname }}
+                </a>
+            </h3>
+    
             <p class="time">{{ reply.creationDate }} · {{ reply.creationTime }}</p>
         </div>
     </div>
@@ -24,6 +29,5 @@
                 {{ reply.showNested  ? 'Hide replies' : 'Show replies' }}
             </button>
         }
-        
     </div>
 </div>

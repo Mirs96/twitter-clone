@@ -2,7 +2,7 @@
 nav {
     background-color: #000000; /* Colore di sfondo nero */
     color: #fff; /* Testo bianco */
-    width: 250px; /* Larghezza della barra di navigazione */
+    width: 200px; /* Larghezza della barra di navigazione */
     height: 100vh; /* Altezza che copre l'intera finestra */
     position: fixed; /* Fissa la barra sul lato sinistro */
     top: 0;

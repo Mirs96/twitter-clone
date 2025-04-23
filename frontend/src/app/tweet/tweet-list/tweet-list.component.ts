@@ -20,12 +20,15 @@ export class TweetListComponent implements OnInit, OnChanges {
   hasMoreTweets = true;
   likeDetails!: LikeTweetDetails;
   bookmarkDetails!: BookmarkDetails;
-  userId!: number;
+  currentUserId!: number;
 
   @Input({
     required: true
   })
   isFollowing!: boolean;
+  
+  @Input()
+  userId!: number;
 
   constructor(
     private tweetService: TweetService,
@@ -35,17 +38,29 @@ export class TweetListComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.userId = parseInt(this.userService.getUserIdFromToken() ?? "0");
-      this.loadTweets();
+      this.currentUserId = parseInt(this.userService.getUserIdFromToken() ?? "0");
+      if (this.userId != null) {
+        this.loadTweetsByUser();
+      } else {
+        this.loadTweets();
+      }
     }, 1000);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isFollowing']) {
-      this.page = 0; 
-      this.tweets = [];  
+    if (changes['userId']) {
+      this.resetTweetList();
+      this.loadTweetsByUser();
+    } else if (changes['isFollowing']) {
+      this.resetTweetList();
       this.loadTweets();
     }
+  }
+
+  resetTweetList(): void {
+    this.page = 0;
+    this.tweets = [];
+    this.hasMoreTweets = true;
   }
 
   // Load tweets
@@ -60,19 +75,8 @@ export class TweetListComponent implements OnInit, OnChanges {
       this.tweetService
         .getTweets(this.page, this.size)
         .subscribe({
-          next: r => {
-            this.tweets = [...this.tweets, ...r.content];
-            this.page++;
-            this.hasMoreTweets = this.page < r.totalPages;
-            this.isLoading = false;
-            setTimeout(() => {
-              this.cdr.detectChanges();
-            }, 100); // Ritardo di 100 millisecondi
-          },
-          error: err => {
-            console.log(err);
-            this.isLoading = false;
-          }
+          next: r => this.handleTweetResponse(r),
+          error: err => this.handleError(err)
         });
     } else { 
       // TODO
@@ -80,6 +84,32 @@ export class TweetListComponent implements OnInit, OnChanges {
 
       this.isLoading = false;
     }
+  }
+
+  loadTweetsByUser(): void {
+    if (this.isLoading || !this.hasMoreTweets || this.userId == null) return;
+
+    this.isLoading = true;
+    this.tweetService.getTweetsByUserId(this.userId, this.page, this.size)
+    .subscribe({
+      next: r => this.handleTweetResponse(r),
+      error: err => this.handleError(err)
+    });
+  }
+
+  handleTweetResponse(r: any): void {
+    this.tweets = [...this.tweets, ...r.content];
+    this.page++;
+    this.hasMoreTweets = this.page < r.totalPages;
+    this.isLoading = false;
+    setTimeout(() => {
+      this.cdr.detectChanges();
+    }, 100); // Ritardo di 100 millisecondi
+  }
+
+  handleError(err: any): void{
+    console.log(err);
+    this.isLoading = false;
   }
 
   // Do paging by scrolling down (scroll event)

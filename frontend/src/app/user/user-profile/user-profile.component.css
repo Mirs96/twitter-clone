@@ -1,0 +1,45 @@
+.profile-header {
+  border-bottom: 1px solid #ddd;
+  padding: 1rem;
+  background: rgb(0, 0, 0);
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: black;
+  color: white;
+}
+
+.follow-btn {
+  background-color: #1da1f2;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.profile-tabs {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  background: #000000;
+}
+
+.profile-tabs button {
+  flex: 1;
+  padding: 0.8rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: bold;
+  color: #6e767d;
+}
+
+.profile-tabs button.active {
+  border-bottom: 3px solid #1da1f2;
+  color: #1da1f2;
+}

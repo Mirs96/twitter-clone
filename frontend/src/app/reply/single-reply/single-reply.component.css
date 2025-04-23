@@ -55,7 +55,7 @@
     border: none;
     padding: 8px 12px;
     border-radius: 9999px;
-    margin-left: auto; /* Questo spinge il bottone a destra */
+    margin-left: auto;
 }
 
 .toggle-nested:hover {
@@ -103,3 +103,14 @@
     filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
     color: rgb(249, 24, 128);
 }
+
+.nickname-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.nickname-link:hover {
+    text-decoration: underline;
+}
+  

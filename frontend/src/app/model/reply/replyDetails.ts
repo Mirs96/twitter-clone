@@ -11,7 +11,7 @@ export interface ReplyDetails {
     likeCount: number;
     liked: boolean;
     likeId?: number;
-    hasNestedReplies: boolean;
+    hasNestedReplies?: boolean;
     showNested?: boolean;
 }
 
