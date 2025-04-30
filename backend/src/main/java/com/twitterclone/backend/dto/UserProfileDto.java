@@ -22,6 +22,7 @@ public class UserProfileDto {
     public UserProfileDto(UserProfile profile) {
         this.nickname = profile.getNickname();
         this.profilePicture = profile.getProfilePicture();
+        this.bio = profile.getBio();
         this.followersCount = profile.getFollowersCount();
         this.followingCount = profile.getFollowingCount();
         this.isFollowing = profile.isFollowing();

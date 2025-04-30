@@ -1,6 +1,7 @@
 package com.twitterclone.backend.dto;
 
 import com.twitterclone.backend.model.DisplayReply;
+import io.micrometer.common.util.StringUtils;
 
 public class DisplayReplyDto {
 
@@ -53,7 +54,8 @@ public class DisplayReplyDto {
         this.id = reply.getReply().getId();
         this.userId = reply.getReply().getUser().getId();
         this.userNickname = reply.getReply().getUser().getNickname();
-        this.userProfilePicture = reply.getReply().getUser().getProfilePicture();
+        String profilePic = reply.getReply().getUser().getProfilePicture();
+        this.userProfilePicture =  StringUtils.isBlank(profilePic) ? "/images/default-avatar.png" : profilePic;
         this.tweetId = reply.getReply().getTweet().getId();
         this.parentReplyId = (reply.getReply().getParentReply() != null) ? reply.getReply().getParentReply().getId() : null;
         this.content = reply.getReply().getContent();

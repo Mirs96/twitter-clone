@@ -32,6 +32,32 @@ public interface TweetRepositoryJpa extends JpaRepository<Tweet, Long> {
     @Query("""
                 SELECT t
                 FROM Tweet t
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM Follower f
+                    WHERE f.follower.id = :loggedInUserId AND f.user = t.user
+                )
+                ORDER BY
+                    EXTRACT(EPOCH FROM CAST(t.creationDate AS TIMESTAMP)) * 0.7 +
+                    (
+                        (
+                            SELECT COUNT(lt)
+                            FROM LikeTweet lt
+                            WHERE lt.tweet = t
+                        ) +
+                        (
+                            SELECT COUNT(r)
+                            FROM Reply r
+                            WHERE r.tweet = t
+                        )
+                    ) * 0.3
+                DESC
+            """)
+    Page<Tweet> getFollowedUsersTweetsByLikesAndCommentsDesc(@Param("loggedInUserId") Long loggedInUserId, Pageable pageable);
+
+    @Query("""
+                SELECT t
+                FROM Tweet t
                 WHERE t.user.id =:userId
                 ORDER BY t.creationDate DESC, t.creationTime DESC
             """)

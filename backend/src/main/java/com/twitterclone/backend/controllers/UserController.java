@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -76,21 +75,27 @@ public class UserController {
 
         try {
             UserProfile userProfile = userService.getProfile(userId, currentUserId);
-            return ResponseEntity.ok(new UserProfileDto(userProfile));
+
+            UserProfileDto mmmm = new UserProfileDto(userProfile);
+            System.out.println("BIO:" + mmmm.getBio());
+            return ResponseEntity.ok(mmmm);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/update-profile")
+    @PostMapping("/{userId}/update-profile")
     public ResponseEntity<?> updateProfile(
+            @PathVariable long userId,
             @RequestParam(value = "bio", required = false) String bio,
             @RequestParam(value = "avatar", required = false) MultipartFile avatar,
             HttpServletRequest request
     ) {
-        long userId = Long.parseLong(extractUserIdFromToken(request));
-        String filename = null;
+        if (!isValidUser(request, userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
+        String filename = null;
         try {
             if (avatar != null && !avatar.isEmpty()) {
                 String ext = FilenameUtils.getExtension(avatar.getOriginalFilename());
@@ -119,7 +124,6 @@ public class UserController {
 
             userService.updateUserProfile(userId, bio, filename);
             return ResponseEntity.ok().build();
-
         } catch (IOException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (EntityNotFoundException e) {
@@ -208,5 +212,10 @@ public class UserController {
         }
         String token = authHeader.substring(7);
         return jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
+    }
+
+    private boolean isValidUser(HttpServletRequest request, long userId) {
+        String tokenUserId = extractUserIdFromToken(request);
+        return tokenUserId != null && tokenUserId.equals(String.valueOf(userId));
     }
 }

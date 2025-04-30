@@ -61,15 +61,37 @@ public class TweetController {
     }
 
     @GetMapping("/trending")
-    public ResponseEntity<Page<DisplayTweetDto>> getTrendingTweets(
+    public ResponseEntity<?> getTrendingTweets(
             @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "20") String size,
             HttpServletRequest request
     ) {
         long userId = parseInt(extractUserIdFromToken(request));
         Pageable pageable = PageRequest.of(parseInt(page), parseInt(size));
-        Page<DisplayTweet> tweets = tweetService.getTrendingTweets(pageable, userId);
-        return ResponseEntity.ok(tweets.map(DisplayTweetDto::new));
+
+        try {
+            Page<DisplayTweet> tweets = tweetService.getTrendingTweets(pageable, userId);
+            return ResponseEntity.ok(tweets.map(DisplayTweetDto::new));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/followed")
+    public ResponseEntity<?> getTweetsByFollowedUsers(
+            @RequestParam(defaultValue = "0") String page,
+            @RequestParam(defaultValue = "20") String size,
+            HttpServletRequest request
+    ) {
+        long userId = parseInt(extractUserIdFromToken(request));
+        Pageable pageable = PageRequest.of(parseInt(page), parseInt(size));
+
+        try {
+            Page<DisplayTweet> tweets = tweetService.getTrendingTweetsByFollowedUsers(pageable, userId);
+            return ResponseEntity.ok(tweets.map(DisplayTweetDto::new));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{id}")

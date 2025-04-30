@@ -12,7 +12,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface TweetService {
     Tweet createTweet(Tweet tweet, long userId) throws EntityNotFoundException;
-    Page<DisplayTweet> getTrendingTweets(Pageable pageable, long userId);
+    Page<DisplayTweet> getTrendingTweets(Pageable pageable, long userId) throws EntityNotFoundException;
+    Page<DisplayTweet> getTrendingTweetsByFollowedUsers(Pageable pageable, long userId) throws EntityNotFoundException;
 
     DisplayTweet findTweetById(long tweetId, long userId) throws EntityNotFoundException;
     Page<DisplayTweet> getTweetByUserId(long userId, long currentUserId, Pageable pageable) throws EntityNotFoundException;

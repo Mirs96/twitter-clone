@@ -1,7 +1,5 @@
 package com.twitterclone.backend.model.services;
 
-import com.twitterclone.backend.model.DisplayReply;
-import com.twitterclone.backend.model.DisplayTweet;
 import com.twitterclone.backend.model.UserProfile;
 import com.twitterclone.backend.model.entities.*;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
@@ -14,28 +12,17 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceJpa implements UserService {
     private UserRepositoryJpa userRepo;
-    private TweetRepositoryJpa tweetRepo;
-    private ReplyRepositoryJpa replyRepo;
-    private LikeTweetRepositoryJpa likeTweetRepo;
-    private BookmarkRepositoryJpa bookmarkRepo;
     private FollowerRepositoryJpa followerRepo;
-    private LikeReplyRepositoryJpa likeReplyRepo;
 
     @Autowired
-    public UserServiceJpa(UserRepositoryJpa userRepo, TweetRepositoryJpa tweetRepo, ReplyRepositoryJpa replyRepo, LikeTweetRepositoryJpa likeTweetRepo, BookmarkRepositoryJpa bookmarkRepo, FollowerRepositoryJpa followerRepo, LikeReplyRepositoryJpa likeReplyRepo) {
+    public UserServiceJpa(UserRepositoryJpa userRepo, FollowerRepositoryJpa followerRepo) {
         this.userRepo = userRepo;
-        this.tweetRepo = tweetRepo;
-        this.replyRepo = replyRepo;
-        this.likeTweetRepo = likeTweetRepo;
-        this.bookmarkRepo = bookmarkRepo;
         this.followerRepo = followerRepo;
-        this.likeReplyRepo = likeReplyRepo;
     }
 
     @Override
@@ -67,7 +54,7 @@ public class UserServiceJpa implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
 
         if (followerId == userId) {
-
+            throw new ReactionAlreadyExistsException("A user cannot follow themselves", Follower.class.getName());
         }
 
         if (followerRepo.findByFollowerAndUser(followerId, userId).isPresent()) {
