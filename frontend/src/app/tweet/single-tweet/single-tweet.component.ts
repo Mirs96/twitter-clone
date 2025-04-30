@@ -13,10 +13,6 @@ import { UserService } from '../../model/authentication/userService';
   styleUrl: './single-tweet.component.css'
 })
 export class SingleTweetComponent implements OnInit, OnChanges {
-  likeDetails!: LikeTweetDetails;
-  bookmarkDetails!: BookmarkDetails;
-  userId!: number;
-
   @Input({
     required: true
   })
@@ -24,6 +20,11 @@ export class SingleTweetComponent implements OnInit, OnChanges {
 
   @Input()
   replyCount!: number;
+
+  likeDetails!: LikeTweetDetails;
+  bookmarkDetails!: BookmarkDetails;
+  userId!: number;
+  baseUrl = "http://localhost:8080";
 
   constructor(
     private tweetService: TweetService,
@@ -112,6 +113,10 @@ export class SingleTweetComponent implements OnInit, OnChanges {
           error: err => console.log(err)
         });
     }
+  }
+
+  getFullImageUrl(profilePicture: string) {
+    return `${this.baseUrl}${profilePicture}`;
   }
 
   // Open a tweet

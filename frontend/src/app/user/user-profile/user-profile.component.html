@@ -19,9 +19,12 @@
         <div class="user-nickname">
           <h2>{{ profile.nickname }}</h2>
         </div>
-        <button class="setup-profile" (click)="openSetupProfilePopup()">
-          Set up profile
-        </button>
+        
+        @if (currentUserId === profileUserId) {
+          <button class="setup-profile" (click)="openSetupProfilePopup()">
+            Set up profile
+          </button>
+        }
       </div>
 
       <div class="avatar-bio-container">

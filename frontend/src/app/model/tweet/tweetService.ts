@@ -34,6 +34,14 @@ export class TweetService {
         return this.http.get<Page<DisplayTweetDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/trending`, { params });
     }
 
+    getFollowedUsersTweets(page: number, size: number): Observable<Page<DisplayTweetDetails>> {
+        const params = new HttpParams()
+            .set('page', page.toString())
+            .set('size', size.toString());
+        return this.http.get<Page<DisplayTweetDetails>>(`${HttpConfig.apiUrl}${this.urlExtension}/followed`, { params });
+    }
+
+
     addLikeToTweet(like: LikeTweetDetails): Observable<DisplayTweetDetails> {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json'

@@ -1,12 +1,14 @@
 <div class="tweet" (click)="openTweet(tweet.id)">
     <div class="post-header">
         <div class="user-info">
-            <h3>
-                <a [routerLink]="['/profile', tweet.userId]" class="nickname-link"  (click)="$event.stopPropagation()">
-                    {{ tweet.userNickname }}
-                </a>
-            </h3>
-
+            <img class="profile-picture" 
+                 [src]="getFullImageUrl(tweet.userProfilePicture)" 
+                 alt="Profile picture of {{ tweet.userNickname }}">
+            
+            <a [routerLink]="['/profile', tweet.userId]" class="nickname-link" (click)="$event.stopPropagation()">
+                <h3>{{ tweet.userNickname }}</h3>
+            </a>
+            
             <p class="time">{{ tweet.creationDate }} · {{ tweet.creationTime }}</p>
         </div>
     </div>

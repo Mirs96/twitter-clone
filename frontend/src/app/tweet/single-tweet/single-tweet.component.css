@@ -105,4 +105,18 @@
 .nickname-link:hover {
     text-decoration: underline;
 }
-  
+
+.profile-picture-link {
+    margin-right: 10px; /* Space between picture and user info */
+    flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.profile-picture {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #2f3336;
+    margin-right: 10px; /* questo aggiunge lo spazio tra immagine e nome */
+}
+

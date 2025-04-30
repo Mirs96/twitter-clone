@@ -38,7 +38,7 @@ export class UserProfileComponent implements OnInit {
         this.isCurrentUserFollowing = p.isFollowing;
       });
   }
-
+  
   getFullImageUrl(profilePicture: string) {
     return `${this.baseUrl}${profilePicture}`;
   }
@@ -69,6 +69,7 @@ export class UserProfileComponent implements OnInit {
   openSetupProfilePopup(): void {
     console.log(this.showSetupProfileModal);
     this.showSetupProfileModal = true;
+    console.log(this.profile.bio);
   }
 
   closeSetupProfilePopup(): void { 

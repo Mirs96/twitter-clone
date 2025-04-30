@@ -13,11 +13,6 @@ import { RouterModule } from '@angular/router';
   styleUrl: './single-reply.component.css'
 })
 export class SingleReplyComponent implements OnInit {
-  likeDetails!: LikeReplyDetails;
-  bookmarkDetails!: BookmarkDetails;
-  userId!: number;
-  showNestedReplies = false;
-
   @Input({
     required: true
   })
@@ -28,6 +23,12 @@ export class SingleReplyComponent implements OnInit {
 
   @Output()
   loadNestedReplies = new EventEmitter<number>();
+
+  likeDetails!: LikeReplyDetails;
+  bookmarkDetails!: BookmarkDetails;
+  userId!: number;
+  showNestedReplies = false;
+  baseUrl = "http://localhost:8080";
 
   constructor(
     private replyService: ReplyService,
@@ -72,6 +73,10 @@ export class SingleReplyComponent implements OnInit {
           error: err => console.log(err)
         });
     }
+  }
+
+  getFullImageUrl(profilePicture: string) {
+    return `${this.baseUrl}${profilePicture}`;
   }
 
   onReplyClick(): void {

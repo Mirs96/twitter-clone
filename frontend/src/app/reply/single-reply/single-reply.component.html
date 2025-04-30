@@ -1,14 +1,15 @@
 <div class="reply">
     <div class="reply-header">
         <div class="user-info">
-            <h3>
-                <a [routerLink]="['/profile', reply.userId]" class="nickname-link" (click)="$event.stopPropagation()">
-                    {{ reply.userNickname }}
-                </a>
-            </h3>
-    
-            <p class="time">{{ reply.creationDate }} · {{ reply.creationTime }}</p>
+            <img class="profile-picture"
+                 [src]="getFullImageUrl(reply.userProfilePicture)"
+                 alt="Profile picture of {{ reply.userNickname }}">
+            
+            <a [routerLink]="['/profile', reply.userId]" class="nickname-link" (click)="$event.stopPropagation()">
+                <h3>{{ reply.userNickname }}</h3>
+            </a>
         </div>
+        <p class="time">{{ reply.creationDate }} · {{ reply.creationTime }}</p>
     </div>
     <div class="reply-content">
         <p>{{ reply.content }}</p>

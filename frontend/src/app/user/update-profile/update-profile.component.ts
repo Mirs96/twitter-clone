@@ -3,6 +3,7 @@ import { UserProfileService } from '../../model/user/userProfileService';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../model/authentication/userService';
 import Compressor from 'compressorjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-update-profile',
@@ -22,15 +23,18 @@ export class UpdateProfileComponent implements OnInit, AfterViewInit {
   avatarPreview: string | ArrayBuffer | null = null;
   userId!: number;
   selectedAvatarFile: File | null = null;
+  profileUserId!: number;
 
   constructor(
     private fb: FormBuilder,
     private userProfileService: UserProfileService,
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.userId = Number(this.userService.getUserIdFromToken()) || 0;
+    this.profileUserId = Number(this.route.snapshot.paramMap.get('id') ?? 0);
     this.profileForm = this.fb.group({
       bio: ['', [Validators.maxLength(500)]]
     });
@@ -86,7 +90,6 @@ export class UpdateProfileComponent implements OnInit, AfterViewInit {
     reader.readAsDataURL(fileWithName);
   
     this.selectedAvatarFile = fileWithName; 
-    
   }
 
   onSubmit(): void {
@@ -97,7 +100,7 @@ export class UpdateProfileComponent implements OnInit, AfterViewInit {
         formData.append('avatar', this.selectedAvatarFile);
       }
 
-      this.userProfileService.updateProfile(formData).subscribe({
+      this.userProfileService.updateProfile(formData, this.profileUserId).subscribe({
         next: () => {
           this.profileUpdated.emit();
           this.resetForm();

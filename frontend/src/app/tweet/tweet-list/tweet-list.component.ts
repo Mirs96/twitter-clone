@@ -48,12 +48,13 @@ export class TweetListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['userId']) {
+    if (changes['userId'] || changes['isFollowing']) {
       this.resetTweetList();
-      this.loadTweetsByUser();
-    } else if (changes['isFollowing']) {
-      this.resetTweetList();
-      this.loadTweets();
+      if (this.userId != null && !this.isFollowing) {
+        this.loadTweetsByUser();
+      } else {
+        this.loadTweets();
+      }
     }
   }
 
@@ -65,26 +66,21 @@ export class TweetListComponent implements OnInit, OnChanges {
 
   // Load tweets
   loadTweets(): void {
-    if (this.isLoading || !this.hasMoreTweets) {
+    if (this.isLoading || !this.hasMoreTweets)
       return;
-    }
-
+  
     this.isLoading = true;
-
-    if (!this.isFollowing) {
-      this.tweetService
-        .getTweets(this.page, this.size)
-        .subscribe({
-          next: r => this.handleTweetResponse(r),
-          error: err => this.handleError(err)
-        });
-    } else { 
-      // TODO
-      console.log('following...');
-
-      this.isLoading = false;
-    }
+  
+    const stream = this.isFollowing
+      ? this.tweetService.getFollowedUsersTweets(this.page, this.size)
+      : this.tweetService.getTweets(this.page, this.size);
+  
+    stream.subscribe({
+      next: r => this.handleTweetResponse(r),
+      error: err => this.handleError(err)
+    });
   }
+  
 
   loadTweetsByUser(): void {
     if (this.isLoading || !this.hasMoreTweets || this.userId == null) return;
@@ -98,13 +94,16 @@ export class TweetListComponent implements OnInit, OnChanges {
   }
 
   handleTweetResponse(r: any): void {
-    this.tweets = [...this.tweets, ...r.content];
+    const newTweets = r.content.filter((t: DisplayTweetDetails) =>
+      !this.tweets.some(existing => existing.id === t.id)
+    );
+  
+    this.tweets = [...this.tweets, ...newTweets];
     this.page++;
     this.hasMoreTweets = this.page < r.totalPages;
     this.isLoading = false;
-    setTimeout(() => {
-      this.cdr.detectChanges();
-    }, 100); // Ritardo di 100 millisecondi
+  
+    setTimeout(() => this.cdr.detectChanges(), 100);
   }
 
   handleError(err: any): void{

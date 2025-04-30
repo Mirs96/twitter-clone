@@ -1,48 +1,79 @@
-.arrow-container {
-  background-color: black;
-  padding: 10px;
+/* ==============================================
+   Debug: evidenzia il contenitore avatar+bio
+   Rimuovi o commenta quando funziona
+   ============================================== */
+.avatar-bio-container {
+  display: flex !important;
+  /* flex orizzontale */
+  align-items: flex-start !important;
+  /* allinea in alto */
+  gap: 1rem !important;
+  /* spazio tra immagine e bio */
+  margin: 1rem 0 !important;
+}
+
+/* ==============================================
+     Immagine del profilo
+     ============================================== */
+.avatar-img {
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  display: inline-block;
-  cursor: pointer;
+  object-fit: cover;
+  border: 2px solid #444;
+  flex-shrink: 0;
+  /* non si riduce */
 }
 
-.arrow-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  color: white;
+/* ==============================================
+     Testo della bio
+     ============================================== */
+.bio-text {
+  margin: 0 !important;
+  /* rimuove margini predefiniti */
+  font-style: italic;
+  color: #aaa;
+  line-height: 1.4 !important;
+  flex: 1 1 auto !important;
+  /* occupa lo spazio rimanente */
+  max-width: calc(100% - 80px - 1rem) !important;
+  /* evita sovrapposizioni */
 }
 
+/* ==============================================
+     Altri stili esistenti nel componente
+     ============================================== */
 .profile-header {
   border-bottom: 1px solid #ddd;
   padding: 1rem;
-  background: rgb(0, 0, 0);
+  background: #000;
 }
+
 .nickname-setup {
   display: flex;
-  align-items: center; /* Allinea verticalmente gli elementi al centro */
+  align-items: center;
   justify-content: space-between;
 }
 
 .setup-profile {
-  background-color: #000; /* Sfondo nero */
-  color: #fff; /* Testo bianco */
-  padding: 12px 24px; /* Spazio interno (alto/basso, sinistra/destra) */
-  border-radius: 30px; /* Bordo arrotondato per dargli la forma a pillola */
-  border: 1px solid #333; /* Bordo sottile grigio scuro (opzionale, per definizione) */
-  font-size: 16px; /* Dimensione del testo */
-  font-weight: bold; /* Testo in grassetto */
-  cursor: pointer; /* Cambia il cursore al passaggio del mouse per indicare che è cliccabile */
-  transition: background-color 0.3s ease; /* Transizione fluida per il cambio di colore */
+  background-color: #000;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 30px;
+  border: 1px solid #333;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .setup-profile:hover {
-  background-color: #111; /* Sfondo leggermente più chiaro al passaggio del mouse */
+  background-color: #111;
 }
 
 .setup-profile:focus {
-  outline: none; /* Rimuove il bordo di focus predefinito del browser */
-  border-color: #fff; /* Aggiunge un bordo bianco quando il pulsante è attivo/focalizzato */
+  outline: none;
+  border-color: #fff;
 }
 
 .profile-container {
@@ -50,13 +81,13 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: black;
-  color: white;
+  background-color: #000;
+  color: #fff;
 }
 
 .follow-btn {
   background-color: #1da1f2;
-  color: white;
+  color: #fff;
   border: none;
   padding: 0.4rem 1rem;
   border-radius: 1rem;
@@ -67,7 +98,7 @@
 .profile-tabs {
   display: flex;
   border-bottom: 1px solid #ccc;
-  background: #000000;
+  background: #000;
 }
 
 .profile-tabs button {
@@ -85,23 +116,16 @@
   color: #1da1f2;
 }
 
-.avatar-bio-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin: 1rem 0;
-}
-
-.avatar-img {
-  width: 80px;
-  height: 80px;
+.arrow-container {
+  background-color: #000;
+  padding: 10px;
   border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #444;
+  display: inline-block;
+  cursor: pointer;
 }
 
-.bio-text {
-  flex: 1;
-  font-style: italic;
-  color: #aaa;
+.arrow-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }

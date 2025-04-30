@@ -2,6 +2,7 @@ export interface DisplayTweetDetails {
     id: number;
     userId: number;
     userNickname: string;
+    userProfilePicture: string;
     content: string;
     creationDate: string;
     creationTime: string;

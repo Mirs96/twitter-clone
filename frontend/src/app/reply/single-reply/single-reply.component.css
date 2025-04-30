@@ -113,4 +113,12 @@
 .nickname-link:hover {
     text-decoration: underline;
 }
-  
+
+.profile-picture {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #2f3336;
+    margin-right: 10px;
+}

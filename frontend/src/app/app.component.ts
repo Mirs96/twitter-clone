@@ -3,8 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AuthHomeComponent } from './authentication/auth-home/auth-home.component';
 import { UserService } from './model/authentication/userService';
-import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './authentication/register/register.component';
 import { RightSidebarComponent } from './right-sidebar/right-sidebar/right-sidebar.component';
 
 @Component({
