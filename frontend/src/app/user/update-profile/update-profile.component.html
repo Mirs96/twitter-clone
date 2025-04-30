@@ -1,0 +1,29 @@
+<div class="profile-update-container">
+    <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
+      
+      <div class="avatar-container">
+        <label for="avatar" class="avatar-label">
+          <p class="choose-avatar-text">Pick a profile picture</p>
+          @if (avatarPreview) {
+            <img [src]="avatarPreview" alt="Avatar Preview" class="avatar-preview" />
+          } @else {
+            <span class="avatar-placeholder">+</span>
+          }
+        </label>
+        <input type="file" id="avatar" (change)="onFileChange($event)" />
+
+      </div>
+  
+      <div class="bio-container">
+        <label for="bio">Describe yourself</label>
+        <textarea id="bio" formControlName="bio" rows="4" placeholder="What makes you special? Don't think too hard, just have fun with it."></textarea>
+      </div>
+  
+      <div class="form-actions">
+        <button type="submit" [disabled]="profileForm.invalid">Save Changes</button>
+        <button type="button" (click)="onCancel()" class="cancel-button">Annulla</button>
+      </div>
+  
+    </form>
+  </div>
+  

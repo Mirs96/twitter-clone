@@ -4,12 +4,37 @@
       <img src="icons/back-arrow.svg" alt="Go Back" class="arrow-icon">
     </div>
 
+    @if (showSetupProfileModal) {
+      <div class="overlay" (click)="closeSetupProfilePopup()">
+        <div class="popup-content" (click)="$event.stopPropagation()">
+          <app-update-profile 
+            (profileUpdated)="onUpdatedProfile()">
+          </app-update-profile>
+        </div>
+      </div>
+    }    
+
     <div class="profile-header">
-      <h2>{{ profile.nickname }}</h2>
+      <div class="nickname-setup">
+        <div class="user-nickname">
+          <h2>{{ profile.nickname }}</h2>
+        </div>
+        <button class="setup-profile" (click)="openSetupProfilePopup()">
+          Set up profile
+        </button>
+      </div>
+
+      <div class="avatar-bio-container">
+        <img [src]="getFullImageUrl(profile.profilePicture)" alt="Profile picture" class="avatar-img">
+        <p class="bio-text">{{ profile.bio }}</p>
+      </div>
+
       <p>{{ profile.followersCount }} followers • {{ profile.followingCount }} following</p>
-      <button (click)="toggleFollow()" class="follow-btn">
-        {{ isCurrentUserFollowing ? 'Unfollow' : 'Follow' }}
-      </button>
+      @if (profileUserId != currentUserId) {
+        <button (click)="toggleFollow()" class="follow-btn">
+          {{ isCurrentUserFollowing ? 'Unfollow' : 'Follow' }}
+        </button>
+      }
     </div>
   }
 
@@ -21,16 +46,16 @@
   @if (profile) {
     <div class="profile-content">
       @if (activeTab === 'tweets') {
-        <app-tweet-list
+        <app-tweet-list 
           [isFollowing]="false"
           [userId]="profileUserId">
         </app-tweet-list>
       }
       @if (activeTab === 'replies') {
-        <app-reply-list
+        <app-reply-list 
           [userId]="profileUserId">
         </app-reply-list>
       }
     </div>
   }
-</div>  
+</div>

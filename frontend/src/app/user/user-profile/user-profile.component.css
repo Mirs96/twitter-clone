@@ -18,6 +18,32 @@
   padding: 1rem;
   background: rgb(0, 0, 0);
 }
+.nickname-setup {
+  display: flex;
+  align-items: center; /* Allinea verticalmente gli elementi al centro */
+  justify-content: space-between;
+}
+
+.setup-profile {
+  background-color: #000; /* Sfondo nero */
+  color: #fff; /* Testo bianco */
+  padding: 12px 24px; /* Spazio interno (alto/basso, sinistra/destra) */
+  border-radius: 30px; /* Bordo arrotondato per dargli la forma a pillola */
+  border: 1px solid #333; /* Bordo sottile grigio scuro (opzionale, per definizione) */
+  font-size: 16px; /* Dimensione del testo */
+  font-weight: bold; /* Testo in grassetto */
+  cursor: pointer; /* Cambia il cursore al passaggio del mouse per indicare che è cliccabile */
+  transition: background-color 0.3s ease; /* Transizione fluida per il cambio di colore */
+}
+
+.setup-profile:hover {
+  background-color: #111; /* Sfondo leggermente più chiaro al passaggio del mouse */
+}
+
+.setup-profile:focus {
+  outline: none; /* Rimuove il bordo di focus predefinito del browser */
+  border-color: #fff; /* Aggiunge un bordo bianco quando il pulsante è attivo/focalizzato */
+}
 
 .profile-container {
   width: 100%;
@@ -57,4 +83,25 @@
 .profile-tabs button.active {
   border-bottom: 3px solid #1da1f2;
   color: #1da1f2;
+}
+
+.avatar-bio-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.avatar-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #444;
+}
+
+.bio-text {
+  flex: 1;
+  font-style: italic;
+  color: #aaa;
 }

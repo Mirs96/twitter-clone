@@ -17,6 +17,10 @@ export class UserProfileService {
     getUserProfile(userProfileId: number): Observable<UserProfileDetails> {
         return this.http.get<UserProfileDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${userProfileId}/profile`);
     }
+    
+    updateProfile(formData: FormData): Observable<void> {
+        return this.http.post<void>(`${HttpConfig.apiUrl}${this.urlExtension}/update-profile`, formData);
+    }      
 
     follow(userIdToFollow: number): Observable<void> {
         const headers = new HttpHeaders({
