@@ -75,10 +75,7 @@ public class UserController {
 
         try {
             UserProfile userProfile = userService.getProfile(userId, currentUserId);
-
-            UserProfileDto mmmm = new UserProfileDto(userProfile);
-            System.out.println("BIO:" + mmmm.getBio());
-            return ResponseEntity.ok(mmmm);
+            return ResponseEntity.ok(new UserProfileDto(userProfile));
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
