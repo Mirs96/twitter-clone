@@ -43,22 +43,6 @@ public class UserServiceJpa implements UserService {
         return userRepo.findById(userId);
     }
 
-//    @Override
-//    public long countFollowersByUserId(long userId) throws EntityNotFoundException {
-//        userRepo.findById(userId)
-//                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
-//
-//        return followerRepo.countByUserId(userId);
-//    }
-//
-//    @Override
-//    public long countFollowingByFollowerId(long followerId) throws EntityNotFoundException {
-//        userRepo.findById(followerId)
-//                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
-//
-//        return followerRepo.countByFollowerId(followerId);
-//    }
-
     @Override
     public Page<Follower> findFollowersByUserId(long userId, Pageable pageable) throws EntityNotFoundException {
         userRepo.findById(userId)
@@ -81,6 +65,10 @@ public class UserServiceJpa implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+
+        if (followerId == userId) {
+
+        }
 
         if (followerRepo.findByFollowerAndUser(followerId, userId).isPresent()) {
             throw new ReactionAlreadyExistsException("Already following", Follower.class.getName());
@@ -120,11 +108,34 @@ public class UserServiceJpa implements UserService {
 
         Optional<Follower> of = followerRepo.findByFollowerAndUser(currentUserId, profileUserId);
 
+        String profilePicture = user.getProfilePicture();
+
+        if (profilePicture == null || profilePicture.isEmpty()) {
+            profilePicture = "/images/default-avatar.png";
+        }
+
         return new UserProfile(
                 user.getNickname(),
+                profilePicture,
+                user.getBio(),
                 followersCount,
                 followingCount,
                 of.isEmpty() ? false : true
         );
+    }
+
+    @Override
+    public void updateUserProfile(long userId, String bio, String avatarFilename) throws EntityNotFoundException {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+
+        if (bio != null) {
+            user.setBio(bio);
+        }
+        if (avatarFilename != null) {
+            user.setProfilePicture("/uploads/avatars/" + avatarFilename);
+        }
+
+        userRepo.save(user);
     }
 }

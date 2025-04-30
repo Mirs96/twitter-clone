@@ -7,6 +7,7 @@ import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
 import com.twitterclone.backend.model.exceptions.ReactionAlreadyExistsException;
 import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.UserService;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.imageio.ImageIO;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +77,51 @@ public class UserController {
         try {
             UserProfile userProfile = userService.getProfile(userId, currentUserId);
             return ResponseEntity.ok(new UserProfileDto(userProfile));
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(
+            @RequestParam(value = "bio", required = false) String bio,
+            @RequestParam(value = "avatar", required = false) MultipartFile avatar,
+            HttpServletRequest request
+    ) {
+        long userId = Long.parseLong(extractUserIdFromToken(request));
+        String filename = null;
+
+        try {
+            if (avatar != null && !avatar.isEmpty()) {
+                String ext = FilenameUtils.getExtension(avatar.getOriginalFilename());
+                filename = UUID.randomUUID() + "." + ext;
+
+                Path projectRootPath = Paths.get("").toAbsolutePath().getParent();
+                Path folder = projectRootPath.resolve("uploads/avatars");
+
+                if (!Files.exists(folder)) {
+                    Files.createDirectories(folder);
+                }
+
+                BufferedImage img = ImageIO.read(avatar.getInputStream());
+
+                boolean needsCompression = (img.getWidth() > 800 || img.getHeight() > 800) || avatar.getSize() > (500 * 1024); // soglia 500 KB
+
+                if (needsCompression) {
+                    Thumbnails.of(img)
+                            .size(800, 800)
+                            .outputQuality(0.6)
+                            .toFile(folder.resolve(filename).toFile());
+                } else {
+                    Files.copy(avatar.getInputStream(), folder.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+                }
+            }
+
+            userService.updateUserProfile(userId, bio, filename);
+            return ResponseEntity.ok().build();
+
+        } catch (IOException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

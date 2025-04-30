@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("/uploads/**")
-                .addResourceLocations("file:///C:/dev/projects/twitter-clone/uploads/profiles");
+                .addResourceHandler("/uploads/avatars/**")
+                .addResourceLocations("file:///C:/dev/twitter-clone/uploads/avatars/");
     }
 }

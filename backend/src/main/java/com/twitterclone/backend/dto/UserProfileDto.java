@@ -4,12 +4,16 @@ import com.twitterclone.backend.model.UserProfile;
 
 public class UserProfileDto {
     private String nickname;
+    private String profilePicture;
+    private String bio;
     private long followersCount;
     private long followingCount;
     private boolean isFollowing;
 
-    public UserProfileDto(String nickname, long followersCount, long followingCount, boolean isFollowing) {
+    public UserProfileDto(String nickname, String profilePicture, String bio, long followersCount, long followingCount, boolean isFollowing) {
         this.nickname = nickname;
+        this.profilePicture = profilePicture;
+        this.bio = bio;
         this.followersCount = followersCount;
         this.followingCount = followingCount;
         this.isFollowing = isFollowing;
@@ -17,6 +21,7 @@ public class UserProfileDto {
 
     public UserProfileDto(UserProfile profile) {
         this.nickname = profile.getNickname();
+        this.profilePicture = profile.getProfilePicture();
         this.followersCount = profile.getFollowersCount();
         this.followingCount = profile.getFollowingCount();
         this.isFollowing = profile.isFollowing();
@@ -31,6 +36,22 @@ public class UserProfileDto {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public long getFollowersCount() {

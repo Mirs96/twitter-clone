@@ -33,6 +33,10 @@ public class SecurityConfiguration {
                         req -> req
                                 .requestMatchers(HttpMethod.OPTIONS, "/**")
                                 .permitAll()
+                                .requestMatchers("/uploads/**")
+                                .permitAll()
+                                .requestMatchers("/images/**")
+                                .permitAll()
                                 .requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
                                 .anyRequest()
@@ -46,5 +50,6 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
 }
 

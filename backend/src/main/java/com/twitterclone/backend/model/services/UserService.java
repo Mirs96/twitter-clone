@@ -13,6 +13,7 @@ public interface UserService {
     Optional<User> findById(Long userId);
 
     UserProfile getProfile(long profileUserId, long currentUserId) throws EntityNotFoundException;
+    void updateUserProfile(long userId, String bio, String avatarFilename) throws EntityNotFoundException;
 
     Page<Follower> findFollowersByUserId(long userId, Pageable pageable) throws EntityNotFoundException;
     Page<Follower> findFollowingByFollowerId(long followerId, Pageable pageable) throws EntityNotFoundException;

@@ -2,12 +2,16 @@ package com.twitterclone.backend.model;
 
 public class UserProfile {
     private String nickname;
+    private String profilePicture;
+    private String bio;
     private long followersCount;
     private long followingCount;
     private boolean isFollowing;
 
-    public UserProfile(String nickname, long followersCount, long followingCount, boolean isFollowing) {
+    public UserProfile(String nickname, String profilePicture, String bio, long followersCount, long followingCount, boolean isFollowing) {
         this.nickname = nickname;
+        this.profilePicture = profilePicture;
+        this.bio = bio;
         this.followersCount = followersCount;
         this.followingCount = followingCount;
         this.isFollowing = isFollowing;
@@ -16,20 +20,28 @@ public class UserProfile {
     public UserProfile() {
     }
 
-    public boolean isFollowing() {
-        return isFollowing;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setFollowing(boolean following) {
-        isFollowing = following;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public long getFollowingCount() {
-        return followingCount;
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
-    public void setFollowingCount(long followingCount) {
-        this.followingCount = followingCount;
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public long getFollowersCount() {
@@ -40,11 +52,19 @@ public class UserProfile {
         this.followersCount = followersCount;
     }
 
-    public String getNickname() {
-        return nickname;
+    public long getFollowingCount() {
+        return followingCount;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setFollowingCount(long followingCount) {
+        this.followingCount = followingCount;
+    }
+
+    public boolean isFollowing() {
+        return isFollowing;
+    }
+
+    public void setFollowing(boolean following) {
+        isFollowing = following;
     }
 }
