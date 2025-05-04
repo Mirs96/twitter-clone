@@ -22,8 +22,7 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
-@RestController
+@CrossOrigin(origins= {"http://localhost:4200", "http://localhost:5173"}, allowedHeaders = "*")@RestController
 @RequestMapping("/api/reply")
 public class ReplyController {
 
