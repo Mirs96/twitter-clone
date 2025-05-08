@@ -34,7 +34,7 @@ import javax.imageio.ImageIO;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins="http://localhost:4200", allowedHeaders = "*")
+@CrossOrigin(origins={"http://localhost:4200", "http://localhost:5173"}, allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {

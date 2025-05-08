@@ -9,7 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-@CrossOrigin(origins="http://localhost:4200", allowedHeaders = "*")
+@CrossOrigin(origins={"http://localhost:4200", "http://localhost:5173"}, allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/hashtag")
 public class HashtagController {
