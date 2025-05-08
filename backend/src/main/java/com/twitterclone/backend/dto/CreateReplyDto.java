@@ -32,15 +32,11 @@ public class CreateReplyDto {
     }
 
     public static Reply fromDto(CreateReplyDto dto) {
-        return new Reply(
-                dto.getId(),
-                null,
-                null,
-                null,
-                dto.getContent(),
-                LocalDate.parse(dto.getCreationDate()),
-                LocalTime.parse(dto.getCreationTime())
-        );
+        return Reply.builder()
+                .id(dto.getId())
+                .content(dto.getContent())
+                .createdAt(LocalDate.parse(dto.getCreationDate()).atTime(LocalTime.parse(dto.getCreationTime())))
+                .build();
     }
 
     public long getId() {

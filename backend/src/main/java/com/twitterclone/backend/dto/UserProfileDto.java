@@ -1,5 +1,6 @@
 package com.twitterclone.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.twitterclone.backend.model.UserProfile;
 
 public class UserProfileDto {
@@ -8,6 +9,7 @@ public class UserProfileDto {
     private String bio;
     private long followersCount;
     private long followingCount;
+    @JsonProperty("isFollowing")
     private boolean isFollowing;
 
     public UserProfileDto(String nickname, String profilePicture, String bio, long followersCount, long followingCount, boolean isFollowing) {

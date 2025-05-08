@@ -74,6 +74,11 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.19.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<!-- JSON Web Token Dependencies -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

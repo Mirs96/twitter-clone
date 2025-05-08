@@ -39,18 +39,24 @@ public class AuthService {
     public AuthenticationResponse register(RegisterRequest request) {
         logger.info("Register method called with request: {}", request);
 
-//        var user = User.builder()
-//                .firstname(request.getFirstname())
-//                .lastname(request.getLastname())
-//                .email(request.getEmail())
-//                .password(passwordEncoder.encode(request.getPassword()))
-//                .role(request.getRole())
-//                .build();
+        User user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .nickname(request.getNickname())
+                .dob(request.getDob())
+                .sex(request.getSex())
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(request.getRole())
+                .profilePicture(request.getProfilePicture())
+                .bio(request.getBio())
+                .build();
 
-        User user = new User(null, request.getFirstname(), request.getLastname(),
-                request.getNickname(),request.getDob(),request.getSex(), request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),request.getPhone(),request.getRole(),
-                request.getProfilePicture(), request.getBio(), request.getCreationDate());
+//        User user = new User(null, request.getFirstname(), request.getLastname(),
+//                request.getNickname(),request.getDob(),request.getSex(), request.getEmail(),
+//                passwordEncoder.encode(request.getPassword()),request.getPhone(),request.getRole(),
+//                request.getProfilePicture(), request.getBio(), request.getCreationDate());
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
