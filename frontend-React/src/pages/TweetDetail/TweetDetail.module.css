@@ -1,0 +1,76 @@
+.pageContainer {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Allow page scroll */
+     /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.pageContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+
+.headerBar {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    position: sticky;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-bottom: 1px solid #2f3336;
+}
+
+.backButton {
+    background: none;
+    border: none;
+    padding: 8px;
+    margin-right: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrowIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.headerTitle {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+}
+
+
+.tweetContainer {
+    padding: 0; 
+    border-bottom: 1px solid #2f3336;
+}
+
+.createReplyContainer {
+    padding: 15px;
+    border-bottom: 10px solid #2f3336; 
+}
+
+
+.repliesContainer {
+    flex-grow: 1; 
+    /* No overflow-y: auto here, page container handles scrolling */
+}
+
+
+.replyModal {
+    width: 600px;
+    background-color: #15202b; 
+}
+
+.customCloseBtn {
+    color: #fff; 
+}

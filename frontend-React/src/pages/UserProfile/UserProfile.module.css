@@ -1,0 +1,203 @@
+.profileContainer {
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Allow profile scroll */
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.profileContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+
+.headerBar {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    position: sticky;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-bottom: 1px solid #2f3336;
+}
+
+.backButton {
+    background: none;
+    border: none;
+    padding: 8px;
+    margin-right: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrowIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.headerNickname {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+
+.profileHeader {
+    padding: 1rem;
+    background: #000;
+    border-bottom: 1px solid #2f3336;
+}
+
+.headerTopSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+    margin-bottom: 1rem;
+}
+
+.avatarImg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #000; 
+    background-color: #2f3336; 
+}
+
+.setupProfile, .followBtn {
+    background-color: transparent;
+    color: #fff;
+    padding: 8px 16px; 
+    border-radius: 30px;
+    border: 1px solid #536471; 
+    font-size: 15px; 
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: fit-content; 
+    margin-top: 12px; 
+}
+
+.setupProfile:hover, .followBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.followBtn {
+    background-color: #fff; 
+    color: #000;
+    border: none;
+}
+
+.followBtn.following {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #536471;
+}
+
+.followBtn.following:hover {
+    background-color: rgba(249, 24, 128, 0.1); /* Reddish tint on hover */
+    border-color: rgb(103, 7, 15); /* Darker red border */
+    color: rgb(249, 24, 128);
+}
+
+
+
+.userInfoSection {
+    margin-top: -40px; 
+    padding-left: 5px; 
+}
+
+.userNickname {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.bioText {
+    margin: 8px 0;
+    color: #e7e9ea; 
+    line-height: 1.4;
+    font-size: 15px;
+}
+
+.followCounts {
+    margin-top: 12px;
+    color: #71767b; 
+    font-size: 14px;
+}
+
+.countItem {
+    margin-right: 15px;
+}
+
+.countItem b {
+    color: #fff; 
+    font-weight: bold;
+}
+
+
+.profileTabs {
+    display: flex;
+    border-bottom: 1px solid #2f3336;
+    background: #000;
+    position: sticky;
+    
+    top: 57px; 
+    z-index: 99;
+}
+
+.tabButton {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: bold;
+    color: #6e767d;
+    position: relative;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.tabButton:hover {
+    background-color: rgba(29, 155, 240, 0.1);
+    color: #1da1f2;
+}
+
+.tabButton.active {
+    color: #fff;
+}
+
+.tabButton.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px; 
+    height: 4px;
+    background: #1da1f2;
+    border-radius: 2px;
+}
+
+.profileContent {
+    flex-grow: 1;
+    
+}
+
+
+.updateProfileModal {
+    width: 600px;
+    background-color: #15202b; 
+}
+
+.customCloseBtn {
+    color: #fff; 
+}

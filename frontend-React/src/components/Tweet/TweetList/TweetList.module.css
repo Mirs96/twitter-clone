@@ -1,0 +1,21 @@
+.tweetsContainer {
+    
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.loading,
+.endMessage,
+.error {
+    text-align: center;
+    padding: 20px;
+    color: #71767b;
+    font-style: italic;
+}
+
+.error {
+    color: #ff6b6b;
+}
+
+

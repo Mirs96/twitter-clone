@@ -1,0 +1,18 @@
+.repliesContainer {
+    overflow-y: auto; /* Ensure it's scrollable if content overflows */
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    padding-right: 10px; 
+}
+
+.repliesContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.nestedReplies {
+    margin-left: 20px;
+    border-left: 2px solid #38444d; 
+    padding-left: 15px;
+    margin-top: 10px; 
+}

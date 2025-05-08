@@ -1,0 +1,119 @@
+.registerContainer {
+    background-color: #1a1a1a; 
+    color: white;
+    padding: 20px 30px; 
+    border-radius: 10px;
+    width: 100%; 
+    max-width: 700px; 
+    text-align: center;
+    box-sizing: border-box;
+    max-height: calc(90vh - 40px); 
+    overflow-y: auto; 
+    overflow-x: hidden;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.registerContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.registerContainer h2 {
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.registerForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+.formGroup {
+    text-align: left;
+}
+
+.registerContainer label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.registerContainer input[type="text"],
+.registerContainer input[type="email"],
+.registerContainer input[type="password"],
+.registerContainer input[type="date"],
+.registerContainer input[type="tel"],
+.registerContainer select,
+.registerContainer textarea {
+    width: 100%;
+    padding: 12px 10px;
+    border: 1px solid #444; 
+    border-radius: 5px;
+    background: #222; 
+    color: white;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.registerContainer input:focus,
+.registerContainer select:focus,
+.registerContainer textarea:focus {
+    outline: none;
+    border-color: #1da1f2; 
+}
+
+.registerContainer textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.registerContainer input::placeholder,
+.registerContainer textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.fileInput {
+   padding: 10px 0;
+   border: none;
+   background: none;
+}
+
+.submitBtn {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-radius: 25px;
+    width: 100%;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+    background-color: #1991db;
+}
+
+.submitBtn:disabled {
+    background-color: #657786;
+    cursor: not-allowed;
+}
+
+.validationMessage {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block; 
+}
+
+.inputError {
+    border-color: #ff6b6b !important;
+    background-color: rgba(255, 107, 107, 0.05) !important;
+}
+

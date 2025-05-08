@@ -1,0 +1,151 @@
+.tweetContainer {
+    border-bottom: 1px solid #2f3336;
+    padding: 15px;
+    color: white;
+    background-color: #000;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tweetContainer:hover {
+    background-color: #080808;
+}
+
+.tweetHeader {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.profilePicLink {
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.profilePicture {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #2f3336;
+}
+
+.userInfoContainer {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+
+.nicknameLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+.nicknameLink:hover .nickname {
+    text-decoration: underline;
+}
+
+.nickname {
+    margin: 0;
+    font-size: 15px;
+    font-weight: bold;
+    margin-right: 5px;
+    color: #e7e9ea;
+}
+
+.time {
+    color: #71767b;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.tweetContent p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    color: #e7e9ea;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+    padding-left: 58px;
+    max-width: 425px;
+}
+
+.interactionButtons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.interactionButton {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: #71767d;
+    padding: 5px;
+    transition: color 0.2s ease;
+    outline: none;
+}
+
+.bookmarkShareButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.interactionButton:hover {
+    color: rgb(29, 155, 240); /* solo cambio colore del contatore */
+}
+
+.interactionIcon {
+    width: 18.75px;
+    height: 18.75px;
+}
+
+.interactionCount {
+    margin-left: 5px;
+    min-width: 1em;
+}
+
+/* Hover: solo cambio colore icona */
+.likeButton:hover .interactionIcon {
+    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+}
+
+.replyButton:hover .interactionIcon {
+    filter: brightness(0) saturate(100%) invert(56%) sepia(93%) saturate(1637%) hue-rotate(119deg) brightness(96%) contrast(97%);
+}
+
+.bookmarkButton:hover .interactionIcon {
+    filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(601%) hue-rotate(167deg) brightness(97%) contrast(97%);
+}
+
+/* Stati attivi: mantengono il colore */
+.likeButton.active .interactionIcon {
+    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+    color: rgb(249, 24, 128);
+}
+
+.bookmarkButton.active .interactionIcon {
+    filter: brightness(0) saturate(100%) invert(78%) sepia(40%) saturate(601%) hue-rotate(167deg) brightness(97%) contrast(97%);
+    color: rgb(29, 155, 240);
+}
+
+.likeButton.active {
+    color: rgb(249, 24, 128);
+}

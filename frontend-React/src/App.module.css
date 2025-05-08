@@ -1,0 +1,46 @@
+.mainContainer {
+    display: flex;
+    min-height: 100vh;
+    background-color: black;
+}
+
+.nav {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px 0;
+    border-right: 1px solid #2f3336;
+    overflow-y: auto;
+    background-color: black;
+    z-index: 10;
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.nav::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.scrollableMain {
+    flex: 1;
+    margin-left: 250px;
+    display: flex;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+    max-width: 600px;
+    border-left: 1px solid #2f3336;
+    border-right: 1px solid #2f3336;
+    min-height: 100vh;
+}
+
+.rightSidebar {
+    width: 350px;
+    padding: 20px;
+    flex-shrink: 0;
+}

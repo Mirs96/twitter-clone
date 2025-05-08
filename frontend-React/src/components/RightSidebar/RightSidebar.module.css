@@ -1,0 +1,72 @@
+.sidebarContainer {
+    width: 100%;
+    max-width: 350px; 
+    padding: 10px 0 10px 20px; 
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    height: 100vh; /* Ensure it takes full viewport height */
+     /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.sidebarContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+
+.searchPlaceholder {
+    margin-bottom: 15px;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 9999px;
+    border: 1px solid #2f3336;
+    background-color: #202327; 
+    color: white;
+    font-size: 15px;
+    outline: none;
+}
+
+.searchInput::placeholder {
+    color: #71767b;
+}
+
+.widget {
+    background-color: #16181c; 
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.widgetTitle {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    color: #e7e9ea;
+}
+
+.trendList, .followList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.trendItem, .followItem {
+    color: #e7e9ea;
+    font-size: 15px;
+    cursor: pointer;
+    
+}
+
+.trendItem:hover, .followItem:hover {
+     background-color: #1d1f23; 
+     
+}

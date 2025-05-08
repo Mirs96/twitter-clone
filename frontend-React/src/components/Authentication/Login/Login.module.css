@@ -1,0 +1,85 @@
+.loginContainer {
+    background-color: #1a1a1a; 
+    color: white;
+    padding: 30px 40px; 
+    border-radius: 10px;
+    width: 100%; 
+    max-width: 500px; 
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.loginContainer h2 {
+    margin-bottom: 30px;
+    font-size: 1.8em;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+}
+
+.formGroup {
+    text-align: left;
+}
+
+.loginContainer label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+.loginContainer input[type="email"],
+.loginContainer input[type="password"] {
+    width: 100%;
+    padding: 14px 12px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background: #222;
+    color: white;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.loginContainer input:focus {
+    outline: none;
+    border-color: #1da1f2;
+}
+
+.submitBtn {
+    background-color: #1da1f2;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-radius: 25px;
+    width: 100%;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+    background-color: #1991db;
+}
+
+.submitBtn:disabled {
+    background-color: #657786;
+    cursor: not-allowed;
+}
+
+.validationMessage {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    display: block;
+}
+
+.inputError {
+    border-color: #ff6b6b !important;
+    background-color: rgba(255, 107, 107, 0.05) !important;
+}
