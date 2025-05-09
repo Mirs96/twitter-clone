@@ -138,8 +138,8 @@ The base path for all APIs is `/api`.
 *   **Bookmark:** Stores user bookmarks for tweets.
 *   **Follower:** Represents the follow relationship between users.
 *   **Hashtag:** Stores unique hashtags.
-*   **Message:** (Entity defined, but no controllers/services implemented in the provided code for direct messaging)
-*   **Notification:** (Entity defined, but no controllers/services implemented in the provided code for notifications)
+*   **Message:** (Entity defined, but no controllers/services implemented)
+*   **Notification:** (Entity defined, but no controllers/services implemented)
 
 ## Configuration (`application.properties`)
 
@@ -215,7 +215,7 @@ Key configuration properties:
 
 # Frontend (Angular)
 
-This project is the frontend for a Twitter-like application, built with Angular. It interacts with a backend API (presumably the one described in the previous README) to provide a user interface for tweeting, replying, liking, following, and managing user profiles.
+This project is the frontend for a Twitter-like application, built with Angular. It interacts with a backend API (described above) to provide a user interface for tweeting, replying, liking, following, and managing user profiles.
 
 ## Features
 
@@ -233,7 +233,7 @@ This project is the frontend for a Twitter-like application, built with Angular.
     *   Tabs for viewing user's tweets and replies.
     *   Functionality to follow/unfollow users.
     *   Profile setup/update (bio, avatar).
-*   **Navigation:** Main navigation bar for accessing Home, Explore (not fully implemented in provided code), Notifications (not fully implemented), Profile, and Bookmarks (not fully implemented).
+*   **Navigation:** Main navigation bar for accessing Home, Explore (not implemented), Notifications (not implemented), Profile, and Bookmarks (not implemented).
 *   **Image Handling:** Avatar uploads with client-side compression (using `compressorjs`).
 *   **Routing:** Utilizes Angular Router for navigating between different views.
 *   **State Management (Basic):** Uses Angular services and RxJS `BehaviorSubject` for managing login state and user details.
@@ -250,7 +250,6 @@ This project is the frontend for a Twitter-like application, built with Angular.
     *   `@angular/router`
     *   `@angular/animations`
 *   **TypeScript ~5.6.2**
-*   **RxJS ~7.8.0**
 *   **jwt-decode:** For decoding JWT tokens on the client-side.
 *   **compressorjs:** For client-side image compression before upload.
 *   **CSS:** For styling components.
@@ -319,7 +318,7 @@ The project follows a standard Angular CLI project structure:
 
 *   Node.js and npm (Node Package Manager)
 *   Angular CLI (`npm install -g @angular/cli`)
-*   A running instance of the backend API (see previous README for backend setup).
+*   A running instance of the backend API (see backend setup).
 
 ### Setup
 
@@ -351,7 +350,6 @@ The project follows a standard Angular CLI project structure:
 ## Angular CLI Commands
 
 *   **Development server:** `ng serve`
-*   **Build:** `ng build` (for production: `ng build --configuration production`)
 *   **Watch and build:** `ng build --watch --configuration development`
 *   **Run unit tests:** `ng test` (using Karma)
 *   **Generate components/services/etc.:** `ng generate component <component-name>`
@@ -430,7 +428,6 @@ This project is the React frontend for a Twitter-like application, built using V
 *   **React Hook Form:** Form validation and management.
 *   **jwt-decode:** Decoding JWT tokens.
 *   **compressorjs:** Client-side image compression.
-*   **ESLint:** Code linting.
 *   **CSS Modules:** Scoped CSS styling.
 
 ## Project Structure
