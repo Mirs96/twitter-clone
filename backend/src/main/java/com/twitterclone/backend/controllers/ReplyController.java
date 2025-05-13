@@ -10,6 +10,7 @@ import com.twitterclone.backend.model.exceptions.UnauthorizedException;
 import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.ReplyService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +26,11 @@ import static java.lang.Integer.parseInt;
 @CrossOrigin(origins={"http://localhost:4200", "http://localhost:5173"}, allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/reply")
+@RequiredArgsConstructor
 public class ReplyController {
 
-    private ReplyService replyService;
-    private JwtService jwtService;
-
-    @Autowired
-    public ReplyController(ReplyService replyService, JwtService jwtService) {
-        this.replyService = replyService;
-        this.jwtService = jwtService;
-    }
+    private final ReplyService replyService;
+    private final JwtService jwtService;
 
     @PostMapping
     public ResponseEntity<?> createReplyToTweet(

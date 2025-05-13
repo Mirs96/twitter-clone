@@ -2,25 +2,20 @@ package com.twitterclone.backend.model.services;
 
 import com.twitterclone.backend.model.entities.Hashtag;
 import com.twitterclone.backend.model.repositories.HashtagRepositoryJpa;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class HashtagServiceJpa implements HashtagService {
-    private HashtagRepositoryJpa hashtagRepo;
-
-    @Autowired
-    public HashtagServiceJpa(HashtagRepositoryJpa hashtagRepo) {
-        this.hashtagRepo = hashtagRepo;
-    }
+    private final HashtagRepositoryJpa hashtagRepo;
 
     public Hashtag createHashtag(Hashtag hashtag) {
         return hashtagRepo.save(hashtag);
     }
 
-    public List<Hashtag> createHashtagsFromTweet(String content) {
+    public List<Hashtag> linkHashtagsToTweet(String content) {
         if (!content.contains("#")) {
             return new ArrayList<>();
         }
@@ -40,7 +35,7 @@ public class HashtagServiceJpa implements HashtagService {
 
         return tags.stream()
                 .filter(t -> hashtagRepo.findByTag(t).isEmpty())
-                .map(t -> new Hashtag(0, t))
+                .map(t -> Hashtag.builder().tag(t).build())
                 .map(hashtagRepo::save)
                 .toList();
     }

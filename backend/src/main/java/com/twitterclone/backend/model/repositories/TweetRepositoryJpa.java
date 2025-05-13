@@ -12,7 +12,7 @@ public interface TweetRepositoryJpa extends JpaRepository<Tweet, Long> {
                 SELECT t
                 FROM Tweet t
                 ORDER BY
-                    EXTRACT(EPOCH FROM CAST(t.creationDate AS TIMESTAMP)) * 0.7 +
+                    EXTRACT(EPOCH FROM CAST(t.createdAt AS TIMESTAMP)) * 0.7 +
                     (
                         (
                             SELECT COUNT(lt)
@@ -38,7 +38,7 @@ public interface TweetRepositoryJpa extends JpaRepository<Tweet, Long> {
                     WHERE f.follower.id = :loggedInUserId AND f.user = t.user
                 )
                 ORDER BY
-                    EXTRACT(EPOCH FROM CAST(t.creationDate AS TIMESTAMP)) * 0.7 +
+                    EXTRACT(EPOCH FROM CAST(t.createdAt AS TIMESTAMP)) * 0.7 +
                     (
                         (
                             SELECT COUNT(lt)
@@ -59,7 +59,7 @@ public interface TweetRepositoryJpa extends JpaRepository<Tweet, Long> {
                 SELECT t
                 FROM Tweet t
                 WHERE t.user.id =:userId
-                ORDER BY t.creationDate DESC, t.creationTime DESC
+                ORDER BY t.createdAt DESC
             """)
     Page<Tweet> getTweetsByUserId(@Param("userId") long userId, Pageable pageable);
 }

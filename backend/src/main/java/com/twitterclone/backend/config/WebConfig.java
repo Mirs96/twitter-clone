@@ -9,8 +9,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String uploadPath = "file:///C:/dev/twitter-clone/uploads/";
+
         registry
                 .addResourceHandler("/uploads/avatars/**")
-                .addResourceLocations("file:///C:/dev/twitter-clone/uploads/avatars/");
+                .addResourceLocations(uploadPath + "avatars/");
     }
 }

@@ -9,29 +9,21 @@ import com.twitterclone.backend.model.repositories.LikeReplyRepositoryJpa;
 import com.twitterclone.backend.model.repositories.ReplyRepositoryJpa;
 import com.twitterclone.backend.model.repositories.TweetRepositoryJpa;
 import com.twitterclone.backend.model.repositories.UserRepositoryJpa;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class ReplyServiceJpa implements ReplyService {
 
-    private UserRepositoryJpa userRepo;
-    private ReplyRepositoryJpa replyRepo;
-    private TweetRepositoryJpa tweetRepo;
-    private LikeReplyRepositoryJpa likeReplyRepo;
-
-    @Autowired
-    public ReplyServiceJpa(UserRepositoryJpa userRepo, ReplyRepositoryJpa replyRepo, TweetRepositoryJpa tweetRepo, LikeReplyRepositoryJpa likeReplyRepo) {
-        this.userRepo = userRepo;
-        this.replyRepo = replyRepo;
-        this.tweetRepo = tweetRepo;
-        this.likeReplyRepo = likeReplyRepo;
-    }
+    private final UserRepositoryJpa userRepo;
+    private final ReplyRepositoryJpa replyRepo;
+    private final TweetRepositoryJpa tweetRepo;
+    private final LikeReplyRepositoryJpa likeReplyRepo;
 
     @Override
     public DisplayReply createReplyToTweet(Reply reply, long userId, long tweetId, Long parentReplyId) throws EntityNotFoundException {

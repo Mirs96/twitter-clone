@@ -1,5 +1,14 @@
 package com.twitterclone.backend.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserProfile {
     private String nickname;
     private String profilePicture;
@@ -7,64 +16,4 @@ public class UserProfile {
     private long followersCount;
     private long followingCount;
     private boolean isFollowing;
-
-    public UserProfile(String nickname, String profilePicture, String bio, long followersCount, long followingCount, boolean isFollowing) {
-        this.nickname = nickname;
-        this.profilePicture = profilePicture;
-        this.bio = bio;
-        this.followersCount = followersCount;
-        this.followingCount = followingCount;
-        this.isFollowing = isFollowing;
-    }
-
-    public UserProfile() {
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public long getFollowersCount() {
-        return followersCount;
-    }
-
-    public void setFollowersCount(long followersCount) {
-        this.followersCount = followersCount;
-    }
-
-    public long getFollowingCount() {
-        return followingCount;
-    }
-
-    public void setFollowingCount(long followingCount) {
-        this.followingCount = followingCount;
-    }
-
-    public boolean isFollowing() {
-        return isFollowing;
-    }
-
-    public void setFollowing(boolean following) {
-        isFollowing = following;
-    }
 }

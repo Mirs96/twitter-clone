@@ -7,6 +7,7 @@ import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
 import com.twitterclone.backend.model.exceptions.ReactionAlreadyExistsException;
 import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.UserService;
+import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,15 +38,10 @@ import java.util.Optional;
 @CrossOrigin(origins={"http://localhost:4200", "http://localhost:5173"}, allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
-    private UserService userService;
-    private JwtService jwtService;
-
-    @Autowired
-    public UserController(UserService userService, JwtService jwtService) {
-        this.userService = userService;
-        this.jwtService = jwtService;
-    }
+    private final UserService userService;
+    private final JwtService jwtService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable long id, HttpServletRequest request) {

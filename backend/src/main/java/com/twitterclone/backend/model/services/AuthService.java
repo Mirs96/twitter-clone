@@ -5,10 +5,10 @@ import com.twitterclone.backend.controllers.AuthenticationResponse;
 import com.twitterclone.backend.controllers.RegisterRequest;
 import com.twitterclone.backend.model.entities.User;
 import com.twitterclone.backend.model.repositories.UserRepositoryJpa;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
@@ -26,33 +27,25 @@ public class AuthService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
-    @Autowired
-    public AuthService( PasswordEncoder passwordEncoder, JwtService jwtService, UserRepositoryJpa repository, AuthenticationManager authenticationManager) {
-
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-        this.repository = repository;
-        this.authenticationManager = authenticationManager;
-    }
-
-
     public AuthenticationResponse register(RegisterRequest request) {
         logger.info("Register method called with request: {}", request);
 
-//        var user = User.builder()
-//                .firstname(request.getFirstname())
-//                .lastname(request.getLastname())
-//                .email(request.getEmail())
-//                .password(passwordEncoder.encode(request.getPassword()))
-//                .role(request.getRole())
-//                .build();
+        User user = User.builder()
+                .firstname(request.getFirstname())
+                .lastname(request.getLastname())
+                .nickname(request.getNickname())
+                .dob(request.getDob())
+                .sex(request.getSex())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .phone(request.getPhone())
+                .role(request.getRole())
+                .profilePicture(request.getProfilePicture())
+                .bio(request.getBio())
+                .build();
 
-        User user = new User(null, request.getFirstname(), request.getLastname(),
-                request.getNickname(),request.getDob(),request.getSex(), request.getEmail(),
-                passwordEncoder.encode(request.getPassword()),request.getPhone(),request.getRole(),
-                request.getProfilePicture(), request.getBio(), request.getCreationDate());
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
     }
 
@@ -60,10 +53,9 @@ public class AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        User user = repository.findByEmail(request.getEmail()).orElseThrow();
+        String jwtToken = jwtService.generateToken(user);
         return new AuthenticationResponse(jwtToken);
-
     }
 }
 

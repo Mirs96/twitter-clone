@@ -16,7 +16,7 @@ public interface ReplyRepositoryJpa extends JpaRepository<Reply, Long> {
                 WHERE r.tweet.id = :tweetId
                 AND r.parentReply IS NULL
                 ORDER BY
-                    (EXTRACT(EPOCH FROM r.creationDate) * 0.7) +
+                    (EXTRACT(EPOCH FROM r.createdAt) * 0.7) +
                     (
                         (
                             SELECT COUNT(lr)
@@ -37,7 +37,7 @@ public interface ReplyRepositoryJpa extends JpaRepository<Reply, Long> {
                 FROM Reply r
                 WHERE r.parentReply.id = :parentReplyId
                 ORDER BY
-                    (EXTRACT(EPOCH FROM r.creationDate) * 0.7) +
+                    (EXTRACT(EPOCH FROM r.createdAt) * 0.7) +
                     (
                         (
                             SELECT COUNT(lr)
@@ -78,7 +78,7 @@ public interface ReplyRepositoryJpa extends JpaRepository<Reply, Long> {
                 SELECT r
                 FROM Reply r
                 WHERE r.user.id =:userId
-                ORDER BY r.creationDate DESC, r.creationTime DESC
+                ORDER BY r.createdAt DESC
             """)
     Page<Reply> getRepliesByUserId(@Param("userId") long userId, Pageable pageable);
 }

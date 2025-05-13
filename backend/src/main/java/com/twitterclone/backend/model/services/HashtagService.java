@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface HashtagService {
     Hashtag createHashtag(Hashtag hashtag);
-    List<Hashtag> createHashtagsFromTweet(String content);
+    List<Hashtag> linkHashtagsToTweet(String content);
 }

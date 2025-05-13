@@ -10,6 +10,7 @@ import com.twitterclone.backend.model.exceptions.ReactionAlreadyExistsException;
 import com.twitterclone.backend.model.exceptions.UnauthorizedException;
 import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.TweetService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,19 +25,14 @@ import java.net.URI;
 import static java.lang.Integer.parseInt;
 
 @CrossOrigin(origins={"http://localhost:4200", "http://localhost:5173"}, allowedHeaders = "*")
-
 @RestController
 @RequestMapping("/api/tweet")
+@RequiredArgsConstructor
 public class TweetController {
 
-    private TweetService tweetService;
-    private JwtService jwtService;
+    private final TweetService tweetService;
+    private final JwtService jwtService;
 
-    @Autowired
-    public TweetController(TweetService tweetService, JwtService jwtService) {
-        this.tweetService = tweetService;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping
     public ResponseEntity<?> createTweet(

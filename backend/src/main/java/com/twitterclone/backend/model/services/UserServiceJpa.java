@@ -5,25 +5,17 @@ import com.twitterclone.backend.model.entities.*;
 import com.twitterclone.backend.model.exceptions.EntityNotFoundException;
 import com.twitterclone.backend.model.exceptions.ReactionAlreadyExistsException;
 import com.twitterclone.backend.model.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceJpa implements UserService {
-    private UserRepositoryJpa userRepo;
-    private FollowerRepositoryJpa followerRepo;
-
-    @Autowired
-    public UserServiceJpa(UserRepositoryJpa userRepo, FollowerRepositoryJpa followerRepo) {
-        this.userRepo = userRepo;
-        this.followerRepo = followerRepo;
-    }
+    private final UserRepositoryJpa userRepo;
+    private final FollowerRepositoryJpa followerRepo;
 
     @Override
     public Optional<User> findById(Long userId) {
@@ -64,8 +56,6 @@ public class UserServiceJpa implements UserService {
         Follower f = new Follower();
         f.setUser(user);
         f.setFollower(follower);
-        f.setCreationDate(LocalDate.now());
-        f.setCreationTime(LocalTime.now());
 
         followerRepo.save(f);
     }
@@ -107,7 +97,7 @@ public class UserServiceJpa implements UserService {
                 user.getBio(),
                 followersCount,
                 followingCount,
-                of.isEmpty() ? false : true
+                of.isPresent()
         );
     }
 
