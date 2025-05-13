@@ -1,9 +1,7 @@
 
 export interface FollowerUserDetails {
     id: number; // Follow relationship ID
-    
     followerNickname: string; // Nickname of the follower
     followerProfilePicture: string;
-    creationDate: string; 
-    creationTime: string;
+    createdAt: string; 
 }

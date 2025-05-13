@@ -4,8 +4,7 @@ export interface DisplayTweetDetails {
     userNickname: string;
     userProfilePicture: string;
     content: string;
-    creationDate: string;
-    creationTime: string;
+    createdAt: string;
     likeCount: number;
     replyCount: number;
     bookmarkCount: number;

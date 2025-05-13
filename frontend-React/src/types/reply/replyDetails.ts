@@ -6,12 +6,11 @@ export interface ReplyDetails {
     tweetId: number;
     parentReplyId?: number;
     content: string;
-    creationDate: string;
-    creationTime: string;
+    createdAt: string;
     likeCount: number;
     liked: boolean;
     likeId?: number;
     hasNestedReplies?: boolean;
-    showNested?: boolean; // Client-side state for UI
+    showNested?: boolean;
 }
 

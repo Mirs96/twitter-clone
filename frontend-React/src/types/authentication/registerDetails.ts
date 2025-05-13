@@ -26,5 +26,5 @@ export interface RegisterPayload {
     role: Role;
     profilePicture?: string | null; // Backend might handle this from FormData
     bio?: string;
-    creationDate: string;
+    createdAt: string;
 }

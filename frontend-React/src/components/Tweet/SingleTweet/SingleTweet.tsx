@@ -9,6 +9,8 @@ import { selectUserId } from '../../../store/slices/authSlice';
 import replyIcon from '../../../assets/icons/tweet-buttons/reply.svg';
 import likeIcon from '../../../assets/icons/tweet-buttons/like.svg';
 import bookmarkIcon from '../../../assets/icons/tweet-buttons/bookmark.svg';
+import { format, parseISO } from 'date-fns';
+import { it } from 'date-fns/locale/it';
 
 interface SingleTweetProps {
   tweet: DisplayTweetDetails;
@@ -136,6 +138,21 @@ const SingleTweet: React.FC<SingleTweetProps> = ({ tweet, isDetailView = false }
     return `${HttpConfig.baseUrl}${profilePicturePath}`;
   };
 
+  const formatDateTime = (dateTimeString: string | undefined) => {
+    if (!dateTimeString) {
+      return '';
+    }
+    try {
+      const date = parseISO(dateTimeString);
+      const formattedDate = format(date, 'yyyy-MM-dd', { locale: it });
+      const formattedTime = format(date, 'HH:mm', { locale: it });
+      return `${formattedDate} \u00B7 ${formattedTime}`;
+    } catch (error) {
+      console.error("Error parsing date string:", error);
+      return dateTimeString;
+    }
+  };
+
   return (
     <div className={styles.tweetContainer} onClick={navigateToTweet} role="article" tabIndex={0}>
       <div className={styles.tweetHeader}>
@@ -159,8 +176,7 @@ const SingleTweet: React.FC<SingleTweetProps> = ({ tweet, isDetailView = false }
             >
               <h3 className={styles.nickname}>{localTweet.userNickname}</h3>
             </Link>
-
-            <p className={styles.time}>&middot; {localTweet.creationDate} {isDetailView ? ` \u00b7 ${localTweet.creationTime}` : ''}</p>
+           <p className={styles.time}>{formatDateTime(localTweet.createdAt)}</p>
           </div>
           <div className={styles.tweetContent}>
             <p>{localTweet.content}</p>
