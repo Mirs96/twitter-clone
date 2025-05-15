@@ -9,7 +9,7 @@
                 <h3>{{ reply.userNickname }}</h3>
             </a>
         </div>
-        <p class="time">{{ reply.creationDate }} · {{ reply.creationTime }}</p>
+        <p class="time">{{ formatDateTime(reply.createdAt) }}</p>
     </div>
     <div class="reply-content">
         <p>{{ reply.content }}</p>

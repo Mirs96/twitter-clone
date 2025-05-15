@@ -10,5 +10,4 @@ export interface RegisterDetails {
     role: string;
     profilePicture: string;
     bio: string;
-    creationDate: string;
 }

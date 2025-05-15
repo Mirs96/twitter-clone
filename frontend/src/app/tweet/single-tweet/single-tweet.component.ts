@@ -5,10 +5,13 @@ import { BookmarkDetails } from '../../model/tweet/bookmarkDetails';
 import { DisplayTweetDetails } from '../../model/tweet/displayTweetDetails';
 import { TweetService } from '../../model/tweet/tweetService';
 import { UserService } from '../../model/authentication/userService';
+import { HttpConfig } from '../../config/http-config';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-single-tweet',
   imports: [RouterModule],
+  providers: [DatePipe],
   templateUrl: './single-tweet.component.html',
   styleUrl: './single-tweet.component.css'
 })
@@ -24,13 +27,14 @@ export class SingleTweetComponent implements OnInit, OnChanges {
   likeDetails!: LikeTweetDetails;
   bookmarkDetails!: BookmarkDetails;
   userId!: number;
-  baseUrl = "http://localhost:8080";
+  baseUrl = HttpConfig.apiUrl.replace('/api', '');
 
   constructor(
     private tweetService: TweetService,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -43,10 +47,24 @@ export class SingleTweetComponent implements OnInit, OnChanges {
     }
   }
 
+  formatDateTime(dateTimeString: string | undefined): string {
+    if (!dateTimeString) {
+      return '';
+    }
+    try {
+      const date = new Date(dateTimeString);
+      const formattedDate = this.datePipe.transform(date, 'yyyy-MM-dd');
+      const formattedTime = this.datePipe.transform(date, 'HH:mm');
+      return `${formattedDate} \u00B7 ${formattedTime}`;
+    } catch (error) {
+      console.error("Error during date formatting:", error);
+      return dateTimeString;
+    }
+  }
+
   // Toggle like
   toggleLike() {
     this.likeDetails = {
-      id: 0,
       userId: this.userId,
       tweetId: this.tweet.id
     };
@@ -81,11 +99,8 @@ export class SingleTweetComponent implements OnInit, OnChanges {
   // Toggle bookmark
   toggleBookmark() {
     this.bookmarkDetails = {
-      id: 0,
       userId: this.userId,
       tweetId: this.tweet.id,
-      creationDate: new Date().toISOString().split('T')[0],
-      creationTime: new Date().toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" })
     };
 
     if (!this.tweet.bookmarked) {

@@ -1,5 +1,5 @@
 export interface LikeReplyDetails {
-    id: number;
+    id?: number;
     userId: number;
     replyId: number;
 }

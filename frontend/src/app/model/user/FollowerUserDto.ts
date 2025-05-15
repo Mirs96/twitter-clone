@@ -3,6 +3,5 @@ export interface FollowerUserDetails {
     followerId: number;
     followerNickname: number;
     followerProfilePicture: string;
-    creationDate: string;
-    creationTime: string;
+    createdAt: string;
 }

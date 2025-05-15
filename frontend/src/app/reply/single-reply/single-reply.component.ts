@@ -5,10 +5,13 @@ import { ReplyService } from '../../model/reply/replyService';
 import { UserService } from '../../model/authentication/userService';
 import { LikeReplyDetails } from '../../model/reply/likeReplyDetails';
 import { RouterModule } from '@angular/router';
+import { HttpConfig } from '../../config/http-config';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-single-reply',
   imports: [RouterModule],
+  providers: [DatePipe],
   templateUrl: './single-reply.component.html',
   styleUrl: './single-reply.component.css'
 })
@@ -28,22 +31,37 @@ export class SingleReplyComponent implements OnInit {
   bookmarkDetails!: BookmarkDetails;
   userId!: number;
   showNestedReplies = false;
-  baseUrl = "http://localhost:8080";
+  baseUrl = HttpConfig.apiUrl.replace('/api', '');
 
   constructor(
     private replyService: ReplyService,
     private userService: UserService,
     private cdr: ChangeDetectorRef,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
     this.userId = Number(this.userService.getUserIdFromToken()) || 0;
   }
 
+  formatDateTime(dateTimeString: string | undefined): string {
+    if (!dateTimeString) {
+      return '';
+    }
+    try {
+      const date = new Date(dateTimeString);
+      const formattedDate = this.datePipe.transform(date, 'yyyy-MM-dd');
+      const formattedTime = this.datePipe.transform(date, 'HH:mm');
+      return `${formattedDate} \u00B7 ${formattedTime}`;
+    } catch (error) {
+      console.error("Errore durante la formattazione della data:", error);
+      return dateTimeString; // In caso di errore, mostra la stringa originale
+    }
+  }
+
   // Toggle like
   toggleLike() {
     this.likeDetails = {
-      id: 0,
       userId: this.userId,
       replyId: this.reply.id
     };

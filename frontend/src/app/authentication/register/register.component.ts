@@ -40,7 +40,6 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid) {
       const formData: RegisterDetails = {
         ...this.registerForm.value,
-        creationDate: new Date().toISOString().split('T')[0]
       };
 
       this.authService.register(formData).subscribe({

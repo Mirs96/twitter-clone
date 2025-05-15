@@ -9,7 +9,7 @@
                 <h3>{{ tweet.userNickname }}</h3>
             </a>
             
-            <p class="time">{{ tweet.creationDate }} · {{ tweet.creationTime }}</p>
+            <p class="time">{{ formatDateTime(tweet.createdAt) }}</p>
         </div>
     </div>
     <div class="post-content">

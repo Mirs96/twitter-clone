@@ -6,8 +6,7 @@ export interface ReplyDetails {
     tweetId: number;
     parentReplyId?: number;
     content: string;
-    creationDate: string;
-    creationTime: string;
+    createdAt: string;
     likeCount: number;
     liked: boolean;
     likeId?: number;

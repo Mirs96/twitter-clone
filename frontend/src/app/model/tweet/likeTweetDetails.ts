@@ -1,5 +1,5 @@
 export interface LikeTweetDetails {
-    id: number;
+    id?: number;
     userId: number;
     tweetId: number;
 }
