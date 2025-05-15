@@ -5,7 +5,8 @@ A **full-stack** application that replicates basic Twitter functionalities, incl
 ## Project Structure 
 
 **Database (PostgreSQL):**
-![TwitterCloneDb](https://github.com/user-attachments/assets/54333496-792f-45ed-8456-dff7ef5fc2e1)
+![image](https://github.com/user-attachments/assets/1b57bf87-d5fd-4d52-b94d-197c5de5ad95)
+
 
 # Backend
 
