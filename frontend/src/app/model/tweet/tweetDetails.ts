@@ -3,5 +3,4 @@ export interface TweetDetails {
     userId: number;
     userNickname: string;
     content: string;
-    createdAt: string;
 }

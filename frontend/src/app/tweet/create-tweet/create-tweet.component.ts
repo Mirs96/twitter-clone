@@ -45,9 +45,7 @@ export class CreateTweetComponent implements OnInit, AfterViewInit {
     if (this.tweetForm.valid && this.userId) {
       const formData: TweetDetails = {
         ...this.tweetForm.value,
-        userId: this.userId,
-        creationDate: new Date().toISOString().split('T')[0],
-        creationTime: new Date().toISOString().split('T')[1].slice(0, 5)
+        userId: this.userId
       };
 
       this.tweetService.createTweet(formData).subscribe({

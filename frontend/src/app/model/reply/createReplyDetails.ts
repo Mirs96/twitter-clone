@@ -3,5 +3,4 @@ export interface CreateReplyDetails {
     tweetId: number;
     parentReplyId?: number;
     content: string;
-    createdAt: string;
 }
