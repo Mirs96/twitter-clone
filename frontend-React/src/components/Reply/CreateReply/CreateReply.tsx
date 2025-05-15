@@ -44,14 +44,11 @@ const CreateReply: React.FC<CreateReplyProps> = ({ tweetId, parentReplyId = null
         return;
     }
 
-    const now = new Date();
     const payload: CreateReplyDetails = {
       ...data,
       userId: userId,
       tweetId: tweetId,
-      parentReplyId: parentReplyId,
-      creationDate: now.toISOString().split('T')[0],
-      creationTime: now.toISOString().split('T')[1].slice(0, 5)
+      parentReplyId: parentReplyId
     };
 
     try {

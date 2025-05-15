@@ -6,11 +6,11 @@ export interface ReplyDetails {
     tweetId: number;
     parentReplyId?: number;
     content: string;
-    createdAt: string;
     likeCount: number;
     liked: boolean;
     likeId?: number;
     hasNestedReplies?: boolean;
     showNested?: boolean;
+    createdAt: string;
 }
 

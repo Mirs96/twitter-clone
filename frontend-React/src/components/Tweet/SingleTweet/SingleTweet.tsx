@@ -78,16 +78,16 @@ const SingleTweet: React.FC<SingleTweetProps> = ({ tweet, isDetailView = false }
     }));
 
     try {
-      const currentDate = new Date();
+      /* const currentDate = new Date();
       const creationDate = currentDate.toISOString().split('T')[0];
-      const creationTime = currentDate.toISOString().split('T')[1].split('.')[0];
+      const creationTime = currentDate.toISOString().split('T')[1].split('.')[0]; */
 
       if (!currentlyBookmarked) {
         const bookmarkData = {
           userId: userId,
           tweetId: localTweet.id,
-          creationDate: creationDate,
-          creationTime: creationTime
+/*           creationDate: creationDate,
+          creationTime: creationTime */
         };
         const result = await addBookmarkToTweet(bookmarkData);
         setLocalTweet(prev => ({

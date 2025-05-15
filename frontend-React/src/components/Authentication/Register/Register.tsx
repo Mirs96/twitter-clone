@@ -48,9 +48,7 @@ const Register: React.FC<RegisterProps> = ({ onClose }) => {
         password: data.password,
         phone: data.phone,
         role: data.role,
-        bio: data.bio,
-        creationDate: new Date().toISOString().split('T')[0],
-        
+        bio: data.bio        
     };
 
     

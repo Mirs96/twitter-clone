@@ -40,12 +40,9 @@ const CreateTweet: React.FC<CreateTweetProps> = ({ onTweetCreated }) => {
       return;
     }
 
-    const now = new Date();
     const payload: CreateTweetDetails = {
       ...data,
-      userId: userId,
-      creationDate: now.toISOString().split('T')[0],
-      creationTime: now.toISOString().split('T')[1].slice(0, 5)
+      userId: userId
     };
 
     try {
