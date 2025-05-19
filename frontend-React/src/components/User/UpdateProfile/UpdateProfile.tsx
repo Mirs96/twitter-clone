@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import Compressor from 'compressorjs';
 import { UpdateProfilePayload } from '../../../types/user/UpdateProfilePayload';
-import { updateProfile, getUserProfile } from '../../../services/userProfileService'; // Import getUserProfile
+import { updateProfile, getUserProfile } from '../../../services/userProfileService';
 import { HttpConfig } from '../../../config/http-config';
 import styles from './UpdateProfile.module.css';
 import { UserProfileDetails } from '../../../types/user/userProfileDetails';
@@ -27,6 +27,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onProfileUpdated }) => {
     control,
     setValue,
     reset,
+    watch, // <--- Add watch here
     formState: { errors, isDirty, isValid }
   } = useForm<UpdateProfilePayload>({
     mode: 'onChange',
@@ -38,6 +39,8 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onProfileUpdated }) => {
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const avatarValue = watch('avatar'); // Watch the avatar field
 
   // Fetch current profile details to populate the form
   const fetchCurrentProfile = useCallback(async () => {
@@ -68,70 +71,75 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onProfileUpdated }) => {
   }, [fetchCurrentProfile]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) {
-      // If user cancels file selection, revert to original or clear preview if desired
-      // Revert preview to original fetched profile picture
+    const originalFile = event.target.files?.[0];
+    if (!originalFile) {
       setAvatarPreview(userProfileDetails?.profilePicture ? `${HttpConfig.baseUrl}${userProfileDetails.profilePicture}` : null);
-      setValue('avatar', null, { shouldDirty: true }); // Mark as dirty if they clear it
+      setValue('avatar', null, { shouldDirty: true, shouldValidate: true });
       return;
     }
 
-    if (!file.type.startsWith('image/')) {
+    if (!originalFile.type.startsWith('image/')) {
       alert('Please select an image file.');
       return;
     }
 
-    new Compressor(file, {
+    new Compressor(originalFile, {
       quality: 0.6,
       maxWidth: 800,
       maxHeight: 800,
       success: (compressedResult) => {
-        const compressedFile = compressedResult as File;
+        const finalFile = new File(
+          [compressedResult],
+          originalFile.name,
+          {
+            type: compressedResult.type || originalFile.type,
+          }
+        );
+
         const reader = new FileReader();
         reader.onloadend = () => {
           setAvatarPreview(reader.result as string);
         };
-        reader.readAsDataURL(compressedFile);
-        setValue('avatar', compressedFile, { shouldDirty: true, shouldValidate: true });
+        reader.readAsDataURL(finalFile);
+        setValue('avatar', finalFile, { shouldDirty: true, shouldValidate: true });
       },
       error: (err) => {
         console.error('Compression error:', err.message);
         alert('Could not process image. Please try another one.');
+        setAvatarPreview(userProfileDetails?.profilePicture ? `${HttpConfig.baseUrl}${userProfileDetails.profilePicture}` : null);
+        setValue('avatar', null, { shouldDirty: false, shouldValidate: true });
       },
     });
   };
 
-  const onSubmit: SubmitHandler<UpdateProfilePayload> = async (data) => {
+  const onSubmit: SubmitHandler<UpdateProfilePayload> = async (formDataValues) => { // Renamed 'data' to 'formDataValues'
     if (!userId) {
       console.error('User ID not found');
       return;
     }
 
-    const avatarChanged = !!data.avatar; // True if a new file is selected
+    const avatarChanged = !!formDataValues.avatar;
 
-    if (!isDirty && !avatarChanged) { // Use isDirty for bio, explicit check for avatar
-        // console.log('No changes detected.');
-        onProfileUpdated(); // Close modal even if no changes
+    // Check if any field has changed: either 'bio' is dirty or 'avatar' has a new value.
+    // 'isDirty' from RHF only tracks registered fields that have changed from their default/reset values.
+    // If 'avatar' was initially null and a new file is selected, 'avatarChanged' will be true.
+    if (!isDirty && !avatarChanged) {
+        onProfileUpdated();
         return;
     }
 
     setIsProcessing(true);
     const formData = new FormData();
+    formData.append('bio', formDataValues.bio || '');
 
-    // Only append fields that are part of the change
-    // Backend should handle null/empty bio correctly if needed
-    formData.append('bio', data.bio || '');
-
-    if (avatarChanged) {
-      formData.append('avatar', data.avatar as Blob);
+    if (avatarChanged && formDataValues.avatar) {
+      formData.append('avatar', formDataValues.avatar);
     }
 
     try {
       await updateProfile(formData, userId);
-      // Refresh user details in the Redux store after successful update
       dispatch(fetchUserDetails(userId));
-      onProfileUpdated(); // Callback to close modal/refresh profile page
+      onProfileUpdated();
     } catch (error) {
       console.error('Failed to update profile:', error);
       alert('Failed to update profile. Please try again.');
@@ -141,7 +149,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onProfileUpdated }) => {
   };
 
   if (isLoadingProfile) {
-    return <div>Loading profile data...</div>; // Or a spinner
+    return <div>Loading profile data...</div>;
   }
 
   return (
@@ -153,19 +161,23 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onProfileUpdated }) => {
             {avatarPreview ? (
               <img src={avatarPreview} alt="Avatar Preview" className={styles.avatarPreview} />
             ) : (
-              // Better placeholder or use a default avatar icon
               <img src='/icons/default-avatar.png' alt="Default Avatar" className={styles.avatarPreview} />
             )}
           </label>
           <Controller
             name="avatar"
             control={control}
-            render={() => (
+            render={({ field: { onBlur, name, ref } }) => ( // Removed onChange as handleFileChange calls setValue
               <input
                 type="file"
                 id="avatar"
                 accept="image/*"
-                onChange={handleFileChange}
+                onChange={(e) => {
+                    handleFileChange(e);
+                }}
+                onBlur={onBlur}
+                name={name}
+                ref={ref}
                 className={styles.fileInput}
               />
             )}
@@ -189,7 +201,14 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onProfileUpdated }) => {
         <div className={styles.formActions}>
           <button
             type="submit"
-            disabled={!isDirty || !isValid || isProcessing} // Keep !isValid check
+            // Corrected disabled logic:
+            // Button is disabled if:
+            // 1. No fields are dirty (isDirty is false) AND no new avatar has been selected (avatarValue is null/falsy)
+            // OR
+            // 2. The form is not valid (e.g., bio exceeds max length)
+            // OR
+            // 3. An update is currently processing
+            disabled={(!isDirty && !avatarValue) || !isValid || isProcessing}
             className={styles.submitButton}
           >
             {isProcessing ? 'Saving...' : 'Save Changes'}

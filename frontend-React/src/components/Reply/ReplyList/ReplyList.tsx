@@ -127,8 +127,8 @@ const ReplyList: React.FC<ReplyListProps> = ({ tweetId, userId, newReply, onOpen
         </div>
       ))}
        {isLoading && <div>Loading more replies...</div>}
-       {!hasMoreReplies && mainReplies.length > 0 && <div>No more replies</div>}
-       {!hasMoreReplies && mainReplies.length === 0 && <div>Be the first to reply!</div>}
+       {!hasMoreReplies && mainReplies.length > 0 && <div className={styles.endMessage}>No more replies</div>}
+       {!hasMoreReplies && mainReplies.length === 0 && <div className={styles.endMessage}>No replies to show</div>}
     </div>
   );
 };

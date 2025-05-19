@@ -154,7 +154,7 @@ const UserProfile: React.FC = () => {
         <div className={styles.userInfoSection}>
             <h2 className={styles.userNickname}>{profile.nickname}</h2>
             
-            <p className={styles.bioText}>{profile.bio || 'No bio yet.'}</p>
+            <p className={styles.bioText}>{profile.bio || ''}</p>
             <div className={styles.followCounts}>
                 <span className={styles.countItem}><b>{profile.followingCount}</b> Following</span>
                 <span className={styles.countItem}><b>{profile.followersCount}</b> Followers</span>

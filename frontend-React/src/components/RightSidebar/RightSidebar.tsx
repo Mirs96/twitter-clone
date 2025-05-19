@@ -25,14 +25,14 @@ const RightSidebar: React.FC = () => {
       </div>
 
        
-      <div className={styles.widget}>
+      {/* <div className={styles.widget}>
         <h2 className={styles.widgetTitle}>Who to follow</h2>
          <ul className={styles.followList}>
           
           <li className={styles.followItem}>Suggested User 1</li>
           <li className={styles.followItem}>Suggested User 2</li>
          </ul>
-      </div>
+      </div> */}
 
     </aside>
   );
