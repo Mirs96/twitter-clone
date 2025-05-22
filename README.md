@@ -233,10 +233,6 @@ spring.jpa.hibernate.ddl-auto=validate # Validates schema. Use 'update' or 'crea
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 spring.main.banner-mode=off
-
-# JWT Configuration (can be set here to override defaults in JwtService)
-# application.security.jwt.secret-key=your-super-secret-key-here
-# application.security.jwt.expiration=custom-expiration-in-ms
 ```
 
 ### `WebConfig.java` (`src/main/java/com/twitterclone/backend/config/WebConfig.java`)
