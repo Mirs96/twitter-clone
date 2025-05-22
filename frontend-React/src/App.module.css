@@ -1,38 +1,46 @@
 .mainContainer {
     display: flex;
+    justify-content: center; /* Center the entire layout horizontally */
     min-height: 100vh;
     background-color: black;
 }
 
+.layoutWrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1300px; /* Max width for the overall layout */
+}
+
 .nav {
-    width: 250px;
+    width: 275px; /* Increased navbar width */
     height: 100vh;
-    position: fixed;
-    left: 0;
+    position: sticky; /* Sticky to the viewport */
     top: 0;
-    padding: 20px 0;
+    padding: 0; /* Adjusted padding */
     border-right: 1px solid #2f3336;
     overflow-y: auto;
     background-color: black;
     z-index: 10;
-    /* Hide scrollbar */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
+    flex-shrink: 0; /* Prevent navbar from shrinking */
+    display: flex; /* Added for internal alignment */
+    justify-content: flex-end; /* Align Navbar content to the right */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .nav::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
 }
 
 .scrollableMain {
-    flex: 1;
-    margin-left: 250px;
+    flex-grow: 1; /* Allow main content area to grow */
     display: flex;
     min-height: 100vh;
+    max-width: calc(100% - 275px); /* Adjust based on navbar width */
 }
 
 .content {
-    flex: 1;
+    flex-grow: 1;
     max-width: 600px;
     border-left: 1px solid #2f3336;
     border-right: 1px solid #2f3336;
@@ -41,6 +49,16 @@
 
 .rightSidebar {
     width: 350px;
-    padding: 20px;
+    padding: 0 20px;
     flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.rightSidebar::-webkit-scrollbar {
+    display: none;
 }

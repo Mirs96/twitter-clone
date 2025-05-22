@@ -1,0 +1,105 @@
+.exploreContainer {
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Enable scrolling for the whole page */
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    color: #fff;
+    /* Global scrollbar hiding is in index.css, so this should work */
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #2f3336;
+    position: sticky;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.backButton {
+    background: none;
+    border: none;
+    padding: 8px;
+    margin-right: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrowIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e7e9ea;
+    margin: 0;
+}
+
+.hashtagList {
+    flex-grow: 1; /* Allows the list to take available space and scroll */
+    /* overflow-y: auto; If we want this specific list to scroll independently and hide its scrollbar */
+    /* scrollbar-width: none; Firefox */
+    /* -ms-overflow-style: none;  IE and Edge */
+}
+
+/* .hashtagList::-webkit-scrollbar {
+    display: none; Chrome, Safari, Opera
+} */
+
+.hashtagItem {
+    display: block;
+    padding: 15px;
+    border-bottom: 1px solid #2f3336;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.2s ease;
+}
+
+.hashtagItem:hover {
+    background-color: #16181c; /* Slightly darker on hover */
+}
+
+.hashtagInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.hashtagName {
+    font-size: 16px;
+    font-weight: bold;
+    color: #e7e9ea;
+    margin-bottom: 4px;
+}
+
+.hashtagCount {
+    font-size: 14px;
+    color: #71767b;
+}
+
+.tweetListWrapper {
+    flex-grow: 1;
+    /* overflow-y: auto; This will be handled by TweetList's own scroll or the page scroll */
+}
+
+
+.loadingMessage,
+.endMessage,
+.errorMessage {
+    text-align: center;
+    padding: 20px;
+    color: #71767b;
+    font-style: italic;
+}
+
+.errorMessage {
+    color: #ff6b6b; /* Red for errors */
+}

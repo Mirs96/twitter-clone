@@ -189,7 +189,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({ onProfileUpdated }) => {
           <textarea
             id="bio"
             {...register('bio', {
-              maxLength: { value: 500, message: 'Bio cannot exceed 500 characters' }
+              maxLength: { value: 255, message: 'Bio cannot exceed 255 characters' }
             })}
             rows={4}
             placeholder="What makes you special? Don't think too hard, just have fun with it."

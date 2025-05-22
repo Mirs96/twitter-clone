@@ -4,31 +4,29 @@ import TweetList from '../../components/Tweet/TweetList/TweetList';
 import styles from './Home.module.css';
 
 const Home: React.FC = () => {
-  const [isFollowing, setIsFollowing] = useState(false);
+  const [activeTab, setActiveTab] = useState<'forYou' | 'following'>('forYou');
   const containerRef = useRef<HTMLDivElement>(null);
-  const [listKey, setListKey] = useState<'forYou' | 'following'>('forYou');
 
-  const handleForYou = () => {
-    if (!isFollowing) return; // Avoid unnecessary state change if already selected
-    setIsFollowing(false);
-    setListKey('forYou');
-  };
-
-  const handleFollowing = () => {
-    if (isFollowing) return; // Avoid unnecessary state change if already selected
-    setIsFollowing(true);
-    setListKey('following');
+  const handleTabChange = (tab: 'forYou' | 'following') => {
+    if (activeTab === tab) return;
+    setActiveTab(tab);
   };
 
    useEffect(() => {
-     // Scroll to top when the tab changes
      if (containerRef.current) {
        containerRef.current.scrollTop = 0;
      }
-   }, [listKey]); // Depend on listKey which changes only when tabs are switched
+   }, [activeTab]);
 
    const handleTweetCreated = () => {
-      console.log('New tweet created, list should update.');
+      // Potentially force a re-fetch or update of the 'For you' list if on that tab
+      // Or simply let the optimistic UI update from CreateTweet handle it visually
+      console.log('New tweet created, Home page notified.');
+      if (activeTab === 'forYou') {
+         // Consider a mechanism to refresh the 'forYou' list
+         // For now, changing listKey to force re-render, though more sophisticated state management might be better
+         setActiveTab('forYou'); // This will trigger useEffect if we add a new key based on this
+      }
    }
 
   return (
@@ -36,14 +34,14 @@ const Home: React.FC = () => {
       <div className={styles.stickyHeader}> 
         <div className={styles.switchBtn}>
           <button
-            className={`${styles.btn} ${!isFollowing ? styles.active : ''}`}
-            onClick={handleForYou}
+            className={`${styles.btn} ${activeTab === 'forYou' ? styles.active : ''}`}
+            onClick={() => handleTabChange('forYou')}
           >
             For you
           </button>
           <button
-            className={`${styles.btn} ${isFollowing ? styles.active : ''}`}
-            onClick={handleFollowing}
+            className={`${styles.btn} ${activeTab === 'following' ? styles.active : ''}`}
+            onClick={() => handleTabChange('following')}
           >
             Following
           </button>
@@ -54,7 +52,10 @@ const Home: React.FC = () => {
       </div>
 
       <div className={styles.tweetListContainer}>
-          <TweetList isFollowing={isFollowing} listKey={listKey} />
+          <TweetList 
+            fetchType={activeTab === 'forYou' ? 'trending' : 'following'} 
+            listKey={activeTab} 
+          />
       </div>
     </div>
   );

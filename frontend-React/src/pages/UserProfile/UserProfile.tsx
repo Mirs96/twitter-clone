@@ -97,7 +97,7 @@ const UserProfile: React.FC = () => {
   };
 
   const goBack = () => {
-    navigate('/home'); 
+    navigate('/home');
   };
 
   if (isLoading) {
@@ -116,7 +116,8 @@ const UserProfile: React.FC = () => {
     <div className={styles.profileContainer}>
       <div className={styles.headerBar}>
         <button onClick={goBack} className={styles.backButton}>
-          <img src={backIcon} alt="Go Back" className={styles.arrowIcon} />
+           <img src={backIcon} alt="Go Back" className={styles.arrowIcon} />
+           <span className={styles.arrowIcon}></span>
         </button>
         <span className={styles.headerNickname}>{profile.nickname}</span>
       </div>
@@ -182,7 +183,7 @@ const UserProfile: React.FC = () => {
         {activeTab === 'tweets' && (
           <TweetList 
             userId={profileUserId} 
-            isFollowing={false} // Not relevant when fetching by specific user ID
+            fetchType='user'
             listKey={listKey} // Use state key
           />
         )}

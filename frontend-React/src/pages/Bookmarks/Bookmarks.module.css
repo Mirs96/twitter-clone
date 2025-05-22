@@ -1,0 +1,49 @@
+.bookmarksContainer {
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.bookmarksContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.header {
+    padding: 15px;
+    border-bottom: 1px solid #2f3336;
+    position: sticky;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.85); 
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e7e9ea;
+}
+
+.content {
+    flex-grow: 1;
+}
+
+.backButton {
+    background: none;
+    border: none;
+    padding: 8px;
+    margin-right: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrowIcon {
+    width: 20px;
+    height: 20px;
+}

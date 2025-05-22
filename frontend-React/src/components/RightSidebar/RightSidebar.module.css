@@ -1,25 +1,19 @@
 .sidebarContainer {
     width: 100%;
-    max-width: 350px; 
-    padding: 10px 0 10px 20px; 
+    padding-top: 10px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 20px; 
-    overflow-y: auto; /* Enable scrolling if content overflows */
-    height: 100vh; /* Ensure it takes full viewport height */
-     /* Hide scrollbar */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
+    gap: 20px;
 }
 
-.sidebarContainer::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-}
-
-
-.searchPlaceholder {
-    margin-bottom: 15px;
+.searchBarContainer {
+    position: sticky;
+    top: 0;
+    padding-top: 10px; /* Match sidebar padding */
+    padding-bottom: 10px;
+    background-color: black; /* Match sidebar background */
+    z-index: 1;
 }
 
 .searchInput {
@@ -27,46 +21,120 @@
     padding: 12px 15px;
     border-radius: 9999px;
     border: 1px solid #2f3336;
-    background-color: #202327; 
+    background-color: #202327;
     color: white;
     font-size: 15px;
     outline: none;
+    box-sizing: border-box; /* Ensure padding doesn't expand width */
 }
 
 .searchInput::placeholder {
     color: #71767b;
 }
 
+.autocompleteResults {
+    background-color: #16181c;
+    border: 1px solid #2f3336;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    position: absolute;
+    width: calc(100% - 2px); /* Adjust for border */
+    z-index: 2;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.autocompleteResults::-webkit-scrollbar {
+    display: none;
+}
+
+.autocompleteItem {
+    padding: 10px 15px;
+    color: #e7e9ea;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.autocompleteItem:hover {
+    background-color: #1d1f23;
+}
+
+.itemImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.itemName {
+    font-weight: bold;
+}
+
+.itemType {
+    font-size: 0.8em;
+    color: #71767b;
+    margin-left: 5px;
+}
+
+
 .widget {
-    background-color: #16181c; 
+    background-color: #16181c;
     border-radius: 15px;
     padding: 15px;
 }
 
 .widgetTitle {
-    font-size: 1.2em;
+    font-size: 20px;
     font-weight: bold;
     margin: 0 0 15px 0;
     color: #e7e9ea;
 }
 
-.trendList, .followList {
+.trendList {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 15px;
 }
 
-.trendItem, .followItem {
-    color: #e7e9ea;
-    font-size: 15px;
+.trendItem {
+    padding: 12px 0;
+    border-bottom: 1px solid #2f3336;
     cursor: pointer;
-    
 }
 
-.trendItem:hover, .followItem:hover {
-     background-color: #1d1f23; 
-     
+.trendItem:last-child {
+    border-bottom: none;
+}
+
+.trendItem:hover {
+    background-color: rgba(29, 31, 35, 0.5); /* Subtle hover */
+}
+
+.trendCategory {
+    font-size: 13px;
+    color: #71767b;
+    margin-bottom: 2px;
+}
+
+.trendName {
+    font-size: 15px;
+    font-weight: bold;
+    color: #e7e9ea;
+    margin-bottom: 2px;
+}
+
+.trendCount {
+    font-size: 13px;
+    color: #71767b;
+}
+
+.loadingText {
+    color: #71767b;
+    padding: 10px;
+    text-align: center;
 }

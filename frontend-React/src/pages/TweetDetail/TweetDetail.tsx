@@ -64,7 +64,7 @@ const TweetDetail: React.FC = () => {
   };
 
   const goBack = () => {
-    navigate('/home'); // Go back to the previous page in history
+    navigate('/home');
   };
 
   if (isLoading) {

@@ -66,3 +66,19 @@ export const addBookmarkToTweet = (bookmark: BookmarkDetails): Promise<{ bookmar
 export const removeBookmarkFromTweet = (bookmarkId: number): Promise<{ bookmarkCount: number }> => {
     return customFetch<{ bookmarkCount: number }>(`${urlExtension}/${bookmarkId}/bookmark`, { method: 'DELETE' });
 };
+
+export const getBookmarkedTweets = (userId: number, page: number, size: number): Promise<Page<DisplayTweetDetails>> => {
+    const params = new URLSearchParams({
+        page: page.toString(),
+        size: size.toString()
+    });
+    return customFetch<Page<DisplayTweetDetails>>(`${urlExtension}/${userId}/bookmarks?${params.toString()}`);
+};
+
+export const getTweetsByHashtagId = (hashtagId: number, page: number, size: number): Promise<Page<DisplayTweetDetails>> => {
+    const params = new URLSearchParams({
+        page: page.toString(),
+        size: size.toString()
+    });
+    return customFetch<Page<DisplayTweetDetails>>(`${urlExtension}/${hashtagId}/hashtag?${params.toString()}`);
+};

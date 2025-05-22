@@ -73,7 +73,7 @@ const CreateTweet: React.FC<CreateTweetProps> = ({ onTweetCreated }) => {
                 <textarea
                     {...register('content', { required: true, maxLength: 1000 })}
                     rows={1}
-                    placeholder="What is happening?!"
+                    placeholder="What is happening?"
                     className={styles.textarea}
                     ref={(e) => {
                     register('content').ref(e);
