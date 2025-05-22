@@ -1,108 +1,118 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BookmarkDetails } from '../../model/tweet/bookmarkDetails';
-import { ReplyDetails } from '../../model/reply/replyDetails';
-import { ReplyService } from '../../model/reply/replyService';
-import { UserService } from '../../model/authentication/userService';
-import { LikeReplyDetails } from '../../model/reply/likeReplyDetails';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
+import { ReplyDetails } from '../../model/reply/replyDetails';
 import { HttpConfig } from '../../config/http-config';
-import { DatePipe } from '@angular/common';
+import { ReplyService } from '../../model/reply/replyService';
+import { AuthService } from '../../model/authentication/authService';
+import { LikeReplyDetails } from '../../model/reply/likeReplyDetails';
 
 @Component({
   selector: 'app-single-reply',
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   providers: [DatePipe],
   templateUrl: './single-reply.component.html',
   styleUrl: './single-reply.component.css'
 })
-export class SingleReplyComponent implements OnInit {
-  @Input({
-    required: true
-  })
-  reply!: ReplyDetails;
+export class SingleReplyComponent implements OnInit, OnChanges {
+  @Input({ required: true }) reply!: ReplyDetails;
+  @Output() openReplyPopup = new EventEmitter<number>();
+  @Output() toggleNested = new EventEmitter<number>();
+  @Input() isNestedVisible?: boolean;
 
-  @Output()
-  openReplyPopup = new EventEmitter<number>();
-
-  @Output()
-  loadNestedReplies = new EventEmitter<number>();
-
-  likeDetails!: LikeReplyDetails;
-  bookmarkDetails!: BookmarkDetails;
-  userId!: number;
-  showNestedReplies = false;
-  baseUrl = HttpConfig.apiUrl.replace('/api', '');
+  localReply!: ReplyDetails;
+  userId: number | null = null;
 
   constructor(
     private replyService: ReplyService,
-    private userService: UserService,
-    private cdr: ChangeDetectorRef,
+    private authService: AuthService,
     private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
-    this.userId = Number(this.userService.getUserIdFromToken()) || 0;
+    this.authService.userId$.subscribe(id => this.userId = id);
+    this.localReply = { ...this.reply };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['reply']) {
+      this.localReply = { ...this.reply };
+    }
+    if (changes['isNestedVisible']) {
+        this.isNestedVisible = changes['isNestedVisible'].currentValue;
+    }
+  }
+
+  handleLikeToggle(): void {
+    if (!this.userId) return;
+
+    const currentLikeId = this.localReply.likeId;
+    const currentlyLiked = this.localReply.liked;
+    const currentLikeCount = this.localReply.likeCount;
+
+    this.localReply.liked = !currentlyLiked;
+    this.localReply.likeCount = currentlyLiked ? currentLikeCount - 1 : currentLikeCount + 1;
+    this.localReply.likeId = currentlyLiked ? undefined : -1; // Placeholder
+
+    if (!currentlyLiked) {
+      const likeData: LikeReplyDetails = { userId: this.userId, replyId: this.localReply.id };
+      this.replyService.addLikeToReply(likeData).subscribe({
+        next: result => {
+          this.localReply.liked = true;
+          this.localReply.likeCount = result.likeCount;
+          this.localReply.likeId = result.likeId;
+        },
+        error: () => {
+          this.localReply.liked = currentlyLiked;
+          this.localReply.likeCount = currentLikeCount;
+          this.localReply.likeId = currentLikeId;
+          alert("Could not update like status.");
+        }
+      });
+    } else if (currentLikeId) {
+      this.replyService.removeLikeFromReply(currentLikeId).subscribe({
+        next: result => {
+          this.localReply.liked = false;
+          this.localReply.likeCount = result.likeCount;
+          this.localReply.likeId = undefined;
+        },
+        error: () => {
+          this.localReply.liked = currentlyLiked;
+          this.localReply.likeCount = currentLikeCount;
+          this.localReply.likeId = currentLikeId;
+          alert("Could not update like status.");
+        }
+      });
+    }
+  }
+
+  handleReplyClick(): void {
+    this.openReplyPopup.emit(this.localReply.id);
+  }
+
+  handleToggleNestedClick(): void {
+    this.toggleNested.emit(this.localReply.id);
+  }
+
+  getFullImageUrl(profilePicturePath: string | null | undefined): string {
+    if (!profilePicturePath) {
+      return '/icons/default-avatar.png';
+    }
+    return `${HttpConfig.baseUrl}${profilePicturePath}`;
   }
 
   formatDateTime(dateTimeString: string | undefined): string {
-    if (!dateTimeString) {
-      return '';
-    }
+    if (!dateTimeString) return '';
     try {
       const date = new Date(dateTimeString);
+      // Using date-fns formatting to match React exactly would require adding date-fns to Angular project
+      // For now, using Angular's DatePipe which is similar
       const formattedDate = this.datePipe.transform(date, 'yyyy-MM-dd');
       const formattedTime = this.datePipe.transform(date, 'HH:mm');
       return `${formattedDate} \u00B7 ${formattedTime}`;
     } catch (error) {
-      console.error("Errore durante la formattazione della data:", error);
-      return dateTimeString; // In caso di errore, mostra la stringa originale
+      console.error("Error parsing date string:", error);
+      return dateTimeString;
     }
   }
-
-  // Toggle like
-  toggleLike() {
-    this.likeDetails = {
-      userId: this.userId,
-      replyId: this.reply.id
-    };
-
-    if (!this.reply.liked) {
-      this.replyService
-        .addLikeToReply(this.likeDetails)
-        .subscribe({
-          next: r => {
-            this.reply.liked = true;
-            this.reply.likeCount = r.likeCount;
-            this.reply.likeId = r.likeId;
-            this.cdr.detectChanges();
-          },
-          error: err => console.log(err)
-        });
-    } else {
-      this.replyService
-        .removeLikeFromReply(this.reply.likeId)
-        .subscribe({
-          next: r => {
-            this.reply.liked = false;
-            this.reply.likeCount = r.likeCount;
-            this.reply.likeId = undefined;
-            this.cdr.detectChanges();
-          },
-          error: err => console.log(err)
-        });
-    }
-  }
-
-  getFullImageUrl(profilePicture: string) {
-    return `${this.baseUrl}${profilePicture}`;
-  }
-
-  onReplyClick(): void {
-    this.openReplyPopup.emit(this.reply.id);
-  }
-
-  toggleNestedRepliesVisibility(): void {
-    this.loadNestedReplies.emit(this.reply.id);
-    this.reply.showNested = !this.reply.showNested;
-  }  
 }

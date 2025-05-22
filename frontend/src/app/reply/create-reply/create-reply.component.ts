@@ -2,89 +2,73 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Outp
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReplyDetails } from '../../model/reply/replyDetails';
 import { ReplyService } from '../../model/reply/replyService';
-import { UserService } from '../../model/authentication/userService';
+import { AuthService } from '../../model/authentication/authService';
 import { CreateReplyDetails } from '../../model/reply/createReplyDetails';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-reply',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './create-reply.component.html',
   styleUrl: './create-reply.component.css'
 })
 export class CreateReplyComponent implements OnInit, AfterViewInit {
-  userId!: number;
-  newReply!: ReplyDetails;
+  userId: number | null = null;
   replyForm!: FormGroup;
   
-  @ViewChild('tweetInput')
-  replyInput!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('replyTextarea') replyTextarea!: ElementRef<HTMLTextAreaElement>;
 
-  @Input({
-    required: true
-  })
-  tweetId!: number;
-
-  @Output()
-  replyCreated = new EventEmitter<ReplyDetails>();
+  @Input() tweetId!: number;
+  @Input() parentReplyId: number | null = null;
+  @Output() replyCreated = new EventEmitter<ReplyDetails>();
   
-  @Input()
-  parentReplyId: number | null = null;
-
   constructor(
     private replyService: ReplyService,
     private fb: FormBuilder,
-    private userService: UserService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.userId = Number(this.userService.getUserIdFromToken()) || 0;
+    this.authService.userId$.subscribe(id => this.userId = id);
     this.replyForm = this.fb.group({
       content: ['', [Validators.required, Validators.maxLength(500)]]
     });
   }
 
   ngAfterViewInit(): void {
-    if (this.replyInput) {
+    if (this.replyTextarea) {
       this.adjustTextareaHeight();
     }
   }
 
   adjustTextareaHeight(): void {
-    if (this.replyInput) {
-      const textarea = this.replyInput.nativeElement;
+    if (this.replyTextarea) {
+      const textarea = this.replyTextarea.nativeElement;
       textarea.style.height = '25px'; 
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
   }
 
   onSubmit(): void {
-    if (this.replyForm.valid) {
-      const formData: CreateReplyDetails = {
-        ...this.replyForm.value,
-        userId: this.userId,
-        tweetId: this.tweetId,
-        parentReplyId: this.parentReplyId,
-        creationDate: new Date().toISOString().split('T')[0],
-        creationTime: new Date().toISOString().split('T')[1].slice(0, 5)
-      }
-
-      this.replyService
-        .replyToTweet(formData)
-        .subscribe({
-          next: r => {
-            this.newReply = r;
-            this.replyCreated.emit(this.newReply);
-            this.resetForm();
-          },
-          error: err => console.log(err)
-        });
-    } else {
-      console.log('Invalid form');
+    if (this.replyForm.invalid || !this.userId) {
+      console.error('Form invalid or user not logged in');
+      return;
     }
-  }
 
-  resetForm() {
-    this.replyForm.reset();
-    this.adjustTextareaHeight();
+    const payload: CreateReplyDetails = {
+      ...this.replyForm.value,
+      userId: this.userId,
+      tweetId: this.tweetId,
+      parentReplyId: this.parentReplyId
+    };
+
+    this.replyService.replyToTweet(payload).subscribe({
+      next: newReply => {
+        this.replyCreated.emit(newReply);
+        this.replyForm.reset();
+        this.adjustTextareaHeight();
+      },
+      error: err => console.error('Failed to post reply:', err)
+    });
   }
 }

@@ -1,160 +1,146 @@
-<div class="register-container">
-    <form (ngSubmit)="onSubmit()" [formGroup]="registerForm">
-        <!-- Firstname -->
-        <div>
-            <label for="firstname">Firstname:</label>
-            <input type="text" id="firstname" formControlName="firstname" (blur)="onFieldBlur('firstname')">
-            @if (registerForm.get('firstname')?.touched && registerForm.get('firstname')?.errors) {
-                <div class="validation-message">
-                    @if (registerForm.get('firstname')?.errors?.['required']) {
-                        <span>✨ Please enter your first name</span>
-                    }
-                    @if (registerForm.get('firstname')?.errors?.['minlength']) {
-                        <span>🌟 At least 3 characters please</span>
-                    }
-                </div>
+<div class="registerContainer">
+    <h2>Create your account</h2>
+    <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" class="registerForm">
+        
+        <div class="formGroup">
+          <label for="firstname">First Name</label>
+          <input type="text" id="firstname" formControlName="firstname" [class.inputError]="registerForm.get('firstname')?.invalid && registerForm.get('firstname')?.touched">
+          @if (registerForm.get('firstname')?.invalid && registerForm.get('firstname')?.touched) {
+              <span class="validationMessage">
+                  @if (registerForm.get('firstname')?.errors?.['required']) {
+                      Please enter your first name
+                  }
+                  @if (registerForm.get('firstname')?.errors?.['minlength']) {
+                      At least 3 characters please
+                  }
+              </span>
+          }
+        </div>
+
+         <div class="formGroup">
+          <label for="lastname">Last Name</label>
+          <input type="text" id="lastname" formControlName="lastname" [class.inputError]="registerForm.get('lastname')?.invalid && registerForm.get('lastname')?.touched">
+           @if (registerForm.get('lastname')?.invalid && registerForm.get('lastname')?.touched) {
+              <span class="validationMessage">
+                  @if (registerForm.get('lastname')?.errors?.['required']) {
+                       Your last name is important too!
+                  }
+                  @if (registerForm.get('lastname')?.errors?.['minlength']) {
+                      3 characters minimum
+                  }
+              </span>
+          }
+        </div>
+        
+         <div class="formGroup">
+          <label for="nickname">Nickname</label>
+          <input type="text" id="nickname" formControlName="nickname" [class.inputError]="registerForm.get('nickname')?.invalid && registerForm.get('nickname')?.touched">
+          @if (registerForm.get('nickname')?.invalid && registerForm.get('nickname')?.touched) {
+              <span class="validationMessage">
+                  @if (registerForm.get('nickname')?.errors?.['required']) {
+                      How should we call you?
+                  }
+                  @if (registerForm.get('nickname')?.errors?.['minlength']) {
+                      Make it at least 3 characters
+                  }
+              </span>
+          }
+        </div>
+
+        <div class="formGroup">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" formControlName="dob" [class.inputError]="registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched">
+             @if (registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched && registerForm.get('dob')?.errors?.['required']) {
+                <span class="validationMessage">We need to know your birthday!</span>
             }
         </div>
 
-        <!-- Lastname -->
-        <div>
-            <label for="lastname">Lastname:</label>
-            <input type="text" id="lastname" formControlName="lastname" (blur)="onFieldBlur('lastname')">
-            @if (registerForm.get('lastname')?.touched && registerForm.get('lastname')?.errors) {
-                <div class="validation-message">
-                    @if (registerForm.get('lastname')?.errors?.['required']) {
-                        <span>✨ Your last name is important too!</span>
-                    }
-                    @if (registerForm.get('lastname')?.errors?.['minlength']) {
-                        <span>🌟 3 characters minimum</span>
-                    }
-                </div>
-            }
-        </div>
-
-        <!-- Nickname -->
-        <div>
-            <label for="nickname">Nickname:</label>
-            <input type="text" id="nickname" formControlName="nickname" (blur)="onFieldBlur('nickname')">
-            @if (registerForm.get('nickname')?.touched && registerForm.get('nickname')?.errors) {
-                <div class="validation-message">
-                    @if (registerForm.get('nickname')?.errors?.['required']) {
-                        <span>✨ How should we call you?</span>
-                    }
-                    @if (registerForm.get('nickname')?.errors?.['minlength']) {
-                        <span>🌟 Make it at least 3 characters</span>
-                    }
-                </div>
-            }
-        </div>
-
-        <!-- Date of Birth -->
-        <div>
-            <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob" formControlName="dob" (blur)="onFieldBlur('dob')">
-            @if (registerForm.get('dob')?.touched && registerForm.get('dob')?.errors) {
-                <div class="validation-message">
-                    <span>✨ We need to know your birthday!</span>
-                </div>
-            }
-        </div>
-
-        <!-- Sex -->
-        <div>
-            <label for="sex">Sex:</label>
-            <select id="sex" formControlName="sex" (blur)="onFieldBlur('sex')">
+        <div class="formGroup">
+            <label for="sex">Sex</label>
+            <select id="sex" formControlName="sex" [class.inputError]="registerForm.get('sex')?.invalid && registerForm.get('sex')?.touched">
                 <option value="">Select...</option>
-                <option value="M">man</option>
-                <option value="F">woman</option>
-                <option value="O">other</option>
+                <option value="M">Man</option>
+                <option value="F">Woman</option>
+                <option value="O">Other</option>
             </select>
-            @if (registerForm.get('sex')?.touched && registerForm.get('sex')?.errors) {
-                <div class="validation-message">
-                    <span>✨ Please select your gender</span>
-                </div>
+            @if (registerForm.get('sex')?.invalid && registerForm.get('sex')?.touched && registerForm.get('sex')?.errors?.['required']) {
+                <span class="validationMessage">Please select your gender</span>
             }
         </div>
 
-        <!-- Email -->
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" formControlName="email" (blur)="onFieldBlur('email')">
-            @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
-                <div class="validation-message">
-                    @if (registerForm.get('email')?.errors?.['required']) {
-                        <span>✨ Email is required</span>
-                    }
-                    @if (registerForm.get('email')?.errors?.['email']) {
-                        <span>🌟 Please enter a valid email</span>
-                    }
-                </div>
-            }
+        <div class="formGroup">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" [class.inputError]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+              <span class="validationMessage">
+                  @if (registerForm.get('email')?.errors?.['required']) {
+                      Email is required
+                  }
+                  @if (registerForm.get('email')?.errors?.['email']) {
+                      Please enter a valid email
+                  }
+              </span>
+          }
         </div>
 
-        <!-- Password -->
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" formControlName="password" (blur)="onFieldBlur('password')">
-            @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
-                <div class="validation-message">
-                    @if (registerForm.get('password')?.errors?.['required']) {
-                        <span>✨ Password is required</span>
-                    }
-                    @if (registerForm.get('password')?.errors?.['minlength']) {
-                        <span>🌟 At least 8 characters please</span>
-                    }
-                </div>
-            }
+         <div class="formGroup">
+          <label for="password">Password</label>
+          <input type="password" id="password" formControlName="password" [class.inputError]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+              <span class="validationMessage">
+                  @if (registerForm.get('password')?.errors?.['required']) {
+                      Password is required
+                  }
+                  @if (registerForm.get('password')?.errors?.['minlength']) {
+                      At least 8 characters please
+                  }
+              </span>
+          }
         </div>
 
-        <!-- Phone -->
-        <div>
-            <label for="phone">Phone:</label>
-            <input type="tel" id="phone" formControlName="phone" (blur)="onFieldBlur('phone')">
-            @if (registerForm.get('phone')?.touched && registerForm.get('phone')?.errors) {
-                <div class="validation-message">
-                    @if (registerForm.get('phone')?.errors?.['required']) {
-                        <span>✨ Phone number is required</span>
-                    }
-                    @if (registerForm.get('phone')?.errors?.['minlength']) {
-                        <span>🌟 At least 10 digits please</span>
-                    }
-                </div>
-            }
+        <div class="formGroup">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" formControlName="phone" [class.inputError]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched">
+            @if (registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched) {
+              <span class="validationMessage">
+                  @if (registerForm.get('phone')?.errors?.['required']) {
+                      Phone number is required
+                  }
+                  @if (registerForm.get('phone')?.errors?.['minlength']) {
+                      At least 10 digits please
+                  }
+              </span>
+          }
         </div>
 
-        <!-- Role -->
-        <div>
-            <label for="role">Role:</label>
-            <select id="role" formControlName="role" (blur)="onFieldBlur('role')">
+        <div class="formGroup">
+            <label for="role">Role</label>
+            <select id="role" formControlName="role" [class.inputError]="registerForm.get('role')?.invalid && registerForm.get('role')?.touched">
                 <option value="">Select...</option>
                 <option value="ADMIN">Admin</option>
                 <option value="USER">User</option>
                 <option value="MANAGER">Manager</option>
             </select>
-            @if (registerForm.get('role')?.touched && registerForm.get('role')?.errors) {
-                <div class="validation-message">
-                    <span>✨ Please select a role</span>
-                </div>
+            @if (registerForm.get('role')?.invalid && registerForm.get('role')?.touched && registerForm.get('role')?.errors?.['required']) {
+                <span class="validationMessage">Please select a role</span>
             }
         </div>
 
-        <!-- Profile Image -->
-        <div>
-            <label for="profileImg">Profile Image:</label>
-            <input type="file" id="profileImg" accept=".jpg, .jpeg, .png" (change)="onFileChange($event)">
+         <div class="formGroup">
+            <label for="profilePicture">Profile Image (Optional)</label>
+            <input type="file" id="profilePicture" accept=".jpg, .jpeg, .png" (change)="onFileChange($event)" class="fileInput">
         </div>
 
-        <!-- Bio -->
-        <div>
-            <label for="bio">Write a bio:</label>
-            <textarea id="bio" formControlName="bio" rows="5" maxlength="500" 
-                     (blur)="onFieldBlur('bio')" >
-            </textarea>
+         <div class="formGroup">
+          <label for="bio">Bio (Optional)</label>
+          <textarea id="bio" formControlName="bio" rows="5" placeholder="Tell us a bit about yourself..." [class.inputError]="registerForm.get('bio')?.invalid && registerForm.get('bio')?.touched"></textarea>
+          @if (registerForm.get('bio')?.invalid && registerForm.get('bio')?.touched && registerForm.get('bio')?.errors?.['maxlength']) {
+            <span class="validationMessage">Bio cannot exceed 500 characters</span>
+          }
         </div>
 
-        <div>
-            <button [disabled]="registerForm.invalid" class="submit-btn">Register</button>
-        </div>
+        <button type="submit" [disabled]="!registerForm.valid" class="submitBtn">
+          Register
+        </button>
     </form>
 </div>

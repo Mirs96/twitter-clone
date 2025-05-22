@@ -1,35 +1,50 @@
-@if (tweet) {
-    <div class="arrow-container" (click)="goHome()">
-        <img src="icons/back-arrow.svg" alt="Go Back" class="arrow-icon">
-        <span class="post-text">Post</span>
-    </div>
-    
-    <div class="tweet-container">
-        <app-single-tweet [tweet]="tweet" [replyCount]="tweet.replyCount">
-        </app-single-tweet>
+<div class="pageContainer">
+    <div class="headerBar">
+        <button (click)="goBack()" class="backButton">
+            <img src="/icons/back-arrow.svg" alt="Go Back" class="arrowIcon" />
+        </button>
+        <span class="headerTitle">Post</span>
     </div>
 
-    @if (showReplyModal) {
-        <div class="overlay" (click)="closeReplyPopup()">
-            <div class="popup-content" (click)="$event.stopPropagation()"> <!-- Impedisce che il click sull'interno del popup chiuda il popup -->
-                <app-create-reply 
-                    [tweetId]="tweetId"
-                    [parentReplyId]="parentReplyId"
-                    (replyCreated)="onCreatedReply($event)">
-                </app-create-reply>
-            </div>
+    @if (tweet) {
+        <div class="tweetDetailContent">
+            <app-single-tweet [tweet]="tweet" [isDetailView]="true"></app-single-tweet>
         </div>
+
+        @if (showReplyModal) {
+            <div class="overlay" (click)="closeReplyPopup()">
+                <div class="modal replyModal" (click)="$event.stopPropagation()">
+                    <button class="close-btn customCloseBtn" (click)="closeReplyPopup()">&times;</button>
+                    <app-create-reply 
+                        [tweetId]="tweetId!"
+                        [parentReplyId]="parentReplyId"
+                        (replyCreated)="handleReplyCreated($event)">
+                    </app-create-reply>
+                </div>
+            </div>
+        }
+
+        <div class="createReplyContainer">
+            <app-create-reply 
+                [tweetId]="tweetId!" 
+                [parentReplyId]="null"
+                (replyCreated)="handleReplyCreated($event)">
+            </app-create-reply>
+        </div>
+
+        <div class="repliesContainer">
+            <app-reply-list 
+                [tweetId]="tweetId!" 
+                [newReply]="newReplyForList" 
+                (openReplyPopup)="openReplyPopup($event)"
+                [listKey]="'tweet-' + tweetId + '-replies'">
+            </app-reply-list>
+        </div>
+    } @else if (isLoading) {
+        <div>Loading tweet...</div>
+    } @else if (error) {
+        <div>{{error}}</div>
+    } @else {
+        <div>Tweet not found.</div>
     }
-
-    <div class="create-reply">
-        <app-create-reply [tweetId]="tweetId" [parentReplyId]="parentReplyId" (replyCreated)="onCreatedReply($event)"></app-create-reply>
-    </div>
-
-    <div class="replies">
-        <app-reply-list 
-            [tweetId]="tweetId" 
-            [newReply]="newReply"
-            (openReplyPopup)="openReplyPopup($event)">
-        </app-reply-list>
-    </div>
-}
+</div>

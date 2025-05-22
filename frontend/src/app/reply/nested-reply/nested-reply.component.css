@@ -1,5 +1,13 @@
-.nested-replies {
-  margin-left: 20px;
-  border-left: 2px solid #71767b;
-  padding-left: 15px;
+.loading,
+.error {
+  padding: 10px 0;
+  color: #71767b;
+  font-style: italic;
+}
+
+.deeplyNested {
+    margin-left: 20px;
+    border-left: 2px solid #38444d; 
+    padding-left: 15px;
+    margin-top: 10px;
 }

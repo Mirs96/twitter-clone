@@ -1,5 +1,19 @@
-<div class="tweets-container" (scroll)="onScroll($event)">
-    @for (tweet of tweets; track $index) {
-        <app-single-tweet [tweet]="tweet"></app-single-tweet>
+<div class="tweetsContainer" #tweetListContainer (scroll)="onScroll()">
+    @for (tweet of tweets; track tweet.id; let idx = $index) {
+      <div [attr.data-tweet-id]="tweet.id" [class.last-element]="idx === tweets.length - 1">
+        <app-single-tweet [tweet]="tweet" (bookmarkChange)="handleLocalBookmarkChange($event)"></app-single-tweet>
+      </div>
     }
-</div>
+    @if (isLoading) {
+      <div class="loading">Loading...</div>
+    }
+    @if (!isLoading && !hasMoreTweets && tweets.length > 0) {
+      <div class="endMessage">End of tweets</div>
+    }
+    @if (!isLoading && !hasMoreTweets && tweets.length === 0 && !error) {
+      <div class="endMessage">No tweets to show</div>
+    }
+    @if (error) {
+      <div class="error">{{error}}</div>
+    }
+  </div>

@@ -11,15 +11,12 @@ import { LikeReplyDetails } from "./likeReplyDetails";
     providedIn: 'root'
 })
 export class ReplyService {
-    urlExtension = '/reply';
+    private urlExtension = '/reply';
 
     constructor(private http: HttpClient) { }
 
     replyToTweet(reply: CreateReplyDetails): Observable<ReplyDetails> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-        return this.http.post<ReplyDetails>(`${HttpConfig.apiUrl}${this.urlExtension}`, reply, { headers });
+        return this.http.post<ReplyDetails>(`${HttpConfig.apiUrl}${this.urlExtension}`, reply);
     }
 
     getMainRepliesByTweetId(tweetId: number, page: number, size: number): Observable<Page<ReplyDetails>> {
@@ -37,19 +34,16 @@ export class ReplyService {
         return this.http.delete<void>(`${HttpConfig.apiUrl}${this.urlExtension}/${tweetId}`);
     }
 
-    findReplyById(tweetId: number): Observable<ReplyDetails> {
-        return this.http.get<ReplyDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${tweetId}`);
+    findReplyById(replyId: number): Observable<ReplyDetails> {
+        return this.http.get<ReplyDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${replyId}`);
     }
 
-    addLikeToReply(like: LikeReplyDetails): Observable<ReplyDetails> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-        return this.http.post<ReplyDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/like`, like, { headers });
+    addLikeToReply(like: LikeReplyDetails): Observable<{ likeCount: number, likeId: number }> {
+        return this.http.post<{ likeCount: number, likeId: number }>(`${HttpConfig.apiUrl}${this.urlExtension}/like`, like);
     }
 
-    removeLikeFromReply(likeId?: number): Observable<ReplyDetails> {
-        return this.http.delete<ReplyDetails>(`${HttpConfig.apiUrl}${this.urlExtension}/${likeId}/like`);
+    removeLikeFromReply(likeId: number): Observable<{ likeCount: number }> {
+        return this.http.delete<{ likeCount: number }>(`${HttpConfig.apiUrl}${this.urlExtension}/${likeId}/like`);
     }
 
     getRepliesByUserId(userId: number, page: number, size: number): Observable<Page<ReplyDetails>> {

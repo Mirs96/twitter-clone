@@ -1,48 +1,85 @@
-.login-container {
-    background-color: black;
+.loginContainer {
+    background-color: #1a1a1a; 
     color: white;
-    padding: 20px;
+    padding: 30px 40px; 
     border-radius: 10px;
-    width: 600px;
-    max-width: 90%;
+    width: 100%; 
+    max-width: 500px; 
     text-align: center;
-    margin: auto; /* Centra il form */
-    padding-right: 40px; /* Aumenta lo spazio a destra */
+    box-sizing: border-box;
 }
 
-.login-container label {
+.loginContainer h2 {
+    margin-bottom: 30px;
+    font-size: 1.8em;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+}
+
+.formGroup {
+    text-align: left;
+}
+
+.loginContainer label {
     display: block;
-    margin: 10px 0 5px;
+    margin-bottom: 8px;
     font-weight: bold;
+    font-size: 0.95em;
 }
 
-.login-container input {
+.loginContainer input[type="email"],
+.loginContainer input[type="password"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid white;
+    padding: 14px 12px;
+    border: 1px solid #444;
     border-radius: 5px;
-    background: black;
+    background: #222;
     color: white;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
 }
 
-.login-container input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+.loginContainer input:focus {
+    outline: none;
+    border-color: #1da1f2;
 }
 
-.login-container button {
-    background-color: #007bff;
+.submitBtn {
+    background-color: #1da1f2;
     color: white;
     border: none;
-    padding: 12px 20px;
+    padding: 14px 20px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 25px;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.2s;
 }
 
-.login-container button:disabled {
-    background-color: gray;
+.submitBtn:hover:not(:disabled) {
+    background-color: #1991db;
+}
+
+.submitBtn:disabled {
+    background-color: #657786;
     cursor: not-allowed;
 }
 
+.validationMessage {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 6px;
+    display: block;
+}
+
+.inputError {
+    border-color: #ff6b6b !important;
+    background-color: rgba(255, 107, 107, 0.05) !important;
+}

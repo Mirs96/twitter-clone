@@ -1,20 +1,16 @@
 @if (isLoggedIn) {
-    <div class="main-container">
-        <!-- Navbar fissa a sinistra -->
-        <div class="nav">
-            <app-navbar></app-navbar>
-        </div>
-        
-        <!-- Contenuto centrale scrollabile (con sidebar) -->
-        <div class="scrollable-main">
-            <!-- Router-outlet per feed/profilo/etc -->
-            <div class="content">
-                <router-outlet></router-outlet>
+    <div class="mainContainer">
+        <div class="layoutWrapper">
+            <div class="nav">
+                <app-navbar></app-navbar>
             </div>
-            
-            <!-- Sidebar destra (scorre con il contenuto) -->
-            <div class="right-sidebar">
-                <app-right-sidebar></app-right-sidebar>
+            <div class="scrollableMain">
+                <div class="content">
+                    <router-outlet></router-outlet>
+                </div>
+                <div class="rightSidebar">
+                    <app-right-sidebar></app-right-sidebar>
+                </div>
             </div>
         </div>
     </div>

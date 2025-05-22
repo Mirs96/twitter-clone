@@ -4,5 +4,5 @@ export interface UserProfileDetails {
     bio: string;
     followersCount: number;
     followingCount: number;
-    isFollowing: boolean;
+    isFollowing: boolean; 
 }

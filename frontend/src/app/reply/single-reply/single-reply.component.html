@@ -1,33 +1,37 @@
-<div class="reply">
-    <div class="reply-header">
-        <div class="user-info">
-            <img class="profile-picture"
-                 [src]="getFullImageUrl(reply.userProfilePicture)"
-                 alt="Profile picture of {{ reply.userNickname }}">
-            
-            <a [routerLink]="['/profile', reply.userId]" class="nickname-link" (click)="$event.stopPropagation()">
-                <h3>{{ reply.userNickname }}</h3>
-            </a>
+<div class="replyContainer">
+    <div class="replyHeader">
+        <a [routerLink]="['/profile', localReply.userId]" (click)="$event.stopPropagation()" class="profilePicLink">
+            <img class="profilePicture"
+                 [src]="getFullImageUrl(localReply.userProfilePicture)"
+                 [alt]="'Profile picture of ' + localReply.userNickname">
+        </a>
+        <div class="userInfoContainer">
+            <div class="userInfo">
+                <a [routerLink]="['/profile', localReply.userId]" class="nicknameLink" (click)="$event.stopPropagation()">
+                    <h3 class="nickname">{{ localReply.userNickname }}</h3>
+                </a>
+                <p class="time">{{ formatDateTime(localReply.createdAt) }}</p>
+            </div>
+            <div class="replyContent">
+                <p>{{ localReply.content }}</p>
+            </div>
         </div>
-        <p class="time">{{ formatDateTime(reply.createdAt) }}</p>
     </div>
-    <div class="reply-content">
-        <p>{{ reply.content }}</p>
-    </div>
+
     <div class="actions">
-        <div class="interaction-buttons">
-            <button class="interaction-button like-button" [class.active]="reply.liked"
-                (click)="toggleLike(); $event.stopPropagation()">
-                <img class="interaction-icon" src="icons/tweet-buttons/like.svg" alt="Like">
-                <span class="interaction-count">{{ reply.likeCount }}</span>
+        <div class="interactionButtons">
+            <button class="interactionButton likeButton" [class.active]="localReply.liked"
+                (click)="handleLikeToggle(); $event.stopPropagation()">
+                <img class="interactionIcon" src="/icons/tweet-buttons/like.svg" alt="Like">
+                <span class="interactionCount">{{ localReply.likeCount }}</span>
             </button>
-            <button class="interaction-button reply-button" (click)="onReplyClick()">
-                <img class="interaction-icon" src="icons/tweet-buttons/reply.svg" alt="Reply">
+            <button class="interactionButton replyButton" (click)="handleReplyClick(); $event.stopPropagation()">
+                <img class="interactionIcon" src="/icons/tweet-buttons/reply.svg" alt="Reply">
             </button>
         </div>
-        @if (reply.hasNestedReplies) {
-            <button class="toggle-nested" (click)="toggleNestedRepliesVisibility()">
-                {{ reply.showNested  ? 'Hide replies' : 'Show replies' }}
+        @if (localReply.hasNestedReplies) {
+            <button class="toggleNested" (click)="handleToggleNestedClick(); $event.stopPropagation()">
+                {{ isNestedVisible ? 'Hide replies' : 'Show replies' }}
             </button>
         }
     </div>

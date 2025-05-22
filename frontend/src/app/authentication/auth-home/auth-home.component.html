@@ -1,28 +1,33 @@
-<div class="auth-container" [class.blurred]="isRegisterOpen">
-    <img src="icons/logo.svg" alt="logo" class="auth-image">
-    <div class="auth-content">
-        <h2>Register now.</h2>
-        <button class="register-btn" (click)="openRegister()">Create Account</button>
-        <p class="separator"><span>or</span></p>
-        <h1>Do you already have an account?</h1>
-        <button class="login-btn" (click)="openLogin()">Login</button>
+<div class="authContainer">
+    <img src="/icons/logo.svg" alt="logo" class="authImage">
+    <div class="authContent">
+        <h1 class="mainHeading">Happening now</h1>
+        <h2 class="subHeading">Join today.</h2>
+        <button class="registerBtn" (click)="openRegister()">Create Account</button>
+        <div class="separator">
+            <span class="separatorLine"></span>
+            <span class="separatorText">or</span>
+            <span class="separatorLine"></span>
+        </div>
+        <h3 class="loginPrompt">Already have an account?</h3>
+        <button class="loginBtn" (click)="openLogin()">Sign in</button>
     </div>
 </div>
 
 @if (isRegisterOpen) {
-    <div class="overlay" (click)="closeRegister()"></div>
-    <div class="modal">
-        <div class="modal-content">
-            <button class="close-btn" (click)="closeRegister()">✖</button>
-            <app-register></app-register>
-        </div>
+    <div class="overlay" (click)="closeRegister()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeRegister()">&times;</button>
+        <app-register (closeModal)="closeRegister()"></app-register>
+      </div>
     </div>
-} @else if (isLoginOpen) {
-    <div class="overlay" (click)="closeLogin()"></div>
-    <div class="modal">
-        <div class="modal-content">
-            <button class="close-btn" (click)="closeLogin()">✖</button>
-            <app-login></app-login>
-        </div>
+}
+
+@if (isLoginOpen) {
+    <div class="overlay" (click)="closeLogin()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <button class="close-btn" (click)="closeLogin()">&times;</button>
+        <app-login (closeModal)="closeLogin()"></app-login>
+      </div>
     </div>
 }

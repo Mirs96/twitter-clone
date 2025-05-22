@@ -1,0 +1,51 @@
+<div class="exploreContainer" #exploreContainer (scroll)="onScroll()">
+    <div class="header">
+      <button (click)="goBack()" class="backButton">
+        <img src="/icons/back-arrow.svg" alt="Go Back" class="arrowIcon" />
+      </button>
+      <h1 class="title">
+        {{ hashtagId && hashtagName ? '#' + hashtagName : 'Explore Trends' }}
+      </h1>
+    </div>
+  
+    @if (hashtagId && hashtagName) {
+      <div class="tweetListWrapper">
+        <app-tweet-list
+          [hashtagId]="hashtagId"
+          fetchType='hashtag'
+          [listKey]="'hashtag-' + hashtagId + '-tweets'">
+        </app-tweet-list>
+      </div>
+    } @else {
+        @if (!isLoggedIn && errorHashtags) {
+            <div class="errorMessage">{{errorHashtags}}</div>
+        }
+        @if (isLoggedIn) {
+            <div class="hashtagList">
+                @for (hashtag of trendingHashtags; track hashtag.id; let idx = $index) {
+                    <a [routerLink]="['/explore/tag', hashtag.id, hashtag.tag]"
+                        class="hashtagItem"
+                        [class.last-hashtag-element]="idx === trendingHashtags.length - 1">
+                        <div class="hashtagInfo">
+                        <span class="hashtagName">#{{hashtag.tag}}</span>
+                        <span class="hashtagCount">{{formatCount(hashtag.count)}}</span>
+                        </div>
+                    </a>
+                }
+                @if (isLoadingHashtags) {
+                    <div class="loadingMessage">Loading more trends...</div>
+                }
+                @if (!isLoadingHashtags && !hasMoreHashtags && trendingHashtags.length > 0) {
+                    <div class="endMessage">No more trends</div>
+                }
+                @if (!isLoadingHashtags && trendingHashtags.length === 0 && !errorHashtags) {
+                    <div class="endMessage">No trends to show</div>
+                }
+                @if (isLoggedIn && errorHashtags) {
+                    <div class="errorMessage">{{errorHashtags}}</div>
+                }
+            </div>
+        }
+    }
+  </div>
+  

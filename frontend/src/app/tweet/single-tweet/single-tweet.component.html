@@ -1,36 +1,39 @@
-<div class="tweet" (click)="openTweet(tweet.id)">
-    <div class="post-header">
-        <div class="user-info">
-            <img class="profile-picture" 
-                 [src]="getFullImageUrl(tweet.userProfilePicture)" 
-                 alt="Profile picture of {{ tweet.userNickname }}">
-            
-            <a [routerLink]="['/profile', tweet.userId]" class="nickname-link" (click)="$event.stopPropagation()">
-                <h3>{{ tweet.userNickname }}</h3>
-            </a>
-            
-            <p class="time">{{ formatDateTime(tweet.createdAt) }}</p>
+<div class="tweetContainer" (click)="navigateToTweet()" role="article" tabindex="0">
+    <div class="tweetHeader">
+      <a [routerLink]="['/profile', localTweet.userId]" (click)="$event.stopPropagation()" class="profilePicLink">
+        <img class="profilePicture"
+             [src]="getFullImageUrl(localTweet.userProfilePicture)"
+             [alt]="'Profile picture of ' + localTweet.userNickname">
+      </a>
+      <div class="userInfoContainer">
+        <div class="userInfo">
+          <a [routerLink]="['/profile', localTweet.userId]" class="nicknameLink" (click)="$event.stopPropagation()">
+            <h3 class="nickname">{{ localTweet.userNickname }}</h3>
+          </a>
+         <p class="time">{{ formatDateTime(localTweet.createdAt) }}</p>
         </div>
+        <div class="tweetContent">
+          <p>{{ localTweet.content }}</p>
+        </div>
+      </div>
     </div>
-    <div class="post-content">
-        <p>{{ tweet.content }}</p>
-    </div>
+
     <div class="actions">
-        <div class="interaction-buttons">
-            <button class="interaction-button like-button" [class.active]="tweet.liked" 
-                (click)="toggleLike(); $event.stopPropagation()">
-                <img class="interaction-icon" src="icons/tweet-buttons/like.svg" alt="Like">
-                <span class="interaction-count">{{ tweet.likeCount }}</span>
-            </button>
-            <button class="interaction-button reply-button">
-                <img class="interaction-icon" src="icons/tweet-buttons/reply.svg" alt="Reply">
-                <span class="interaction-count">{{ tweet.replyCount }}</span>
-            </button>
-            <button class="interaction-button bookmark-button" [class.active]="tweet.bookmarked"
-                (click)="toggleBookmark(); $event.stopPropagation()">
-                <img class="interaction-icon" src="icons/tweet-buttons/bookmark.svg" alt="Bookmark">
-                <span class="interaction-count">{{ tweet.bookmarkCount }}</span>
-            </button>
-        </div>
+      <div class="interactionButtons">
+        <button class="interactionButton likeButton" [class.active]="localTweet.liked" (click)="handleLikeToggle(); $event.stopPropagation()" [attr.aria-label]="localTweet.liked ? 'Unlike' : 'Like'" [attr.aria-pressed]="localTweet.liked">
+          <img class="interactionIcon" src="/icons/tweet-buttons/like.svg" alt="Like" />
+          <span class="interactionCount">{{ localTweet.likeCount }}</span>
+        </button>
+
+        <button class="interactionButton replyButton" (click)="handleReplyClick(); $event.stopPropagation()" aria-label="Reply">
+          <img class="interactionIcon" src="/icons/tweet-buttons/reply.svg" alt="Reply" />
+          <span class="interactionCount">{{ localTweet.replyCount }}</span>
+        </button>
+
+        <button class="interactionButton bookmarkButton" [class.active]="localTweet.bookmarked" (click)="handleBookmarkToggle(); $event.stopPropagation()" [attr.aria-label]="localTweet.bookmarked ? 'Remove bookmark' : 'Bookmark'" [attr.aria-pressed]="localTweet.bookmarked">
+          <img class="interactionIcon" src="/icons/tweet-buttons/bookmark.svg" alt="Bookmark" />
+          <span class="interactionCount">{{ localTweet.bookmarkCount }}</span>
+        </button>
+      </div>
     </div>
-</div>
+  </div>

@@ -1,17 +1,28 @@
-<div class="home-feed">
-    <!-- Barra switch "For you/Following" -->
-    <div class="switch-btn">
-        <button class="btn" [class.active]="!isFollowing" (click)="onForYou()">For you</button>
-        <button class="btn" [class.active]="isFollowing" (click)="onFollowing()">Following</button>
-    </div>
+<div class="homeContainer" #homeContainer (scroll)="onScroll()">
+    <div class="stickyHeader"> 
+        <div class="switchBtn">
+          <button
+            class="btn {{ activeTab === 'forYou' ? 'active' : '' }}"
+            (click)="handleTabChange('forYou')"
+          >
+            For you
+          </button>
+          <button
+            class="btn {{ activeTab === 'following' ? 'active' : '' }}"
+            (click)="handleTabChange('following')"
+          >
+            Following
+          </button>
+        </div>
+        <div class="createTweetContainer">
+           <app-create-tweet (tweetCreated)="handleTweetCreated()"></app-create-tweet>
+        </div>
+      </div>
 
-    <!-- Creazione tweet -->
-    <div class="create-tweet">
-        <app-create-tweet></app-create-tweet>
-    </div>
-
-    <!-- Lista tweet -->
-    <div class="tweet-list">
-        <app-tweet-list [isFollowing]="isFollowing"></app-tweet-list>
+    <div class="tweetListContainer">
+        <app-tweet-list 
+            [fetchType]="activeTab === 'forYou' ? 'trending' : 'following'" 
+            [listKey]="listKey">
+        </app-tweet-list>
     </div>
 </div>

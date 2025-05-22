@@ -1,15 +1,28 @@
-@for (nestedReply of nestedReplies; track $index) {
-    <app-single-reply 
-        [reply]="nestedReply" 
-        (openReplyPopup)="onReplyPopupOpened($event)">
-    </app-single-reply>
-
-    @if (nestedReply.hasNestedReplies && nestedReply.showNested) {
-        <div class="nested-replies">
-            <app-nested-reply
-                [replyId]="nestedReply.id"
-                (openReplyPopup)="onReplyPopupOpened($event)">
-            </app-nested-reply>
-        </div>
-    }
-} 
+@if (isLoading) {
+    <div class="loading">Loading replies...</div>
+}
+@if (error) {
+    <div class="error">{{error}}</div>
+}
+@if (!isLoading && !error) {
+    <div class="nestedRepliesContainer">
+        @for (nestedReply of nestedReplies; track nestedReply.id) {
+            <div>
+                <app-single-reply 
+                    [reply]="nestedReply" 
+                    (openReplyPopup)="onOpenReplyPopup($event)"
+                    (toggleNested)="onToggleNested($event)"
+                    [isNestedVisible]="nestedReply.showNested">
+                </app-single-reply>
+                @if (nestedReply.showNested) {
+                    <div class="deeplyNested">
+                        <app-nested-reply 
+                            [parentReplyId]="nestedReply.id" 
+                            (openReplyPopup)="onOpenReplyPopup($event)">
+                        </app-nested-reply>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}

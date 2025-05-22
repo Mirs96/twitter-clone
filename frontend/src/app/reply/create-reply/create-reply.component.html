@@ -1,12 +1,12 @@
-<div class="tweet-container">
-    <form [formGroup]="replyForm" (ngSubmit)="onSubmit()">
-        <div>
-            <textarea #replyInput formControlName="content" rows="1" maxlength="1000" placeholder="Post your repy"
-                (input)="adjustTextareaHeight()">
+<div class="replyContainer">
+    <form [formGroup]="replyForm" (ngSubmit)="onSubmit()" class="replyForm">
+        <div class="textareaWrapper">
+            <textarea #replyTextarea formControlName="content" rows="1" maxlength="500" placeholder="Post your reply"
+                class="textarea" (input)="adjustTextareaHeight()">
             </textarea>
         </div>
-        <div class="button-container">
-            <button type="submit" [disabled]="replyForm.invalid">Reply</button>
+        <div class="buttonContainer">
+            <button type="submit" [disabled]="!replyForm.valid" class="submitButton">Reply</button>
         </div>
     </form>
 </div>

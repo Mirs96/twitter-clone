@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AuthHomeComponent } from './authentication/auth-home/auth-home.component';
-import { UserService } from './model/authentication/userService';
-import { RightSidebarComponent } from './right-sidebar/right-sidebar/right-sidebar.component';
+import { RightSidebarComponent } from './right-sidebar/right-sidebar.component';
+import { AuthService } from './model/authentication/authService';
+import { UserService } from './model/user/userService';
 
 @Component({
   selector: 'app-root',
@@ -11,21 +12,28 @@ import { RightSidebarComponent } from './right-sidebar/right-sidebar/right-sideb
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   isLoggedIn = false;
 
-  constructor(private userService: UserService, private cdRef: ChangeDetectorRef) {}
+  constructor(
+    private authService: AuthService, 
+    private userService: UserService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.isLoggedIn = this.userService.isLoggedIn();
-    
-    this.userService.loggedIn$.subscribe({
-      next: s => {
-        this.isLoggedIn = s;
-        console.log('Stato login aggiornato:', this.isLoggedIn);
-        this.cdRef.detectChanges();
-      },
-      error: err => console.log(err)
+    this.authService.checkAuthStatus(); 
+    this.authService.isLoggedIn$.subscribe(loggedInStatus => {
+      this.isLoggedIn = loggedInStatus;
+      if (this.isLoggedIn) {
+        const userId = this.authService.getUserId();
+        if (userId && (!this.userService.getUserDetailsValue() || this.userService.getUserDetailsValue()?.id !== userId)) {
+          this.userService.fetchUserDetails(userId).subscribe();
+        }
+      } else {
+        this.userService.clearUserState();
+      }
+      this.cdRef.detectChanges();
     });
   }
 }

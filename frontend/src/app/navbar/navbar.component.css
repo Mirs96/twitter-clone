@@ -1,44 +1,117 @@
-/* Stile generale per la barra di navigazione */
-nav {
-    background-color: #000000; /* Colore di sfondo nero */
-    color: #fff; /* Testo bianco */
-    width: 200px; /* Larghezza della barra di navigazione */
-    height: 100vh; /* Altezza che copre l'intera finestra */
-    position: fixed; /* Fissa la barra sul lato sinistro */
-    top: 0;
-    left: 0;
+.navContainerWrapper {
+    width: 100%; /* Takes full width of the .nav div */
+    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding-top: 20px;
+    align-items: flex-start; /* Aligns items to the start (left) of this inner wrapper */
+    padding: 0 12px; /* Padding for inner content */
+    box-sizing: border-box;
 }
 
-/* Stile per i link della barra di navigazione */
-nav a {
-    color: #fff; /* Colore del testo bianco */
-    text-decoration: none; /* Rimuove la sottolineatura */
-    font-size: 18px;
-    padding: 10px 20px;
+.logoContainer {
+    padding: 12px 0;
+    margin-bottom: 10px;
+    align-self: flex-start; /* Align logo to the left of the wrapper */
+}
+
+.logo {
+    width: 30px;
+    height: 30px;
+    filter: invert(1); /* If your logo needs to be white on black bg */
+}
+
+.navLink {
+    color: #e7e9ea;
+    text-decoration: none;
+    font-size: 20px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    border-radius: 9999px;
+    margin-bottom: 8px;
+    width: auto; /* Fit content */
+    transition: background-color 0.2s ease;
+}
+
+.navLink:hover {
+    background-color: rgba(231, 233, 234, 0.1);
+}
+
+.navLink.active .menuText,
+.navLink.active .menuIcon {
+    font-weight: bold;
+}
+
+.menuIcon {
+    margin-right: 20px;
+    width: 26px;
+    height: 26px;
+    fill: currentColor; /* For SVG icons if used directly */
+}
+
+.tweetButton {
+    background-color: #1d9bf0;
+    color: white;
+    border: none;
+    padding: 15px 0;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    width: 90%;
+    margin-top: 15px;
+    transition: background-color 0.2s;
+}
+
+.userAccountControl {
+    margin-top: auto; /* Pushes to the bottom */
+    padding: 12px 0;
     width: 100%;
     display: flex;
     align-items: center;
+    cursor: pointer;
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
 }
 
-/* Stile per le icone all'interno dei link */
-nav a img.menu-icon {
-    margin-right: 15px; /* Spazio tra l'icona e il testo */
-    width: 24px; /* Larghezza dell'icona */
-    height: 24px; /* Altezza dell'icona */
+.userAccountControl:hover {
+    background-color: rgba(231, 233, 234, 0.1);
 }
 
-/* Stile per il link attivo o selezionato */
-nav a.active {
-    background-color: #1a1a1a; /* Sfondo leggermente più chiaro per il link attivo */
-    border-radius: 25px; /* Angoli arrotondati per il link attivo */
+.userProfileImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
 }
 
-/* Stile per il link al passaggio del mouse */
-nav a:hover {
-    background-color: #333; /* Sfondo grigio scuro al passaggio del mouse */
-    border-radius: 25px; /* Angoli arrotondati al passaggio del mouse */
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.userNickname {
+    font-weight: bold;
+    font-size: 15px;
+    color: #e7e9ea;
+}
+
+.logoutButton {
+    margin-left: auto; /* Pushes dots to the right */
+    background: none;
+    border: none;
+    color: #e7e9ea;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px 10px;
+    margin-left: 8px; /* Small space from the nickname area */
+    font-weight: bold;
+    line-height: 1;
+    transition: color 0.2s ease;
+    font-size: 15px;
+    white-space: nowrap;
+    flex-shrink: 0; /* Prevents the button from being squished */
 }

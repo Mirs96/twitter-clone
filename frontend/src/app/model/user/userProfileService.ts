@@ -1,16 +1,17 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, BehaviorSubject, tap } from "rxjs";
 import { HttpConfig } from "../../config/http-config";
 import { UserProfileDetails } from "./userProfileDetails";
 import { FollowedUserDetails } from "./FollowedUserDetails";
-import { FollowerUserDetails } from "./FollowerUserDto";
+import { FollowerUserDetails } from "./FollowerUserDetails";
+import { UserDetails } from "./userDetails";
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserProfileService {
-    urlExtension = '/user';
+    private urlExtension = '/user';
 
     constructor(private http: HttpClient) { }
 
@@ -23,10 +24,7 @@ export class UserProfileService {
     }      
 
     follow(userIdToFollow: number): Observable<void> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-        return this.http.post<void>(`${HttpConfig.apiUrl}${this.urlExtension}/follow/${userIdToFollow}`, { headers });
+        return this.http.post<void>(`${HttpConfig.apiUrl}${this.urlExtension}/follow/${userIdToFollow}`, {});
     }
 
     unfollow(userIdToUnfollow: number): Observable<void> {
@@ -38,6 +36,6 @@ export class UserProfileService {
     }
 
     findFollowersByUserId(userId: number): Observable<FollowerUserDetails[]> {
-        return this.http.get<FollowerUserDetails[]>(`${HttpConfig.apiUrl}${this.urlExtension}/${userId}/followers`)
+        return this.http.get<FollowerUserDetails[]>(`${HttpConfig.apiUrl}${this.urlExtension}/${userId}/followers`);
     }
 }

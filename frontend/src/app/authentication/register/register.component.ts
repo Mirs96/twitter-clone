@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../model/authentication/authService';
-import { RegisterDetails } from '../../model/authentication/registerDetails';
+import { RegisterPayload } from '../../model/authentication/registerDetails';
+import { Role } from '../../model/authentication/role';
 import { Router } from '@angular/router';
-import { UserService } from '../../model/authentication/userService';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
+  selectedFile: File | null = null;
+  @Output() closeModal = new EventEmitter<void>();
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
-    private userService: UserService
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -25,53 +28,66 @@ export class RegisterComponent implements OnInit {
       firstname: ['', [Validators.required, Validators.minLength(3)]],
       lastname: ['', [Validators.required, Validators.minLength(3)]],
       nickname: ['', [Validators.required, Validators.minLength(3)]],
-      dob: ['', [Validators.required]],
-      sex: ['', [Validators.required]],
+      dob: ['', Validators.required],
+      sex: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       phone: ['', [Validators.required, Validators.minLength(10)]],
-      role: ['', [Validators.required]],
-      profilePicture: [''],
-      bio: [''],
+      role: ['', Validators.required],
+      bio: ['', Validators.maxLength(500)],
+      profilePicture: [null] 
     });
   }
 
+  onFileChange(event: Event): void {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList && fileList.length > 0) {
+      this.selectedFile = fileList[0];
+    }
+  }
+
   onSubmit(): void {
-    if (this.registerForm.valid) {
-      const formData: RegisterDetails = {
-        ...this.registerForm.value,
-      };
-
-      this.authService.register(formData).subscribe({
-        next: response => {
-          localStorage.setItem('jwtToken', response.token);
-          this.userService.setLoggedIn(true);
-          this.router.navigate(['/home']);
-        },
-        error: err => {
-          console.log(err);
-          alert('Registration failed');
-        }
-      });
-    } else {
-      console.log('Form non valido.');
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
     }
-  }
 
-  onFieldBlur(fieldName: string) {
-    const field = this.registerForm.get(fieldName);
-    if (field) {
-      field.markAsTouched();
-      field.updateValueAndValidity();
-    }
-  }
+    const formValues = this.registerForm.value;
+    const payload: RegisterPayload = {
+        firstname: formValues.firstname,
+        lastname: formValues.lastname,
+        nickname: formValues.nickname,
+        dob: formValues.dob,
+        sex: formValues.sex,
+        email: formValues.email,
+        password: formValues.password,
+        phone: formValues.phone,
+        role: formValues.role as Role,
+        bio: formValues.bio
+    };
 
-  onFileChange(event: any) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.registerForm.patchValue({
-        profilePicture: file
-      });
+    let submissionData: RegisterPayload | FormData = payload;
+
+    if (this.selectedFile) {
+        const formData = new FormData();
+        Object.keys(payload).forEach(key => {
+            formData.append(key, (payload as any)[key]);
+        });
+        formData.append('profilePicture', this.selectedFile, this.selectedFile.name);
+        submissionData = formData;
     }
+
+    this.authService.register(submissionData).subscribe({
+      next: response => {
+        this.authService.setAuth(response.token);
+        this.closeModal.emit();
+        this.router.navigate(['/home']);
+      },
+      error: err => {
+        console.error('Registration failed:', err);
+        alert('Registration failed. Please try again.');
+      }
+    });
   }
 }

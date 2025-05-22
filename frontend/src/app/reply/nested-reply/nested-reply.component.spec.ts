@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NestedReplyComponent } from './nested-reply.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('NestedReplyComponent', () => {
   let component: NestedReplyComponent;
@@ -8,7 +8,7 @@ describe('NestedReplyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NestedReplyComponent]
+      imports: [NestedReplyComponent, HttpClientTestingModule]
     })
     .compileComponents();
 

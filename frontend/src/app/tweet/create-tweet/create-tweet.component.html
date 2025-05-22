@@ -1,12 +1,21 @@
-<div class="tweet-container">
-    <form (ngSubmit)="onSubmit()" [formGroup]="tweetForm">
-        <div>
-            <textarea #tweetInput formControlName="content" rows="1" maxlength="1000" placeholder="What is happening?"
-                (input)="adjustTextareaHeight()">
+<div class="createTweetContainer">
+    <div class="inputArea">
+        <img 
+            [src]="profilePictureUrl"
+            alt="Your profile picture"
+            class="profilePicture"
+        />
+        <form (ngSubmit)="onSubmit()" [formGroup]="tweetForm" class="tweetForm">
+            <textarea #tweetTextarea formControlName="content" rows="1" placeholder="What is happening?"
+                class="textarea" (input)="adjustTextareaHeight()">
             </textarea>
-        </div>
-        <div class="button-container">
-            <button [disabled]="tweetForm.invalid">Post</button>
-        </div>
-    </form>
+             
+            <div class="actionsContainer">            
+                <div class="iconsPlaceholder"></div>
+                <button type="submit" [disabled]="!tweetForm.valid" class="submitButton">
+                    Post
+                </button>
+             </div>
+        </form>
+    </div>
 </div>

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ReplyListComponent } from './reply-list.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ReplyListComponent', () => {
   let component: ReplyListComponent;
@@ -8,7 +8,7 @@ describe('ReplyListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReplyListComponent]
+      imports: [ReplyListComponent, HttpClientTestingModule]
     })
     .compileComponents();
 

@@ -1,16 +1,18 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from '../model/authentication/authService';
 
-//sino all'anno scorso erano classi, angular si sta spostando a un approccio funzionale, copiando react
-//perchè la maggior parte delle persone vorrebbe js più funzionale
-export const authInterceptor: HttpInterceptorFn = (req, next) => { //req = richiesta in uscita da intercettare, 
-  //next = prossimo elemento nella catena degli intercettatori
-  const token = localStorage.getItem('jwtToken');
-  if(token) {
-    req = req.clone({ //creo una richiesta identica a quella di prima ma gli setto io l'header col token
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.getToken();
+
+  if (token) {
+    const cloned = req.clone({
       setHeaders: {
-        authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     });
+    return next(cloned);
   }
-  return next(req); //passo questa richiesta al prossimo interceptor, appena finiscono la richiesta va subito al backend
+  return next(req);
 };

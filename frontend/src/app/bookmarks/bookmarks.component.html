@@ -1,0 +1,22 @@
+<div class="bookmarksContainer">
+    <div class="header">
+        <button (click)="goBack()" class="backButton" aria-label="Go back">
+            <img src="/icons/back-arrow.svg" alt="Go Back" class="arrowIcon" />
+        </button>
+        <h1 class="title">Bookmarks</h1>
+    </div>
+    <div class="content">
+        @if (userId) {
+            <app-tweet-list 
+                fetchType='bookmarks'
+                [userId]="userId" 
+                [listKey]="'bookmarks-user-' + userId"
+                (tweetUnbookmarked)="handleTweetUnbookmarked($event)">
+            </app-tweet-list>
+        } @else {
+            <div style="text-align: center; padding-top: 50px;">
+                Please log in to see your bookmarks.
+            </div>
+        }
+    </div>
+</div>

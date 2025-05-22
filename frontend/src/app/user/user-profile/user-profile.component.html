@@ -1,63 +1,72 @@
-<div class="profile-container">
-  @if (profile) {
-    <div class="arrow-container" (click)="goHome()">
-      <img src="icons/back-arrow.svg" alt="Go Back" class="arrow-icon">
-    </div>
-
-    @if (showSetupProfileModal) {
-      <div class="overlay" (click)="closeSetupProfilePopup()">
-        <div class="popup-content" (click)="$event.stopPropagation()">
-          <app-update-profile 
-            (profileUpdated)="onUpdatedProfile()">
-          </app-update-profile>
-        </div>
-      </div>
-    }    
-
-    <div class="profile-header">
-      <div class="nickname-setup">
-        <div class="user-nickname">
-          <h2>{{ profile.nickname }}</h2>
-        </div>
-        
-        @if (currentUserId === profileUserId) {
-          <button class="setup-profile" (click)="openSetupProfilePopup()">
-            Set up profile
-          </button>
-        }
-      </div>
-
-      <div class="avatar-bio-container">
-        <img [src]="getFullImageUrl(profile.profilePicture)" alt="Profile picture" class="avatar-img">
-        <p class="bio-text">{{ profile.bio }}</p>
-      </div>
-
-      <p>{{ profile.followersCount }} followers • {{ profile.followingCount }} following</p>
-      @if (profileUserId != currentUserId) {
-        <button (click)="toggleFollow()" class="follow-btn">
-          {{ isCurrentUserFollowing ? 'Unfollow' : 'Follow' }}
-        </button>
-      }
-    </div>
-  }
-
-  <div class="profile-tabs">
-    <button (click)="activeTab = 'tweets'" [class.active]="activeTab === 'tweets'">Post</button>
-    <button (click)="activeTab = 'replies'" [class.active]="activeTab === 'replies'">Replies</button>
+<div class="profileContainer">
+  <div class="headerBar">
+    <button (click)="goBack()" class="backButton">
+        <img src="/icons/back-arrow.svg" alt="Go Back" class="arrowIcon" />
+    </button>
+    @if (profile) {
+      <span class="headerNickname">{{ profile.nickname }}</span>
+    }
   </div>
 
+  @if (isLoading) {
+    <div>Loading profile...</div>
+  }
+  @if (error) {
+    <div>{{ error }}</div>
+  }
+  @if (!isLoading && !profile) {
+    <div>Profile not found.</div>
+  }
+
   @if (profile) {
-    <div class="profile-content">
+    @if (showSetupProfileModal) {
+      <div class="overlay" (click)="closeSetupProfileModal()">
+          <div class="modal updateProfileModal" (click)="$event.stopPropagation()">
+             <button class="close-btn customCloseBtn" (click)="closeSetupProfileModal()">&times;</button>
+             <app-update-profile (profileUpdated)="handleProfileUpdated()" (cancelUpdate)="closeSetupProfileModal()"></app-update-profile>
+          </div>
+       </div>
+    }
+
+    <div class="profileHeader">
+      <div class="headerTopSection">
+          <img [src]="getFullImageUrl(profile.profilePicture)" [alt]="profile.nickname + '\'s profile picture'" class="avatarImg">
+         @if (currentUserId === profileUserId) {
+           <button class="setupProfile" (click)="openSetupProfileModal()">
+             Set up profile
+           </button>
+         } @else {
+           <button (click)="toggleFollow()" class="followBtn {{ profile.isFollowing ? 'following' : '' }}">
+             {{ profile.isFollowing ? 'Unfollow' : 'Follow' }}
+           </button>
+         }
+      </div>
+
+      <div class="userInfoSection">
+          <h2 class="userNickname">{{ profile.nickname }}</h2>
+          <p class="bioText">{{ profile.bio || '' }}</p>
+          <div class="followCounts">
+              <span class="countItem"><b>{{ profile.followingCount }}</b> Following</span>
+              <span class="countItem"><b>{{ profile.followersCount }}</b> Followers</span>
+           </div>
+      </div>
+    </div>
+
+    <div class="profileTabs">
+      <button (click)="switchTab('tweets')" class="tabButton {{ activeTab === 'tweets' ? 'active' : '' }}">
+          Posts
+      </button>
+      <button (click)="switchTab('replies')" class="tabButton {{ activeTab === 'replies' ? 'active' : '' }}">
+          Replies
+      </button>
+    </div>
+
+    <div class="profileContent">
       @if (activeTab === 'tweets') {
-        <app-tweet-list 
-          [isFollowing]="false"
-          [userId]="profileUserId">
-        </app-tweet-list>
+        <app-tweet-list [userId]="profileUserId" fetchType="user" [listKey]="listKey"></app-tweet-list>
       }
       @if (activeTab === 'replies') {
-        <app-reply-list 
-          [userId]="profileUserId">
-        </app-reply-list>
+        <app-reply-list [userId]="profileUserId" (openReplyPopup)="noopReplyPopup($event)" [listKey]="listKey"></app-reply-list>
       }
     </div>
   }

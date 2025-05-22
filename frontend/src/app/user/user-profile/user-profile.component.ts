@@ -1,82 +1,118 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { UserProfileDetails } from '../../model/user/userProfileDetails';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserProfileService } from '../../model/user/userProfileService';
 import { ReplyListComponent } from '../../reply/reply-list/reply-list.component';
 import { TweetListComponent } from '../../tweet/tweet-list/tweet-list.component';
 import { UpdateProfileComponent } from '../update-profile/update-profile.component';
-import { UserService } from '../../model/authentication/userService';
+import { HttpConfig } from '../../config/http-config';
+import { UserProfileService } from '../../model/user/userProfileService';
+import { AuthService } from '../../model/authentication/authService';
 
 @Component({
   selector: 'app-user-profile',
-  imports: [TweetListComponent, ReplyListComponent, UpdateProfileComponent],
+  imports: [RouterModule, CommonModule, TweetListComponent, ReplyListComponent, UpdateProfileComponent],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.css'
 })
 export class UserProfileComponent implements OnInit {
-  profile!: UserProfileDetails;
-  profileUserId!: number;
-  currentUserId!: number;
-  isCurrentUserFollowing = false;
+  profile: UserProfileDetails | null = null;
+  isLoading = true;
+  error: string | null = null;
   activeTab: 'tweets' | 'replies' = 'tweets';
-  showSetupProfileModal: boolean = false;
-  baseUrl = "http://localhost:8080";
+  showSetupProfileModal = false;
+  listKey: string = '';
+  profileUserId!: number;
+  currentUserId: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService,
+    private router: Router,
     private userProfileService: UserProfileService,
-    private router: Router
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.profileUserId = parseInt(this.route.snapshot.paramMap.get('id') ?? '0');
-    this.currentUserId = Number(this.userService.getUserIdFromToken()) || 0;
-    this.userProfileService.getUserProfile(this.profileUserId)
-      .subscribe(p => {
-        this.profile = p;
-        this.isCurrentUserFollowing = p.isFollowing;
-      });
-  }
-  
-  getFullImageUrl(profilePicture: string) {
-    return `${this.baseUrl}${profilePicture}`;
-  }
-
-  toggleFollow() {
-    if (this.isCurrentUserFollowing) {
-      this.userProfileService.unfollow(this.profileUserId)
-        .subscribe(() => {
-          this.isCurrentUserFollowing = false;
-          this.profile.followersCount--;
-        });
-    } else {
-      this.userProfileService.follow(this.profileUserId)
-        .subscribe(() => {
-          this.isCurrentUserFollowing = true;
-          this.profile.followersCount++;
-        });
-    }
-  }
-
-  onUpdatedProfile(): void {
-    this.userProfileService.getUserProfile(this.profileUserId).subscribe((profile) => {
-      this.profile = profile;
-      this.closeSetupProfilePopup();
+    this.authService.userId$.subscribe(id => this.currentUserId = id);
+    this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+      if (idParam) {
+        this.profileUserId = Number(idParam);
+        this.fetchProfile();
+        this.activeTab = 'tweets';
+        this.listKey = `user-${this.profileUserId}-tweets-${Date.now()}`;
+      } else {
+        this.error = 'User ID not provided.';
+        this.isLoading = false;
+      }
     });
   }
 
-  openSetupProfilePopup(): void {
-    console.log(this.showSetupProfileModal);
-    this.showSetupProfileModal = true;
-    console.log(this.profile.bio);
+  fetchProfile(): void {
+    if (!this.profileUserId) return;
+    this.isLoading = true;
+    this.error = null;
+    this.userProfileService.getUserProfile(this.profileUserId).subscribe({
+      next: data => {
+        this.profile = data;
+        this.isLoading = false;
+      },
+      error: err => {
+        console.error("Failed to fetch profile:", err);
+        this.error = 'Failed to load profile.';
+        this.isLoading = false;
+      }
+    });
   }
 
-  closeSetupProfilePopup(): void { 
+  toggleFollow(): void {
+    if (!this.profile || this.currentUserId === null || this.currentUserId === this.profileUserId) return;
+
+    const wasFollowing = this.profile.isFollowing;
+    // Optimistic update is tricky without knowing the new counts from backend immediately
+    // For simplicity, we'll refetch or rely on backend to return updated profile if that's the API design
+    const action = wasFollowing ? this.userProfileService.unfollow(this.profileUserId) : this.userProfileService.follow(this.profileUserId);
+    
+    action.subscribe({
+        next: () => this.fetchProfile(), // Refetch to get updated state including counts
+        error: (err) => {
+            console.error('Failed to toggle follow:', err);
+            alert('Could not update follow status.');
+            // Optionally revert optimistic UI changes if any were made
+        }
+    });
+  }
+
+  handleProfileUpdated(): void {
+     this.showSetupProfileModal = false;
+     this.fetchProfile();
+  }
+
+  openSetupProfileModal(): void {
+    this.showSetupProfileModal = true;
+  }
+
+  closeSetupProfileModal(): void {
     this.showSetupProfileModal = false;
   }
-  
-  goHome(): void {
+
+  switchTab(tab: 'tweets' | 'replies'): void {
+      this.activeTab = tab;
+      this.listKey = `user-${this.profileUserId}-${tab}-${Date.now()}`;
+  }
+
+  getFullImageUrl(profilePicturePath: string | null | undefined): string {
+      if (!profilePicturePath) {
+          return '/icons/default-avatar.png'; 
+      }
+      return `${HttpConfig.baseUrl}${profilePicturePath}`;
+  };
+
+  goBack(): void {
     this.router.navigate(['/home']);
+  }
+  
+  noopReplyPopup(event: any): void{
+    // Placeholder if UserProfile doesn't directly handle opening reply popups from its lists
   }
 }

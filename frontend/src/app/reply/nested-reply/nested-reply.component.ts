@@ -1,44 +1,52 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, forwardRef } from '@angular/core';
 import { SingleReplyComponent } from '../single-reply/single-reply.component';
 import { ReplyDetails } from '../../model/reply/replyDetails';
 import { ReplyService } from '../../model/reply/replyService';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nested-reply',
-  imports: [SingleReplyComponent],
+  imports: [SingleReplyComponent, CommonModule, forwardRef(() => NestedReplyComponent)],
   templateUrl: './nested-reply.component.html',
   styleUrl: './nested-reply.component.css'
 })
 export class NestedReplyComponent implements OnInit {
-  nestedReplies!: ReplyDetails[];
+  @Input() parentReplyId!: number;
+  @Output() openReplyPopup = new EventEmitter<number>();
 
-  @Input()
-  replyId!: number;
-
-  @Output()
-  openReplyPopup = new EventEmitter<number>();
+  nestedReplies: ReplyDetails[] = [];
+  isLoading = false;
+  error: string | null = null;
 
   constructor(private replyService: ReplyService) { }
 
   ngOnInit(): void {
-    this.loadNestedReplies(this.replyId);
+    this.loadNestedReplies();
   }
 
-  // Load nested replies for a parent reply
-  loadNestedReplies(replyId: number): void {
-    this.replyService.getNestedRepliesByParentReplyId(replyId)
-      .subscribe({
-        next: r => {
-          this.nestedReplies = r;
-          // this.toggleShowNested(parentReplyId);
-        },
-        error: err => console.log(err)
-      });
+  loadNestedReplies(): void {
+    this.isLoading = true;
+    this.error = null;
+    this.replyService.getNestedRepliesByParentReplyId(this.parentReplyId).subscribe({
+      next: replies => {
+        this.nestedReplies = replies.map(r => ({ ...r, showNested: false }));
+        this.isLoading = false;
+      },
+      error: err => {
+        console.error('Failed to load nested replies:', err);
+        this.error = 'Could not load replies.';
+        this.isLoading = false;
+      }
+    });
   }
 
-  onReplyPopupOpened(replyId: number): void {
+  onToggleNested(replyId: number): void {
+    this.nestedReplies = this.nestedReplies.map(reply => 
+        reply.id === replyId ? { ...reply, showNested: !reply.showNested } : reply
+    );
+  }
+  
+  onOpenReplyPopup(replyId: number): void {
     this.openReplyPopup.emit(replyId);
   }
-
-
 }

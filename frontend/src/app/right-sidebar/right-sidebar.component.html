@@ -1,0 +1,54 @@
+<aside class="sidebarContainer">
+    <div class="searchBarContainer">
+      <input 
+        type="text" 
+        placeholder="Search" 
+        class="searchInput"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange($event)"
+        (focus)="searchQuery.trim() !== '' && setShowResults(true)"
+        (blur)="onSearchBlur()"
+      />
+      @if (showResults && (searchResults || isSearchLoading)) {
+        <div class="autocompleteResults">
+          @if (isSearchLoading) {
+            <div class="loadingText">Loading...</div>
+          }
+          @for (user of searchResults?.users; track user.id) {
+            <div class="autocompleteItem" (mousedown)="handleResultClick(user, 'user')">
+              <img [src]="getFullImageUrl(user.profilePicture)" [alt]="user.nickname" class="itemImage" />
+              <span class="itemName">{{user.nickname}}</span>
+              <span class="itemType">User</span>
+            </div>
+          }
+          @for (hashtag of searchResults?.hashtags; track hashtag.id) {
+            <div class="autocompleteItem" (mousedown)="handleResultClick(hashtag, 'hashtag')">
+              <span class="itemName">#{{hashtag.tag}}</span>
+              <span class="itemType">Hashtag</span>
+            </div>
+          }
+          @if (!isSearchLoading && !searchResults?.users?.length && !searchResults?.hashtags?.length && searchQuery.trim() !== '') {
+              <div class="loadingText">No results for "{{searchQuery}}"</div>
+          }
+        </div>
+      }
+    </div>
+  
+    <div class="widget">
+      <h2 class="widgetTitle">Trends</h2>
+      @if (trendingHashtags.length > 0) {
+        <ul class="trendList">
+          @for (trend of trendingHashtags; track trend.id) {
+            <li class="trendItem" (click)="navigateToHashtag(trend)">
+              <div class="trendCategory">Trending</div>
+              <div class="trendName">#{{trend.tag}}</div>
+              <div class="trendCount">{{formatCount(trend.count)}}</div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <div class="loadingText">Loading trends...</div>
+      }
+    </div>
+  </aside>
+  

@@ -1,59 +1,43 @@
-import { Component, ElementRef, EventEmitter, HostListener, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, Renderer2 } from '@angular/core';
 import { TweetListComponent } from '../tweet/tweet-list/tweet-list.component';
 import { CreateTweetComponent } from '../tweet/create-tweet/create-tweet.component';
-import { RightSidebarComponent } from '../right-sidebar/right-sidebar/right-sidebar.component';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [CreateTweetComponent, TweetListComponent, RightSidebarComponent],
+  imports: [CreateTweetComponent, TweetListComponent, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
-  isFollowing = false;
-  @ViewChild('createTweet') createTweet!: ElementRef;
-  @ViewChild('tweetListContainer') tweetListContainer!: ElementRef;
+export class HomeComponent implements AfterViewInit {
+  activeTab: 'forYou' | 'following' = 'forYou';
+  listKey: string = 'forYou';
 
-  @Output()
-  isFollowingChanged = new EventEmitter<boolean>();
+  @ViewChild('homeContainer') homeContainer!: ElementRef;
 
   constructor(private renderer: Renderer2) { }
 
-  toggleFollow(): void {
-    this.isFollowing = !this.isFollowing;
-    this.isFollowingChanged.emit(this.isFollowing);
-  }
-
   ngAfterViewInit(): void {
-    this.onTweetListScroll();
+    // Initial scroll setup or logic if needed
   }
 
-  onForYou(): void {
-    this.isFollowing = false;
-    this.isFollowingChanged.emit(this.isFollowing);
-    console.log('Evento isFollowingChanged emesso:', this.isFollowing);
-  }
-
-  onFollowing(): void {
-    this.isFollowing = true;
-    this.isFollowingChanged.emit(this.isFollowing);
-    console.log('Evento isFollowingChanged emesso:', this.isFollowing);
-  }
-
-  @HostListener('scroll', ['$event'])
-  onTweetListScroll(event?: any) {
-    if (this.createTweet && this.createTweet.nativeElement && this.tweetListContainer && this.tweetListContainer.nativeElement) {
-      const scrollY = this.tweetListContainer.nativeElement.scrollTop;
-      const createTweetElement = this.createTweet.nativeElement;
-      const createTweetHeight = createTweetElement.offsetHeight;
-
-      if (scrollY < createTweetHeight) {
-        this.renderer.setStyle(createTweetElement, 'transform', `translateY(-${scrollY}px)`);
-        this.renderer.setStyle(createTweetElement, 'opacity', '1');
-      } else {
-        this.renderer.setStyle(createTweetElement, 'opacity', '0');
-      }
+  handleTabChange(tab: 'forYou' | 'following'): void {
+    if (this.activeTab === tab) return;
+    this.activeTab = tab;
+    this.listKey = `${tab}-${Date.now()}`; // Force re-render of TweetList
+    if (this.homeContainer.nativeElement) {
+      this.homeContainer.nativeElement.scrollTop = 0;
     }
+  }
+
+  handleTweetCreated(): void {
+    if (this.activeTab === 'forYou') {
+        this.listKey = `forYou-${Date.now()}`; // Force re-fetch for 'For you' tab
+    }
+     // If on 'following' tab, new tweet won't appear unless user follows themselves, or logic is added
+  }
+
+  onScroll(): void {
+    // Placeholder for scroll-based actions if needed, e.g., lazy loading header animations
   }
 }

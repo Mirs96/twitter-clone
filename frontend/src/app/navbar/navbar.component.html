@@ -1,35 +1,38 @@
-<nav>
-    <div>
-        <a routerLink="/home">
-            <img src="icons/navbar/home.svg" alt="Home Icon" class="menu-icon">
-            Home
-        </a>
+<div class="navContainerWrapper">
+    <div class="logoContainer">
+        <img src="/icons/logo.svg" alt="Logo" class="logo" />
     </div>
-    <div>
-        <a routerLink="/explore">
-            <img src="icons/navbar/explore.svg" alt="Explore Icon" class="menu-icon">
-            Explore
-        </a>
-    </div>
-    <div>
-        <a routerLink="/notifications">
-            <img src="icons/navbar/notification.svg" alt="Notifications Icon" class="menu-icon">
-            Notifications
-        </a>
-    </div>
-    <div>
-        <a [routerLink]="['/profile', this.userId]">
-            <img src="icons/navbar/profile.svg" alt="Profile Icon" class="menu-icon">
-            Profile
-        </a>
-    </div>
-    <div>
-        <a routerLink="/bookmarks">
-            <img src="icons/navbar/bookmark.svg" alt="Bookmarks Icon" class="menu-icon">
-            Bookmarks
-        </a>
-    </div>
-    <button (click)="logout()">Logout</button>
-</nav>
 
+    <a routerLink="/home" routerLinkActive="active" class="navLink">
+        <img src="/icons/navbar/home.svg" alt="" class="menuIcon" />
+        <span class="menuText">Home</span>
+    </a>
+    <a routerLink="/explore" routerLinkActive="active" class="navLink">
+        <img src="/icons/navbar/explore.svg" alt="" class="menuIcon" />
+        <span class="menuText">Explore</span>
+    </a>
+    <a routerLink="/notifications" routerLinkActive="active" class="navLink">
+        <img src="/icons/navbar/notification.svg" alt="" class="menuIcon" />
+        <span class="menuText">Notifications</span>
+    </a>
+    @if (userId) {
+        <a [routerLink]="['/profile', userId]" routerLinkActive="active" class="navLink">
+            <img src="/icons/navbar/profile.svg" alt="" class="menuIcon" />
+            <span class="menuText">Profile</span>
+        </a>
+    }
+    <a routerLink="/bookmarks" routerLinkActive="active" class="navLink">
+        <img src="/icons/navbar/bookmark.svg" alt="" class="menuIcon" />
+        <span class="menuText">Bookmarks</span>
+    </a>
 
+    @if (userDetails) {
+        <div class="userAccountControl" (click)="handleLogout()" title="Logout">
+            <img [src]="profilePictureUrl" alt="Your profile" class="userProfileImage" />
+            <div class="userInfo">
+                <span class="userNickname">{{ userDetails.nickname }}</span>
+            </div>
+            <button class="logoutButton" aria-label="Logout">Logout</button>
+        </div>
+    }
+</div>

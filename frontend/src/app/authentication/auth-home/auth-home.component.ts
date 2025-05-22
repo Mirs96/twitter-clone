@@ -1,50 +1,41 @@
 import { Component } from '@angular/core';
 import { RegisterComponent } from '../register/register.component';
 import { LoginComponent } from '../login/login.component';
-import { UserService } from '../../model/authentication/userService';
+import { AuthService } from '../../model/authentication/authService';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-auth-home',
-  imports: [RegisterComponent, LoginComponent],
+  imports: [RegisterComponent, LoginComponent, CommonModule],
   templateUrl: './auth-home.component.html',
   styleUrl: './auth-home.component.css'
 })
 export class AuthHomeComponent {
   isRegisterOpen = false;
   isLoginOpen = false;
-  isLoggedIn = false;
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
-  ngOnInit(): void {
-    this.isLoggedIn = this.userService.isLoggedIn();
-
-    this.userService.loggedIn$.subscribe({
-      next: s => this.isLoggedIn = s,
-      error: err => console.log(err)
-    });
-  }
-
-  openRegister() {
+  openRegister(): void {
     this.isRegisterOpen = true;
   }
 
-  closeRegister() {
+  closeRegister(): void {
     this.isRegisterOpen = false;
-    if (this.userService.isLoggedIn()) { 
-      this.router.navigateByUrl('/home');
+    if (this.authService.isLoggedIn()) { 
+      this.router.navigate(['/home']);
     }
   }
 
-  openLogin() {
+  openLogin(): void {
     this.isLoginOpen = true;
   }
 
-  closeLogin() {
+  closeLogin(): void {
     this.isLoginOpen = false;
-    if (this.userService.isLoggedIn()) { 
-      this.router.navigateByUrl('/home');
+    if (this.authService.isLoggedIn()) { 
+      this.router.navigate(['/home']);
     }
   }
 }

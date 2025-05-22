@@ -1,124 +1,150 @@
-.reply {
-    border: 1px solid #2f3336;
-    border-radius: 10px;
+.replyContainer {
+    border-bottom: 1px solid #2f3336;
     padding: 15px;
-    margin: 10px;
     color: white;
     background-color: #000;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-.reply-header {
+.replyHeader {
     display: flex;
-    align-items: center;
+    align-items: flex-start; 
     margin-bottom: 10px;
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
+.profilePicLink {
+    margin-right: 10px;
+    flex-shrink: 0;
 }
 
-.user-info h3 {
+.profilePicture {
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #2f3336;
+}
+
+.userInfoContainer {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; 
+    margin-bottom: 5px; 
+}
+
+.nickname {
     margin: 0;
-    font-size: 16px;
+    font-size: 15px; 
     font-weight: bold;
     margin-right: 5px;
+}
+
+.nicknameLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+.nicknameLink:hover .nickname {
+    text-decoration: underline;
 }
 
 .time {
     color: #71767b;
     font-size: 14px;
+    margin-left: 5px; 
+    white-space: nowrap; 
 }
 
-.reply-content p {
-    margin: 5px 0;
-    font-size: 16px;
+.replyContent p {
+    margin: 0;
+    font-size: 15px; 
+    line-height: 1.4;
+    word-wrap: break-word; 
 }
 
 .actions {
     display: flex;
     justify-content: space-between;
+    align-items: center; 
     margin-top: 15px;
     width: 100%;
+    padding-left: 50px; 
+    box-sizing: border-box;
 }
 
-.interaction-buttons {
+.interactionButtons {
     display: flex;
-    justify-content: flex-start; /* Pulsanti allineati a sinistra */
+    gap: 20px; 
 }
 
-.toggle-nested {
-    color: #6e767d;
+.toggleNested {
+    color: #1d9bf0; 
     font-size: 14px;
     cursor: pointer;
     background: none;
     border: none;
-    padding: 8px 12px;
-    border-radius: 9999px;
-    margin-left: auto;
+    padding: 8px 0; 
+    margin-left: auto; 
 }
 
-.toggle-nested:hover {
-    background-color: rgba(29, 155, 240, 0.1);
-    color: rgb(29, 155, 240);
+.toggleNested:hover {
+    text-decoration: underline;
 }
 
-.interaction-button {
+.interactionButton {
     display: flex;
     align-items: center;
     border: none;
     background-color: transparent;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px; 
     color: #6e767d;
-    padding: 8px 12px;
+    padding: 5px; 
     border-radius: 9999px;
-    transition: background-color 0.3s ease;
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
-.interaction-button:hover {
-    background-color: rgba(29, 155, 240, 0.1);
-    color: rgb(29, 155, 240);
-}
-
-.interaction-icon {
-    width: 20px;
-    height: 20px;
+.interactionIcon {
+    width: 18px; 
+    height: 18px;
     margin-right: 5px;
+    filter: grayscale(100%) brightness(1.5); 
+    transition: filter 0.2s ease;
 }
 
-.interaction-count {
+.interactionCount {
     margin-left: 3px;
 }
 
-.like-button:hover .interaction-icon {
-    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+
+.likeButton:hover {
+    color: rgb(249, 24, 128);
+}
+.likeButton:hover .interactionIcon {
+    filter: none; 
 }
 
-.reply-button:hover .interaction-icon {
-    filter: brightness(0) saturate(100%) invert(56%) sepia(93%) saturate(1637%) hue-rotate(119deg) brightness(96%) contrast(97%);
+.replyButton:hover {
+    color: rgb(29, 155, 240);
+}
+.replyButton:hover .interactionIcon {
+     filter: none;
 }
 
-.like-button.active .interaction-icon {
-    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+
+.likeButton.active {
     color: rgb(249, 24, 128);
 }
 
-.nickname-link {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-}
 
-.nickname-link:hover {
-    text-decoration: underline;
-}
-
-.profile-picture {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #2f3336;
-    margin-right: 10px;
+.likeButton.active .interactionIcon {
+    filter: brightness(0) saturate(100%) invert(29%) sepia(87%) saturate(2250%) hue-rotate(338deg) brightness(88%) contrast(97%);
+    color: rgb(249, 24, 128);
 }

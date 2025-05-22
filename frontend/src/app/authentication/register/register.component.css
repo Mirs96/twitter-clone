@@ -1,124 +1,117 @@
-.register-container {
-    background-color: black;
+.registerContainer {
+    background-color: #1a1a1a; 
     color: white;
-    padding: 20px;
+    padding: 20px 30px; 
     border-radius: 10px;
-    width: 700px;
-    max-width: 90%;
+    width: 100%; 
+    max-width: 700px; 
     text-align: center;
-    max-height: 80vh;
-    overflow-y: auto;
+    box-sizing: border-box;
+    max-height: calc(90vh - 40px); 
+    overflow-y: auto; 
     overflow-x: hidden;
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
 }
 
-.register-container::-webkit-scrollbar {
-    width: 8px;
+.registerContainer::-webkit-scrollbar {
+    display: none; 
 }
 
-.register-container::-webkit-scrollbar-track {
-    background: #444;
+.registerContainer h2 {
+    margin-bottom: 25px;
+    font-size: 1.8em;
 }
 
-.register-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
+.registerForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
 }
 
-.register-container label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
+.formGroup {
     text-align: left;
 }
 
-.register-container input,
-.register-container select,
-.register-container textarea {
+.registerContainer label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.registerContainer input[type="text"],
+.registerContainer input[type="email"],
+.registerContainer input[type="password"],
+.registerContainer input[type="date"],
+.registerContainer input[type="tel"],
+.registerContainer select,
+.registerContainer textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #2f3336;
+    padding: 12px 10px;
+    border: 1px solid #444; 
     border-radius: 5px;
-    background: black;
+    background: #222; 
     color: white;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
 }
 
-.register-container textarea {
+.registerContainer input:focus,
+.registerContainer select:focus,
+.registerContainer textarea:focus {
+    outline: none;
+    border-color: #1da1f2; 
+}
+
+.registerContainer textarea {
     resize: vertical;
-    height: 100px;
+    min-height: 100px;
 }
 
-.register-container input::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+.registerContainer input::placeholder,
+.registerContainer textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
 }
 
-.submit-btn {
+.fileInput {
+   padding: 10px 0;
+   border: none;
+   background: none;
+}
+
+.submitBtn {
     background-color: #1da1f2;
     color: white;
     border: none;
-    padding: 12px 20px;
+    padding: 14px 20px;
     cursor: pointer;
     border-radius: 25px;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 15px;
     font-weight: bold;
     font-size: 16px;
     transition: background-color 0.2s;
 }
 
-.submit-btn:hover {
+.submitBtn:hover:not(:disabled) {
     background-color: #1991db;
 }
 
-.submit-btn:disabled {
+.submitBtn:disabled {
     background-color: #657786;
     cursor: not-allowed;
 }
 
-.validation-message {
+.validationMessage {
     color: #ff6b6b;
     font-size: 0.85rem;
-    margin-top: -8px;
-    margin-bottom: 10px;
-    animation: fadeIn 0.3s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    text-align: left;
+    margin-top: 5px;
+    display: block; 
 }
 
-.validation-message span {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.validation-message span::before {
-    content: "•";
-    color: #ff6b6b;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-input.ng-invalid.ng-touched,
-select.ng-invalid.ng-touched,
-textarea.ng-invalid.ng-touched {
+.inputError {
     border-color: #ff6b6b !important;
     background-color: rgba(255, 107, 107, 0.05) !important;
-}
-
-.char-counter {
-    text-align: right;
-    font-size: 0.8rem;
-    color: #657786;
-    margin-top: -5px;
-    margin-bottom: 10px;
-}
-
-input[type="file"] {
-    border: none;
-    padding: 5px;
 }

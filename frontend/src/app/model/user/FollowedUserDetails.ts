@@ -1,7 +1,6 @@
 export interface FollowedUserDetails {
-    id: number;
-    userId: number;
-    userNickname: number;
+    id: number; 
+    userNickname: string; 
     userProfilePicture: string;
-    createdAt: string;
+    createdAt: string; 
 }

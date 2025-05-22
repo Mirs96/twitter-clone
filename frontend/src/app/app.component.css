@@ -1,62 +1,64 @@
-/* Reset e stili globali */
-body {
-    margin: 0;
-    padding: 0;
-    background-color: black;
-    color: white;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-/* Layout principale */
-.main-container {
+.mainContainer {
     display: flex;
+    justify-content: center; /* Center the entire layout horizontally */
     min-height: 100vh;
     background-color: black;
 }
 
-/* Navbar sinistra (fissa) */
+.layoutWrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1300px; /* Max width for the overall layout */
+}
+
 .nav {
-    width: 250px;
+    width: 275px; /* Increased navbar width */
     height: 100vh;
-    position: fixed;
-    left: 0;
+    position: sticky; /* Sticky to the viewport */
     top: 0;
-    padding: 20px 0;
+    padding: 0; /* Adjusted padding */
     border-right: 1px solid #2f3336;
     overflow-y: auto;
+    background-color: black;
+    z-index: 10;
+    flex-shrink: 0; /* Prevent navbar from shrinking */
+    display: flex; /* Added for internal alignment */
+    justify-content: flex-end; /* Align Navbar content to the right */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-/* Area scrollabile principale */
-.scrollable-main {
-    flex: 1;
-    margin-left: 250px; /* Larghezza navbar */
+.nav::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollableMain {
+    flex-grow: 1; /* Allow main content area to grow */
     display: flex;
     min-height: 100vh;
+    max-width: calc(100% - 275px); /* Adjust based on navbar width */
 }
 
-/* Contenuto centrale */
 .content {
-    flex: 1;
+    flex-grow: 1;
     max-width: 600px;
     border-left: 1px solid #2f3336;
     border-right: 1px solid #2f3336;
+    min-height: 100vh;
 }
 
-/* Sidebar destra */
-.right-sidebar {
+.rightSidebar {
     width: 350px;
-    padding: 20px;
+    padding: 0 20px;
     flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-/* Stile scrollbar (opzionale) */
-::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: #000;
-}
-::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 5px;
+.rightSidebar::-webkit-scrollbar {
+    display: none;
 }

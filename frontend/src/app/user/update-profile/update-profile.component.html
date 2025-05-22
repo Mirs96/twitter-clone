@@ -1,29 +1,34 @@
-<div class="profile-update-container">
+<div class="profileUpdateContainer">
     <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
-      
-      <div class="avatar-container">
-        <label for="avatar" class="avatar-label">
-          <p class="choose-avatar-text">Pick a profile picture</p>
+      <div class="avatarContainer">
+        <p class="chooseAvatarText">Pick a profile picture</p>
+        <label for="avatarFile" class="avatarLabel">
           @if (avatarPreview) {
-            <img [src]="avatarPreview" alt="Avatar Preview" class="avatar-preview" />
+            <img [src]="avatarPreview" alt="Avatar Preview" class="avatarPreview" />
           } @else {
-            <span class="avatar-placeholder">+</span>
+            <img src="/icons/default-avatar.png" alt="Default Avatar" class="avatarPreview" />
           }
         </label>
-        <input type="file" id="avatar" (change)="onFileChange($event)" />
-
+        <input type="file" id="avatarFile" accept="image/*" (change)="onFileChange($event)" class="fileInput" #avatarFileInput/>
       </div>
   
-      <div class="bio-container">
+      <div class="bioContainer">
         <label for="bio">Describe yourself</label>
-        <textarea id="bio" formControlName="bio" rows="4" placeholder="What makes you special? Don't think too hard, just have fun with it."></textarea>
+        <textarea id="bio" formControlName="bio" rows="4" 
+                  placeholder="What makes you special? Don't think too hard, just have fun with it."
+                  [class.inputError]="profileForm.get('bio')?.invalid && profileForm.get('bio')?.touched">
+        </textarea>
+        @if (profileForm.get('bio')?.invalid && profileForm.get('bio')?.touched && profileForm.get('bio')?.errors?.['maxlength']) {
+            <span class="validationMessage">Bio cannot exceed 255 characters</span>
+        }
       </div>
   
-      <div class="form-actions">
-        <button type="submit" [disabled]="profileForm.invalid">Save Changes</button>
-        <button type="button" (click)="onCancel()" class="cancel-button">Annulla</button>
+      <div class="formActions">
+        <button type="submit" class="submitButton" [disabled]="!profileForm.valid || isProcessing || (!profileForm.dirty && !selectedAvatarFile)">
+            {{ isProcessing ? 'Saving...' : 'Save Changes' }}
+        </button>
+        <button type="button" (click)="cancelUpdate.emit()" class="cancelButton">Cancel</button>
       </div>
-  
     </form>
   </div>
   

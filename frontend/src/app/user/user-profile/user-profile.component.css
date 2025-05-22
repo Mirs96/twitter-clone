@@ -1,131 +1,200 @@
-/* ==============================================
-   Debug: evidenzia il contenitore avatar+bio
-   Rimuovi o commenta quando funziona
-   ============================================== */
-.avatar-bio-container {
-  display: flex !important;
-  /* flex orizzontale */
-  align-items: flex-start !important;
-  /* allinea in alto */
-  gap: 1rem !important;
-  /* spazio tra immagine e bio */
-  margin: 1rem 0 !important;
+.profileContainer {
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; 
+    scrollbar-width: none; 
+    -ms-overflow-style: none;  
 }
 
-/* ==============================================
-     Immagine del profilo
-     ============================================== */
-.avatar-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #444;
-  flex-shrink: 0;
-  /* non si riduce */
+.profileContainer::-webkit-scrollbar {
+    display: none; 
 }
 
-/* ==============================================
-     Testo della bio
-     ============================================== */
-.bio-text {
-  margin: 0 !important;
-  /* rimuove margini predefiniti */
-  font-style: italic;
-  color: #aaa;
-  line-height: 1.4 !important;
-  flex: 1 1 auto !important;
-  /* occupa lo spazio rimanente */
-  max-width: calc(100% - 80px - 1rem) !important;
-  /* evita sovrapposizioni */
+
+.headerBar {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    position: sticky;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-bottom: 1px solid #2f3336;
 }
 
-/* ==============================================
-     Altri stili esistenti nel componente
-     ============================================== */
-.profile-header {
-  border-bottom: 1px solid #ddd;
-  padding: 1rem;
-  background: #000;
+.backButton {
+    background: none;
+    border: none;
+    padding: 8px;
+    margin-right: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.nickname-setup {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.arrowIcon {
+    width: 20px;
+    height: 20px;
+    color: white; 
+    font-size: 20px; 
 }
 
-.setup-profile {
-  background-color: #000;
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 30px;
-  border: 1px solid #333;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.headerNickname {
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
-.setup-profile:hover {
-  background-color: #111;
+
+.profileHeader {
+    padding: 1rem;
+    background: #000;
+    border-bottom: 1px solid #2f3336;
 }
 
-.setup-profile:focus {
-  outline: none;
-  border-color: #fff;
+.headerTopSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; 
+    margin-bottom: 1rem;
 }
 
-.profile-container {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #000;
-  color: #fff;
+.avatarImg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #000; 
+    background-color: #2f3336; 
 }
 
-.follow-btn {
-  background-color: #1da1f2;
-  color: #fff;
-  border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 1rem;
-  cursor: pointer;
-  margin-top: 0.5rem;
+.setupProfile, .followBtn {
+    background-color: transparent;
+    color: #fff;
+    padding: 8px 16px; 
+    border-radius: 30px;
+    border: 1px solid #536471; 
+    font-size: 15px; 
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: fit-content; 
+    margin-top: 12px; 
 }
 
-.profile-tabs {
-  display: flex;
-  border-bottom: 1px solid #ccc;
-  background: #000;
+.setupProfile:hover, .followBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1); 
 }
 
-.profile-tabs button {
-  flex: 1;
-  padding: 0.8rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-weight: bold;
-  color: #6e767d;
+.followBtn {
+    background-color: #fff; 
+    color: #000;
+    border: none;
 }
 
-.profile-tabs button.active {
-  border-bottom: 3px solid #1da1f2;
-  color: #1da1f2;
+.followBtn.following {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid #536471;
 }
 
-.arrow-container {
-  background-color: #000;
-  padding: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  cursor: pointer;
+.followBtn.following:hover {
+    background-color: rgba(249, 24, 128, 0.1); 
+    border-color: rgb(103, 7, 15); 
+    color: rgb(249, 24, 128);
 }
 
-.arrow-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
+.userInfoSection {
+    margin-top: -20px; 
+    padding-left: 5px; 
+}
+
+.userNickname {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.bioText {
+    margin: 8px 0;
+    color: #e7e9ea; 
+    line-height: 1.4;
+    font-size: 15px;
+}
+
+.followCounts {
+    margin-top: 12px;
+    color: #71767b; 
+    font-size: 14px;
+}
+
+.countItem {
+    margin-right: 15px;
+}
+
+.countItem b {
+    color: #fff; 
+    font-weight: bold;
+}
+
+
+.profileTabs {
+    display: flex;
+    border-bottom: 1px solid #2f3336;
+    background: #000;
+    position: sticky;
+    top: 57px; /* Adjust based on headerBar height */
+    z-index: 99;
+}
+
+.tabButton {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: bold;
+    color: #6e767d;
+    position: relative;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.tabButton:hover {
+    background-color: rgba(29, 155, 240, 0.1);
+    color: #1da1f2;
+}
+
+.tabButton.active {
+    color: #fff;
+}
+
+.tabButton.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px; 
+    height: 4px;
+    background: #1da1f2;
+    border-radius: 2px;
+}
+
+.profileContent {
+    flex-grow: 1;
+}
+
+
+.updateProfileModal {
+    width: 600px;
+    background-color: #15202b; 
+}
+
+.customCloseBtn {
+    color: #fff; 
 }
