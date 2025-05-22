@@ -9,7 +9,6 @@ import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.UserService;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -51,10 +47,8 @@ public class UserController {
         }
         String token = authHeader.substring(7);
 
-        // Extract id from token
         String tokenUserId = jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
 
-        // Compare the id given by the request to the one extracted from the token
         if (!tokenUserId.equals(String.valueOf(id))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -94,8 +88,11 @@ public class UserController {
                 String ext = FilenameUtils.getExtension(avatar.getOriginalFilename());
                 filename = UUID.randomUUID() + "." + ext;
 
-                Path projectRootPath = Paths.get("").toAbsolutePath().getParent();
-                Path folder = projectRootPath.resolve("uploads/avatars");
+//                Path projectRootPath = Paths.get("").toAbsolutePath().getParent();
+//                Path folder = projectRootPath.resolve("uploads/avatars");
+                Path basePhysicalUploadPath = Paths.get("C:/dev/twitter-clone/uploads/");
+                Path folder = basePhysicalUploadPath.resolve("avatars");
+
 
                 if (!Files.exists(folder)) {
                     Files.createDirectories(folder);
@@ -103,7 +100,7 @@ public class UserController {
 
                 BufferedImage img = ImageIO.read(avatar.getInputStream());
 
-                boolean needsCompression = (img.getWidth() > 800 || img.getHeight() > 800) || avatar.getSize() > (500 * 1024); // soglia 500 KB
+                boolean needsCompression = (img.getWidth() > 800 || img.getHeight() > 800) || avatar.getSize() > (500 * 1024);
 
                 if (needsCompression) {
                     Thumbnails.of(img)

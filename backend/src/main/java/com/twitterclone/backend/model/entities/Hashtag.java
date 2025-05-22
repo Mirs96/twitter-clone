@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,5 +21,7 @@ public class Hashtag extends BaseEntity {
 
     @ManyToMany(mappedBy = "hashtags")
     @Builder.Default
+    @ToString.Exclude // Avoid circular dependency in toString
+    @EqualsAndHashCode.Exclude // Avoid circular dependency in equals/hashCode
     private List<Tweet> tweets = new ArrayList<>();
 }

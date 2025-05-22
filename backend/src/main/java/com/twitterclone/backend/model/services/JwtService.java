@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-@RequiredArgsConstructor
 public class JwtService {
-    private final String secretKey = "b7a002a04fc471eca942e43d9f8974d2826991ccd165dfa0f940df5598704161";
-    private final long jwtExpiration = 1000L * 60 * 60 * 24 * 365;
+    // It's better to load these from application.properties or environment variables
+    @Value("${application.security.jwt.secret-key:b7a002a04fc471eca942e43d9f8974d2826991ccd165dfa0f940df5598704161}")
+    private String secretKey;
+    @Value("${application.security.jwt.expiration:86400000}") // 24 hours default
+    private long jwtExpiration; 
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -60,10 +63,14 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
+        Map<String, Object> claims = new HashMap<>(extraClaims);
+        if (userDetails instanceof User) {
+            claims.put("userId", ((User) userDetails).getId().toString());
+        }
+        
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
-                .claim("userId",((User)userDetails).getId().toString())
+                .setClaims(claims) // Use the claims map which includes extraClaims and userId
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))

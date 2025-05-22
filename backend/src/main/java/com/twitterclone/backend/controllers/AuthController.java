@@ -2,7 +2,6 @@ package com.twitterclone.backend.controllers;
 
 import com.twitterclone.backend.model.services.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,6 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ) {
-        System.out.println("Email ricevuta: " + request.getEmail());
         return ResponseEntity.ok(service.register(request));
     }
 

@@ -9,31 +9,37 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceJpa implements UserService {
     private final UserRepositoryJpa userRepo;
     private final FollowerRepositoryJpa followerRepo;
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<User> findById(Long userId) {
         return userRepo.findById(userId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Follower> findFollowersByUserId(long userId, Pageable pageable) throws EntityNotFoundException {
         userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
 
         return followerRepo.findByUserId(userId, pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Follower> findFollowingByFollowerId(long followerId, Pageable pageable) throws EntityNotFoundException {
         userRepo.findById(followerId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("User (follower) not found", User.class.getName()));
 
         return followerRepo.findByFollowerId(followerId, pageable);
     }
@@ -41,41 +47,40 @@ public class UserServiceJpa implements UserService {
     @Override
     public void followUser(long followerId, long userId) throws EntityNotFoundException, ReactionAlreadyExistsException {
         User follower = userRepo.findById(followerId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("Follower user not found", User.class.getName()));
+        User userToFollow = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User to follow not found", User.class.getName()));
 
         if (followerId == userId) {
             throw new ReactionAlreadyExistsException("A user cannot follow themselves", Follower.class.getName());
         }
 
         if (followerRepo.findByFollowerAndUser(followerId, userId).isPresent()) {
-            throw new ReactionAlreadyExistsException("Already following", Follower.class.getName());
+            throw new ReactionAlreadyExistsException("Already following this user", Follower.class.getName());
         }
 
         Follower f = new Follower();
-        f.setUser(user);
+        f.setUser(userToFollow);
         f.setFollower(follower);
 
         followerRepo.save(f);
     }
 
     @Override
-    public void unfollowUser(long followerId, long userToFollowId) throws EntityNotFoundException {
+    public void unfollowUser(long followerId, long userIdToUnfollow) throws EntityNotFoundException {
+        userRepo.findById(followerId)
+                .orElseThrow(() -> new EntityNotFoundException("Follower user not found", User.class.getName()));
+        userRepo.findById(userIdToUnfollow)
+                .orElseThrow(() -> new EntityNotFoundException("User to unfollow not found", User.class.getName()));
 
-        User follower = userRepo.findById(followerId)
-                .orElseThrow(() -> new EntityNotFoundException("Follower: Entity not found", User.class.getName()));
+        Follower followRelation = followerRepo.findByFollowerAndUser(followerId, userIdToUnfollow)
+                .orElseThrow(() -> new EntityNotFoundException("Follow relationship not found", Follower.class.getName()));
 
-        User followed = userRepo.findById(userToFollowId)
-                .orElseThrow(() -> new EntityNotFoundException("Followed: Entity not found", User.class.getName()));
-
-        Follower f = followerRepo.findByFollowerAndUser(followerId, userToFollowId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", Follower.class.getName()));
-
-        followerRepo.delete(f);
+        followerRepo.delete(followRelation);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserProfile getProfile(long profileUserId, long currentUserId) throws EntityNotFoundException {
         User user = userRepo.findById(profileUserId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
@@ -83,12 +88,11 @@ public class UserServiceJpa implements UserService {
         long followersCount = followerRepo.countByUserId(profileUserId);
         long followingCount = followerRepo.countByFollowerId(profileUserId);
 
-        Optional<Follower> of = followerRepo.findByFollowerAndUser(currentUserId, profileUserId);
+        boolean isFollowing = (profileUserId == currentUserId) ? false : followerRepo.findByFollowerAndUser(currentUserId, profileUserId).isPresent();
 
         String profilePicture = user.getProfilePicture();
-
         if (profilePicture == null || profilePicture.isEmpty()) {
-            profilePicture = "/images/default-avatar.png";
+            profilePicture = "/images/default-avatar.png"; // Ensure this path is servable
         }
 
         return new UserProfile(
@@ -97,14 +101,14 @@ public class UserServiceJpa implements UserService {
                 user.getBio(),
                 followersCount,
                 followingCount,
-                of.isPresent()
+                isFollowing
         );
     }
 
     @Override
     public void updateUserProfile(long userId, String bio, String avatarFilename) throws EntityNotFoundException {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
 
         if (bio != null) {
             user.setBio(bio);

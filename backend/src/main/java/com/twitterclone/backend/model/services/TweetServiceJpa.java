@@ -10,44 +10,47 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TweetServiceJpa implements TweetService {
     private final TweetRepositoryJpa tweetRepo;
     private final UserRepositoryJpa userRepo;
-    private final HashtagService hashtagService;
+    private final HashtagService hashtagService; // Injected interface
+    private final HashtagRepositoryJpa hashtagRepo; // For checking hashtag existence
     private final LikeTweetRepositoryJpa likeTweetRepo;
     private final ReplyRepositoryJpa replyRepo;
     private final BookmarkRepositoryJpa bookmarkRepo;
 
     public Tweet createTweet(Tweet tweet, long userId) throws EntityNotFoundException {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
         tweet.setUser(user);
 
-        List<Hashtag> hashtags = hashtagService.linkHashtagsToTweet(tweet.getContent());
-        tweet.setHashtags(hashtags);
+        List<Hashtag> linkedHashtags = hashtagService.linkHashtagsToTweet(tweet.getContent());
+        tweet.setHashtags(linkedHashtags); // Set the managed/created hashtags
         return tweetRepo.save(tweet);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DisplayTweet findTweetById(long tweetId, long userId) throws EntityNotFoundException {
-        DisplayTweet tweet= tweetRepo.findById(tweetId)
-                .map(DisplayTweet::new)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", Tweet.class.getName()));
-
+        Tweet tweetEntity = tweetRepo.findById(tweetId)
+                .orElseThrow(() -> new EntityNotFoundException("Tweet not found", Tweet.class.getName()));
+        DisplayTweet tweet = new DisplayTweet(tweetEntity);
         updateTweetDetails(tweet, userId);
-
         return tweet;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<DisplayTweet> getTrendingTweets(Pageable pageable, long userId) throws EntityNotFoundException {
-        userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+        userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
 
         Page<DisplayTweet> tweets = tweetRepo
                 .getTweetsByLikesAndCommentsDesc(pageable)
@@ -59,8 +62,9 @@ public class TweetServiceJpa implements TweetService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<DisplayTweet> getTrendingTweetsByFollowedUsers(Pageable pageable, long userId) throws EntityNotFoundException {
-        userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+        userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
 
         Page<DisplayTweet> tweets = tweetRepo
                 .getFollowedUsersTweetsByLikesAndCommentsDesc(userId, pageable)
@@ -72,9 +76,10 @@ public class TweetServiceJpa implements TweetService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<DisplayTweet> getTweetByUserId(long userId, long currentUserId, Pageable pageable) throws EntityNotFoundException {
         userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
 
         Page<DisplayTweet> tweets = tweetRepo.getTweetsByUserId(userId, pageable)
                 .map(DisplayTweet::new);
@@ -84,89 +89,108 @@ public class TweetServiceJpa implements TweetService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<DisplayTweet> getTweetsByHashtagId(long hashtagId, Pageable pageable, long currentUserId) throws EntityNotFoundException {
+        hashtagRepo.findById(hashtagId)
+                .orElseThrow(() -> new EntityNotFoundException("Hashtag not found with ID: " + hashtagId, Hashtag.class.getName()));
+        userRepo.findById(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Current user not found", User.class.getName()));
+
+        Page<Tweet> tweetEntitiesPage = tweetRepo.findByHashtags_IdOrderByCreatedAtDescIdDesc(hashtagId, pageable);
+        return tweetEntitiesPage.map(tweetEntity -> {
+            DisplayTweet displayTweet = new DisplayTweet(tweetEntity);
+            updateTweetDetails(displayTweet, currentUserId);
+            return displayTweet;
+        });
+    }
+
+    @Override
     public DisplayTweet createLikeToTweet(LikeTweet like, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
-        Tweet tweet = tweetRepo.findById(tweetId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", Tweet.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
+        Tweet tweetEntity = tweetRepo.findById(tweetId)
+                .orElseThrow(() -> new EntityNotFoundException("Tweet not found", Tweet.class.getName()));
 
-        // Check if the user already liked the tweet
         if (likeTweetRepo.findLikeByUserIdAndTweetId(userId, tweetId).isPresent()) {
-            throw new ReactionAlreadyExistsException("Reaction already present", LikeTweet.class.getName());
+            throw new ReactionAlreadyExistsException("Reaction already present for this tweet", LikeTweet.class.getName());
         }
 
         like.setUser(user);
-        like.setTweet(tweet);
-
+        like.setTweet(tweetEntity);
         likeTweetRepo.save(like);
 
-        // Update tweet details after like
-        DisplayTweet tweetDetails = new DisplayTweet(tweet);
+        DisplayTweet tweetDetails = new DisplayTweet(tweetEntity);
         updateTweetDetails(tweetDetails, userId);
-
         return tweetDetails;
     }
 
     @Override
     public DisplayTweet deleteLikeFromTweet(long id, long userId) throws EntityNotFoundException, UnauthorizedException {
         LikeTweet like = likeTweetRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", LikeTweet.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("Like not found for this tweet", LikeTweet.class.getName()));
 
         if (like.getUser().getId() != userId) {
-            throw new UnauthorizedException("User is not authorized to delete this", LikeTweet.class.getName());
+            throw new UnauthorizedException("User is not authorized to delete this like", LikeTweet.class.getName());
         }
-
-        DisplayTweet tweet = new DisplayTweet(like.getTweet());
-
+        
+        Tweet likedTweet = like.getTweet();
         likeTweetRepo.deleteById(like.getId());
 
-        // Update tweet details after like deletion
-        updateTweetDetails(tweet, userId);
-
-        return tweet;
+        DisplayTweet tweetDetails = new DisplayTweet(likedTweet);
+        updateTweetDetails(tweetDetails, userId);
+        return tweetDetails;
     }
 
     @Override
     public DisplayTweet createBookmarkToTweet(Bookmark bookmark, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", User.class.getName()));
-        Tweet tweet = tweetRepo.findById(tweetId)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", Tweet.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
+        Tweet tweetEntity = tweetRepo.findById(tweetId)
+                .orElseThrow(() -> new EntityNotFoundException("Tweet not found", Tweet.class.getName()));
 
-        // Check if the user already bookmarked the tweet
         if (bookmarkRepo.findBookmarkByUserIdAndTweetId(userId, tweetId).isPresent()) {
-            throw new ReactionAlreadyExistsException("Reaction already present", Bookmark.class.getName());
+            throw new ReactionAlreadyExistsException("Bookmark already present for this tweet", Bookmark.class.getName());
         }
 
         bookmark.setUser(user);
-        bookmark.setTweet(tweet);
-
+        bookmark.setTweet(tweetEntity);
         bookmarkRepo.save(bookmark);
 
-        // Update tweet details after bookmark
-        DisplayTweet tweetDetails = new DisplayTweet(tweet);
+        DisplayTweet tweetDetails = new DisplayTweet(tweetEntity);
         updateTweetDetails(tweetDetails, userId);
-
         return tweetDetails;
     }
 
     @Override
     public DisplayTweet deleteBookmarkFromTweet(long id, long userId) throws EntityNotFoundException, UnauthorizedException {
         Bookmark bookmark = bookmarkRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Entity not found", Bookmark.class.getName()));
+                .orElseThrow(() -> new EntityNotFoundException("Bookmark not found", Bookmark.class.getName()));
 
         if (bookmark.getUser().getId() != userId) {
-            throw new UnauthorizedException("User is not authorized to delete this", Bookmark.class.getName());
+            throw new UnauthorizedException("User is not authorized to delete this bookmark", Bookmark.class.getName());
         }
 
-        DisplayTweet tweet = new DisplayTweet(bookmark.getTweet());
-
+        Tweet bookmarkedTweet = bookmark.getTweet();
         bookmarkRepo.deleteById(bookmark.getId());
 
-        // Update tweet details after bookmark deletion
-        updateTweetDetails(tweet, userId);
+        DisplayTweet tweetDetails = new DisplayTweet(bookmarkedTweet);
+        updateTweetDetails(tweetDetails, userId); // userId is the current user checking details
+        return tweetDetails;
+    }
 
-        return tweet;
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DisplayTweet> getBookmarkedTweetsByUserId(long userId, Pageable pageable) throws EntityNotFoundException {
+        userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found", User.class.getName()));
+
+        Page<Bookmark> bookmarksPage = bookmarkRepo.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+
+        return bookmarksPage.map(bookmark -> {
+            DisplayTweet displayTweet = new DisplayTweet(bookmark.getTweet());
+            updateTweetDetails(displayTweet, userId); // userId here is the logged-in user viewing their own bookmarks
+            return displayTweet;
+        });
     }
 
     private void updateTweetDetails(DisplayTweet tweetDetails, long userId) {

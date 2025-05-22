@@ -11,7 +11,6 @@ import com.twitterclone.backend.model.exceptions.UnauthorizedException;
 import com.twitterclone.backend.model.services.JwtService;
 import com.twitterclone.backend.model.services.TweetService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +49,8 @@ public class TweetController {
         try {
             Tweet savedTweet = tweetService.createTweet(tweet, userId);
             URI location = uriBuilder.path("/tweet/{id}").buildAndExpand(savedTweet.getId()).toUri();
-            createTweetDto.setId(savedTweet.getUser().getId());
+            createTweetDto.setId(savedTweet.getId()); // Return created tweet id
+            // Consider returning a DisplayTweetDto of the created tweet
             return ResponseEntity.created(location).body(createTweetDto);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
@@ -108,7 +108,7 @@ public class TweetController {
             @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "10") String size,
             HttpServletRequest request
-    ) throws EntityNotFoundException {
+    ) {
         long currentUserId = parseInt(extractUserIdFromToken(request));
 
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(size));
@@ -118,6 +118,48 @@ public class TweetController {
                     .map(DisplayTweetDto::new);
 
             return ResponseEntity.ok(tweets);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/{hashtagId}/hashtag")
+    public ResponseEntity<?> getTweetsByHashtag(
+            @PathVariable long hashtagId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request
+    ) {
+        String userIdFromToken = extractUserIdFromToken(request);
+        if (userIdFromToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User ID not found in token");
+        }
+        long currentUserId = parseInt(userIdFromToken);
+        Pageable pageable = PageRequest.of(page, size);
+        try {
+            Page<DisplayTweet> tweets = tweetService.getTweetsByHashtagId(hashtagId, pageable, currentUserId);
+            Page<DisplayTweetDto> tweetDtos = tweets.map(DisplayTweetDto::new);
+            return ResponseEntity.ok(tweetDtos);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/{userId}/bookmarks")
+    public ResponseEntity<?> getBookmarkedTweets(
+        @PathVariable long userId,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        HttpServletRequest request
+    ) {
+        if (!isValidUser(request, userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        try {
+            Page<DisplayTweet> bookmarkedTweets = tweetService.getBookmarkedTweetsByUserId(userId, pageable);
+            Page<DisplayTweetDto> bookmarkedTweetsDto = bookmarkedTweets.map(DisplayTweetDto::new);
+            return ResponseEntity.ok(bookmarkedTweetsDto);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }

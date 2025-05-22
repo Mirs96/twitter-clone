@@ -23,4 +23,8 @@ public interface TweetService {
 
     DisplayTweet createBookmarkToTweet(Bookmark bookmark, long userId, long tweetId) throws EntityNotFoundException, ReactionAlreadyExistsException;
     DisplayTweet deleteBookmarkFromTweet(long id, long userId) throws EntityNotFoundException, UnauthorizedException;
+
+    Page<DisplayTweet> getBookmarkedTweetsByUserId(long userId, Pageable pageable) throws EntityNotFoundException;
+
+    Page<DisplayTweet> getTweetsByHashtagId(long hashtagId, Pageable pageable, long currentUserId) throws EntityNotFoundException;
 }
