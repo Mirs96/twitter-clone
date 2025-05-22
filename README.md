@@ -390,7 +390,7 @@ This project is the frontend for "Y", a Twitter-like application, built with Ang
 
 The project follows a standard Angular CLI project structure:
 
-
+```
 . (project root)
 ├── .editorconfig
 ├── angular.json
@@ -454,6 +454,7 @@ The project follows a standard Angular CLI project structure:
 ├── like.svg
 ├── reply.svg
 └── bookmark.svg
+```
 
 ## Getting Started
 
