@@ -1,0 +1,35 @@
+# Dependencies
+/node_modules
+
+# Vite build cache and output
+/.vite/
+/dist/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+*.log
+
+# Environment variables files (often contain secrets or local settings)
+.env
+.env.local
+.env.*.local
+!/.env.example # Se hai un file .env.example che vuoi committare
+
+# Editor/IDE specific folders and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Operating System generated files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+/coverage
