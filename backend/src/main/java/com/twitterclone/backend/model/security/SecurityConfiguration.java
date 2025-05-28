@@ -20,7 +20,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthFilter;
+
+    // Existing whitelist
     private static final String[] WHITE_LIST_URL = {"/api/auth/**"};
+
+    // Add Swagger UI paths to a new whitelist array
+    private static final String[] SWAGGER_WHITELIST = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**", // For OpenAPI v3 docs
+            "/swagger-resources/**",
+            "/webjars/**"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,7 +45,9 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .requestMatchers("/images/**")
                                 .permitAll()
-                                .requestMatchers(WHITE_LIST_URL)
+                                .requestMatchers(WHITE_LIST_URL) // Your existing API whitelist
+                                .permitAll()
+                                .requestMatchers(SWAGGER_WHITELIST) // Add Swagger whitelist here
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -47,5 +60,4 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
 }
