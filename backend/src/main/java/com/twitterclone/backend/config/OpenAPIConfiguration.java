@@ -1,6 +1,5 @@
 package com.twitterclone.backend.config;
 
-import com.twitterclone.backend.dto.ErrorResponse;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.core.converter.ResolvedSchema;
@@ -48,14 +47,14 @@ import org.springframework.context.annotation.Configuration;
         in = SecuritySchemeIn.HEADER
 )
 public class OpenAPIConfiguration {
-    @Bean
-    public OpenApiCustomizer schemaCustomizer() {
-        ResolvedSchema resolvedSchema = ModelConverters.getInstance()
-                .resolveAsResolvedSchema(new AnnotatedType(com.twitterclone.backend.dto.ErrorResponse.class)); // Correct class reference
-        return openApi -> {
-            if (resolvedSchema.schema != null && resolvedSchema.schema.getName() != null) {
-                openApi.getComponents().addSchemas(resolvedSchema.schema.getName(), resolvedSchema.schema);
-            }
-        };
-    }
+//    @Bean
+//    public OpenApiCustomizer schemaCustomizer() {
+//        ResolvedSchema resolvedSchema = ModelConverters.getInstance()
+//                .resolveAsResolvedSchema(new AnnotatedType(com.twitterclone.backend.dto.ErrorResponse.class));
+//        return openApi -> {
+//            if (resolvedSchema.schema != null && resolvedSchema.schema.getName() != null) {
+//                openApi.getComponents().addSchemas(resolvedSchema.schema.getName(), resolvedSchema.schema);
+//            }
+//        };
+//    }
 }

@@ -1,4 +1,4 @@
-User Registration
+## User Registration
 
 ```plantuml
 @startuml
@@ -72,7 +72,7 @@ deactivate Frontend
 @enduml
 ```
 
-Create New Tweet
+## Create New Tweet
 ```plantuml
 @startuml
 actor User
@@ -159,7 +159,7 @@ deactivate Frontend
 @enduml
 ```
 
-Create Reply
+## Create Reply
 ```plantuml
 @startuml
 actor User
@@ -249,7 +249,7 @@ deactivate Frontend
 @enduml
 ```
 
-Fetching General Tweets
+## Fetching General Tweets
 ```plantuml
 @startuml
 actor User
@@ -325,7 +325,7 @@ deactivate Frontend
 @enduml
 ```
 
-Fetching Trending Hashtags
+## Fetching Trending Hashtags
 ```plantuml
 @startuml
 actor User
@@ -398,7 +398,7 @@ deactivate Frontend
 @enduml
 ```
 
-Autocomplete Search
+## Autocomplete Search
 ```plantuml
 @startuml
 actor User

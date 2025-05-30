@@ -1,43 +1,3 @@
-//package com.twitterclone.backend.controllers;
-//
-//import com.twitterclone.backend.dto.TrendingHashtagDto;
-//import com.twitterclone.backend.model.TrendingHashtag;
-//import com.twitterclone.backend.model.services.HashtagService;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.PageRequest;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//
-//@CrossOrigin(origins={"http://localhost:4200", "http://localhost:5173"}, allowedHeaders = "*")
-//@RestController
-//@RequestMapping("/api/hashtag")
-//@RequiredArgsConstructor
-//public class HashtagController {
-//    private final HashtagService hashtagService;
-//
-//    @GetMapping("/trending")
-//    public ResponseEntity<List<TrendingHashtagDto>> getTrendingHashtags() {
-//        List<TrendingHashtag> trendingHashtags = hashtagService.getTopTrendingHashtags();
-//        List<TrendingHashtagDto> dtoList = trendingHashtags.stream()
-//                                                              .map(TrendingHashtagDto::new)
-//                                                              .toList();
-//        return ResponseEntity.ok(dtoList);
-//    }
-//
-//    @GetMapping("/trending/paged")
-//    public ResponseEntity<Page<TrendingHashtagDto>> getPaginatedTrendingHashtags(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size) {
-//        Page<TrendingHashtag> trendingHashtagsPage = hashtagService.getPaginatedTrending(PageRequest.of(page, size));
-//        Page<TrendingHashtagDto> dtoListPage = trendingHashtagsPage.map(TrendingHashtagDto::new);
-//        return ResponseEntity.ok(dtoListPage);
-//    }
-//}
-
-// File: src/main/java/com/twitterclone/backend/controllers/HashtagController.java
 package com.twitterclone.backend.controllers;
 
 import com.twitterclone.backend.dto.TrendingHashtagDto;
@@ -45,11 +5,6 @@ import com.twitterclone.backend.model.TrendingHashtag;
 import com.twitterclone.backend.model.services.HashtagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -63,16 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/hashtag")
 @RequiredArgsConstructor
-@Tag(name = "Hashtags", description = "Endpoints for hashtag operations")
+@Tag(name = "Hashtags")
 public class HashtagController {
     private final HashtagService hashtagService;
 
     @Operation(summary = "Get top trending hashtags")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved trending hashtags",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = TrendingHashtagDto.class))))
-    })
     @GetMapping("/trending")
     public ResponseEntity<List<TrendingHashtagDto>> getTrendingHashtags() {
         List<TrendingHashtag> trendingHashtags = hashtagService.getTopTrendingHashtags();
@@ -83,11 +33,6 @@ public class HashtagController {
     }
 
     @Operation(summary = "Get paginated list of trending hashtags")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved paginated trending hashtags",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Page.class)))
-    })
     @GetMapping("/trending/paged")
     public ResponseEntity<Page<TrendingHashtagDto>> getPaginatedTrendingHashtags(
             @Parameter(description = "Page number, 0-indexed") @RequestParam(defaultValue = "0") int page,
