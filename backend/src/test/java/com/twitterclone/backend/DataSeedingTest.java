@@ -1,4 +1,3 @@
-// File: src/test/java/com/twitterclone/backend/DataSeedingTest.java
 package com.twitterclone.backend;
 
 import com.twitterclone.backend.controllers.RegisterRequest;
