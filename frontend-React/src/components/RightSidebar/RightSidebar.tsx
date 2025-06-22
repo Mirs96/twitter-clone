@@ -29,6 +29,7 @@ const RightSidebar: React.FC = () => {
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
+    console.log("Search Input Change:", query);
     setSearchQuery(query);
     if (query.trim() === '') {
       setSearchResults(null);
@@ -40,6 +41,7 @@ const RightSidebar: React.FC = () => {
   };
 
   const performSearch = async (query: string) => {
+    console.log("Performing search for:", query);
     if (query.trim() === '') {
       setSearchResults(null);
       return;
@@ -47,6 +49,7 @@ const RightSidebar: React.FC = () => {
     setIsSearchLoading(true);
     try {
       const data = await autocompleteSearch(query);
+      console.log("Search results received:", data);
       setSearchResults(data);
     } catch (error) {
       console.error('Autocomplete search failed:', error);
@@ -70,17 +73,26 @@ const RightSidebar: React.FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(debounce(performSearch, 300), []);
 
-  const handleResultClick = (item: AutocompleteUser | AutocompleteHashtag, type: 'user' | 'hashtag') => {
+  // Changed from onClick to onMouseDown
+  const handleResultClick = useCallback((item: AutocompleteUser | AutocompleteHashtag, type: 'user' | 'hashtag') => {
+    console.log(`Autocomplete: Item clicked - Type: ${type}, ID: ${'id' in item ? item.id : 'N/A'}`, item);
+    // Note: Using onMouseDown fires before onBlur, helping prevent the element disappearing
+    // No need for e.stopPropagation() or e.preventDefault() here, as onMouseDown completes before blur
+
     setSearchQuery('');
     setSearchResults(null);
-    setShowResults(false);
+    setShowResults(false); // Hide results immediately on click
+
     if (type === 'user') {
-      navigate(`/profile/${(item as AutocompleteUser).id}`);
+      const userItem = item as AutocompleteUser;
+      console.log(`Autocomplete: Navigating to /profile/${userItem.id}`);
+      navigate(`/profile/${userItem.id}`);
     } else {
       const hashtagItem = item as AutocompleteHashtag;
+      console.log(`Autocomplete: Navigating to /explore/tag/${hashtagItem.id}/${encodeURIComponent(hashtagItem.tag)}`);
       navigate(`/explore/tag/${hashtagItem.id}/${encodeURIComponent(hashtagItem.tag)}`);
     }
-  };
+  }, [navigate]);
 
   const formatCount = (count: number): string => {
     if (count >= 1000000) return (count / 1000000).toFixed(1) + 'M posts';
@@ -91,31 +103,54 @@ const RightSidebar: React.FC = () => {
   return (
     <aside className={styles.sidebarContainer}>
       <div className={styles.searchBarContainer}>
-        <input 
-          type="text" 
-          placeholder="Search" 
+        <input
+          type="text"
+          placeholder="Search"
           className={styles.searchInput}
           value={searchQuery}
           onChange={handleSearchChange}
-          onFocus={() => searchQuery.trim() !== '' && setShowResults(true)}
-          onBlur={() => setTimeout(() => setShowResults(false), 100)} // Delay to allow click on results
+          onFocus={() => {
+            console.log("Search input focused. Show results if query exists.");
+            searchQuery.trim() !== '' && setShowResults(true);
+          }}
+          onBlur={() => {
+            console.log("Search input blurred. Delaying hide.");
+            // Delay hiding results to allow click/mousedown event on suggestions to fire
+            setTimeout(() => {
+              console.log("Search: Hiding results after delay (200ms).");
+              setShowResults(false);
+            }, 200); // Increased delay to 200ms
+          }}
         />
         {showResults && (searchResults || isSearchLoading) && (
           <div className={styles.autocompleteResults}>
             {isSearchLoading && <div className={styles.loadingText}>Loading...</div>}
+            {/* Render users */}
             {searchResults?.users?.map(user => (
-              <div key={`user-${user.id}`} className={styles.autocompleteItem} onClick={() => handleResultClick(user, 'user')}>
+              <div
+                key={`user-${user.id}`}
+                className={styles.autocompleteItem}
+                // Use onMouseDown instead of onClick - fires before onBlur
+                onMouseDown={() => handleResultClick(user, 'user')}
+              >
                 <img src={user.profilePicture ? `${HttpConfig.baseUrl}${user.profilePicture}` : '/icons/default-avatar.png'} alt={user.nickname} className={styles.itemImage} />
                 <span className={styles.itemName}>{user.nickname}</span>
                 <span className={styles.itemType}>User</span>
               </div>
             ))}
+            {/* Render hashtags */}
             {searchResults?.hashtags?.map(hashtag => (
-              <div key={`tag-${hashtag.id}`} className={styles.autocompleteItem} onClick={() => handleResultClick(hashtag, 'hashtag')}>
+              <div
+                key={`tag-${hashtag.id}`}
+                className={styles.autocompleteItem}
+                // Use onMouseDown instead of onClick - fires before onBlur
+                 onMouseDown={() => handleResultClick(hashtag, 'hashtag')}
+              >
                 <span className={styles.itemName}>#{hashtag.tag}</span>
                 <span className={styles.itemType}>Hashtag</span>
               </div>
             ))}
+            {/* No results message */}
             {!isSearchLoading && !searchResults?.users?.length && !searchResults?.hashtags?.length && searchQuery.trim() !== '' && (
                 <div className={styles.loadingText}>No results for "{searchQuery}"</div>
             )}
