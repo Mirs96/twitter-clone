@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: twitter_clone_db
+    environment:
+      POSTGRES_DB: twitter_clone
+      POSTGRES_USER: postgresMaster
+      POSTGRES_PASSWORD: goPostgresGo
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+
+volumes:
+  db_data:

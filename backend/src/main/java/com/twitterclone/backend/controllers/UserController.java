@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +51,9 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final JwtService jwtService;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @Operation(summary = "Get user details by ID (authenticated user only)")
     @ApiResponses(value = {
@@ -129,7 +133,7 @@ public class UserController {
             if (avatar != null && !avatar.isEmpty()) {
                 String ext = FilenameUtils.getExtension(avatar.getOriginalFilename());
                 filename = UUID.randomUUID() + "." + ext;
-                Path basePhysicalUploadPath = Paths.get("C:/dev/twitter-clone/uploads/");
+                Path basePhysicalUploadPath = Paths.get(uploadDir);
                 Path folder = basePhysicalUploadPath.resolve("avatars");
 
                 if (!Files.exists(folder)) {
